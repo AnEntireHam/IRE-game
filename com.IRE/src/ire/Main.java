@@ -90,7 +90,7 @@ public class Main {
             System.out.println("Players lost.");
         }
 
-        System.out.println("\nThanks for playing this tiny demo.");
+        System.out.println("\nTiny demo finished. Thanks for playing.");
         Tools.emptyPrompt();
 
     }
