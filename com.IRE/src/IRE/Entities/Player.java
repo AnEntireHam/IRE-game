@@ -1,10 +1,10 @@
-package IRE.Entities;
+package ire.entities;
 
-import IRE.Audio.AudioStream;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.SpellAttack;
-import IRE.Combat.Actions.DefenseActions.SpellDefenses.SpellDefense;
-import IRE.Tools.Tools;
-import IRE.World.Inventory;
+import ire.audio.AudioStream;
+import ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
+import ire.tools.Tools;
+import ire.world.Inventory;
 
 import java.util.ArrayList;
 
@@ -167,18 +167,7 @@ public class Player extends Entity {
             Tools.clear();
             bEffects.fullHeal();
         }
-
-        /*System.out.println("Current Stats: \n");
-
-        System.out.println("[1] Hlh " + this.baseHlh);
-        System.out.println("[2] Atk " + this.baseAtk);
-        System.out.println("[3] Def " + this.baseDef);
-        System.out.println("[4] Mag " + this.baseMag);
-        System.out.println("[5] Spd " + this.baseSpd);
-
-        Utilities.emptyPrompt();*/
         Tools.clear();
-
     }
 
     public void addXp(int xp) {
@@ -208,7 +197,6 @@ public class Player extends Entity {
         boolean confirmed = false;
 
         do {
-
             Tools.clear();
             options.clear();
             options.addAll(attacks);
@@ -216,23 +204,19 @@ public class Player extends Entity {
             choice = Tools.menu(options, 1);
 
             primary: switch (attacks.get(choice - 1)) {
-
-                case "Stab":
+                case "Stab" -> {
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.stab);
                         confirmed = true;
                     }
-                    break;
-
-
-                case "Lunge":
+                }
+                case "Lunge" -> {
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.lunge);
                         confirmed = true;
                     }
-                    break;
-
-                case "Cast":
+                }
+                case "Cast" -> {
                     while (true) {
                         choice = SpellAttack.menu(this.spells, true);
 
@@ -245,7 +229,7 @@ public class Player extends Entity {
                             break primary;
                         }
                     }
-                    break;
+                }
             }
         } while (!confirmed);
     }
@@ -259,7 +243,6 @@ public class Player extends Entity {
         boolean confirmed = false;
 
         do {
-
             Tools.clear();
             options.clear();
             options.addAll(defenses);

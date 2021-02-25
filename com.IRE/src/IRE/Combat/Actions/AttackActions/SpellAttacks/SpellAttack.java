@@ -1,8 +1,8 @@
-package IRE.Combat.Actions.AttackActions.SpellAttacks;
+package ire.combat.actions.attackactions.spellattacks;
 
-import IRE.Audio.AudioStream;
-import IRE.Combat.Actions.AttackActions.AttackAction;
-import IRE.Tools.Tools;
+import ire.audio.AudioStream;
+import ire.combat.actions.attackactions.AttackAction;
+import ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Random;

@@ -1,15 +1,15 @@
-package IRE;
+package ire;
 
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.Lunge;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.Stab;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.Celestial;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.Lunar;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.Solar;
-import IRE.Combat.Actions.DefenseActions.PhysicalDefenses.Counter;
-import IRE.Combat.Actions.DefenseActions.PhysicalDefenses.Shield;
-import IRE.Combat.Actions.DefenseActions.SpellDefenses.Screen;
-import IRE.Entities.Enemies.Skeleton;
-import IRE.Entities.Player;
+import ire.combat.actions.attackactions.physicalattacks.Lunge;
+import ire.combat.actions.attackactions.physicalattacks.Stab;
+import ire.combat.actions.attackactions.spellattacks.Celestial;
+import ire.combat.actions.attackactions.spellattacks.Lunar;
+import ire.combat.actions.attackactions.spellattacks.Solar;
+import ire.combat.actions.defenseactions.physicaldefenses.Counter;
+import ire.combat.actions.defenseactions.physicaldefenses.Shield;
+import ire.combat.actions.defenseactions.spelldefenses.Screen;
+import ire.entities.enemies.Skeleton;
+import ire.entities.Player;
 
 public class Test {
 

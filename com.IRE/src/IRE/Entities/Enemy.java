@@ -1,9 +1,9 @@
-package IRE.Entities;
+package ire.entities;
 
-import IRE.Combat.Actions.AttackActions.SpellAttacks.SpellAttack;
-import IRE.Combat.Actions.DefenseActions.SpellDefenses.SpellDefense;
-import IRE.Tools.Tools;
-import IRE.World.Item;
+import ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
+import ire.tools.Tools;
+import ire.world.Item;
 
 import java.util.ArrayList;
 import java.util.Random;

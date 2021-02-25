@@ -1,7 +1,7 @@
-package IRE.Combat.Actions.DefenseActions.SpellDefenses;
+package ire.combat.actions.defenseactions.spelldefenses;
 
-import IRE.Combat.Actions.DefenseActions.DefenseAction;
-import IRE.Tools.Tools;
+import ire.combat.actions.defenseactions.DefenseAction;
+import ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Random;

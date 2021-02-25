@@ -1,9 +1,9 @@
-package IRE.Combat.Actions.DefenseActions.PhysicalDefenses;
+package ire.combat.actions.defenseactions.physicaldefenses;
 
-import IRE.Combat.Actions.Action;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.PhysicalAttack;
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.combat.actions.Action;
+import ire.combat.actions.attackactions.physicalattacks.PhysicalAttack;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public class Shield extends PhysicalDefense {
 
@@ -26,7 +26,7 @@ public class Shield extends PhysicalDefense {
         if (attack instanceof PhysicalAttack) {
 
             ((PhysicalAttack) attack).incrementDamage(
-                Tools.round((curDef * this.physBoost * PHYS_COEFF_DEF) + (curMag * PHYS_COEFF_MAG)));
+                Tools.round((curDef * this.physBoost * physCoefficientDef) + (curMag * physCoefficientMag)));
         } else {
 
             super.execute(attacker, defender);

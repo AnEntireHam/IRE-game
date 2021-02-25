@@ -1,9 +1,9 @@
-package IRE.Combat.Actions.DefenseActions.SpellDefenses;
+package ire.combat.actions.defenseactions.spelldefenses;
 
-import IRE.Combat.Actions.Action;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.SpellAttack;
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.combat.actions.Action;
+import ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public class Screen extends SpellDefense {
 
@@ -23,7 +23,7 @@ public class Screen extends SpellDefense {
                     Tools.round(((SpellAttack) attack).getDamage() * spellResist));
 
             ((SpellAttack) attack).incrementDamage(
-                    Tools.round((curDef * SPELL_COEFF_DEF) + (curMag * SPELL_COEFF_MAG)));
+                    Tools.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
         } else {
             super.execute(attacker, defender);
         }

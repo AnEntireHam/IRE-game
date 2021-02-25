@@ -1,9 +1,9 @@
-package IRE.Combat;
+package ire.combat;
 
-import IRE.Entities.Enemy;
-import IRE.Entities.Entity;
-import IRE.Entities.Player;
-import IRE.Tools.Tools;
+import ire.entities.Enemy;
+import ire.entities.Entity;
+import ire.entities.Player;
+import ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;

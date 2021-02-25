@@ -1,4 +1,4 @@
-package IRE.Tools;
+package ire.tools;
 
 import java.io.File;
 import java.io.FileNotFoundException;

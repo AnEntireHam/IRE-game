@@ -1,7 +1,7 @@
-package IRE.Combat;
+package ire.combat;
 
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public class BattleEffect {
 

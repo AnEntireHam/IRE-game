@@ -1,8 +1,8 @@
-package IRE.Combat.Actions.AttackActions.SpellAttacks;
+package ire.combat.actions.attackactions.spellattacks;
 
-import IRE.Audio.AudioStream;
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.audio.AudioStream;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public class Solar extends SpellAttack {
 

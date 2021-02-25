@@ -1,18 +1,18 @@
-package IRE.Combat.Actions.DefenseActions;
+package ire.combat.actions.defenseactions;
 
-import IRE.Combat.Actions.Action;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.PhysicalAttack;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.SpellAttack;
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.combat.actions.Action;
+import ire.combat.actions.attackactions.physicalattacks.PhysicalAttack;
+import ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public abstract class DefenseAction extends Action {
 
     // Consider moving to Entity?
-    protected final float PHYS_COEFF_DEF  = -0.5f;
-    protected final float PHYS_COEFF_MAG  =  0.0f;
-    protected final float SPELL_COEFF_DEF = -0.25f;
-    protected final float SPELL_COEFF_MAG = -0.5f;
+    protected final float physCoefficientDef  = -0.5f;
+    protected final float physCoefficientMag  =  0.0f;
+    protected final float spellCoefficientDef = -0.25f;
+    protected final float spellCoefficientMag = -0.5f;
 
     public DefenseAction(String NAME, String DESCRIPTION) {
         super(NAME, DESCRIPTION);
@@ -29,12 +29,12 @@ public abstract class DefenseAction extends Action {
         if (action instanceof PhysicalAttack) {
 
             ((PhysicalAttack) action).incrementDamage(
-                    Tools.round((curDef * PHYS_COEFF_DEF) + (curMag * PHYS_COEFF_MAG)));
+                    Tools.round((curDef * physCoefficientDef) + (curMag * physCoefficientMag)));
 
         } else if (action instanceof SpellAttack) {
 
             ((SpellAttack) action).incrementDamage(
-                    Tools.round((curDef * SPELL_COEFF_DEF) + (curMag * SPELL_COEFF_MAG)));
+                    Tools.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
         }
     }
 }

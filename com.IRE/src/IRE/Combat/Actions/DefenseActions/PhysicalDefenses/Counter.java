@@ -1,10 +1,10 @@
-package IRE.Combat.Actions.DefenseActions.PhysicalDefenses;
+package ire.combat.actions.defenseactions.physicaldefenses;
 
-import IRE.Combat.Actions.Action;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.Lunge;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.PhysicalAttack;
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.combat.actions.Action;
+import ire.combat.actions.attackactions.physicalattacks.Lunge;
+import ire.combat.actions.attackactions.physicalattacks.PhysicalAttack;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public class Counter extends PhysicalDefense {
 
@@ -39,7 +39,7 @@ public class Counter extends PhysicalDefense {
         } else if (attack instanceof PhysicalAttack) {
 
             ((PhysicalAttack) attacker.getCurrentAction()).incrementDamage(
-                    Tools.round(defender.getCurDef() * PHYS_COEFF_DEF));
+                    Tools.round(defender.getCurDef() * physCoefficientDef));
         }
     }
 }

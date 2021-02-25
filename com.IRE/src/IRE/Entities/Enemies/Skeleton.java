@@ -1,6 +1,6 @@
-package IRE.Entities.Enemies;
+package ire.entities.enemies;
 
-import IRE.Entities.Enemy;
+import ire.entities.Enemy;
 
 public class Skeleton extends Enemy {
 

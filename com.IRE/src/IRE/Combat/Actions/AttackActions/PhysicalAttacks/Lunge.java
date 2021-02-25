@@ -1,8 +1,8 @@
-package IRE.Combat.Actions.AttackActions.PhysicalAttacks;
+package ire.combat.actions.attackactions.physicalattacks;
 
-import IRE.Audio.AudioStream;
-import IRE.Entities.Entity;
-import IRE.Tools.Tools;
+import ire.audio.AudioStream;
+import ire.entities.Entity;
+import ire.tools.Tools;
 
 public class Lunge extends PhysicalAttack {
 

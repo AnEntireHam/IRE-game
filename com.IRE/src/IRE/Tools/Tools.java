@@ -1,7 +1,7 @@
-package IRE.Tools;
+package ire.tools;
 
-import IRE.Audio.AudioStream;
-import IRE.Entities.Entity;
+import ire.audio.AudioStream;
+import ire.entities.Entity;
 
 import java.io.IOException;
 import java.util.ArrayList;

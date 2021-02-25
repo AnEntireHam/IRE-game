@@ -1,14 +1,14 @@
-package IRE.Entities;
+package ire.entities;
 
-import IRE.Audio.AudioStream;
-import IRE.Combat.Actions.Action;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.Lunge;
-import IRE.Combat.Actions.AttackActions.PhysicalAttacks.Stab;
-import IRE.Combat.Actions.AttackActions.SpellAttacks.SpellAttack;
-import IRE.Combat.Actions.DefenseActions.PhysicalDefenses.Counter;
-import IRE.Combat.Actions.DefenseActions.PhysicalDefenses.Shield;
-import IRE.Combat.Actions.DefenseActions.SpellDefenses.SpellDefense;
-import IRE.Combat.BattleEffect;
+import ire.audio.AudioStream;
+import ire.combat.actions.Action;
+import ire.combat.actions.attackactions.physicalattacks.Lunge;
+import ire.combat.actions.attackactions.physicalattacks.Stab;
+import ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import ire.combat.actions.defenseactions.physicaldefenses.Counter;
+import ire.combat.actions.defenseactions.physicaldefenses.Shield;
+import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
+import ire.combat.BattleEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,9 +1,9 @@
-package IRE.Combat.Actions.AttackActions;
+package ire.combat.actions.attackactions;
 
-import IRE.Audio.AudioStream;
-import IRE.Combat.Actions.Action;
-import IRE.Combat.Actions.DefenseActions.DefenseAction;
-import IRE.Entities.Entity;
+import ire.audio.AudioStream;
+import ire.combat.actions.Action;
+import ire.combat.actions.defenseactions.DefenseAction;
+import ire.entities.Entity;
 
 public abstract class AttackAction extends Action {
 

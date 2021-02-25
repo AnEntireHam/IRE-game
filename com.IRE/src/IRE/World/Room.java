@@ -1,4 +1,4 @@
-package IRE.World;
+package ire.world;
 
 import java.util.HashMap;
 import java.util.Map;

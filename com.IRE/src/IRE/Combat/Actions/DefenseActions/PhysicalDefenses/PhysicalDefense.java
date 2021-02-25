@@ -1,6 +1,6 @@
-package IRE.Combat.Actions.DefenseActions.PhysicalDefenses;
+package ire.combat.actions.defenseactions.physicaldefenses;
 
-import IRE.Combat.Actions.DefenseActions.DefenseAction;
+import ire.combat.actions.defenseactions.DefenseAction;
 
 public abstract class PhysicalDefense extends DefenseAction {
 

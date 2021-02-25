@@ -1,6 +1,6 @@
-package IRE.Combat.Actions.AttackActions.SpellAttacks;
+package ire.combat.actions.attackactions.spellattacks;
 
-import IRE.Audio.AudioStream;
+import ire.audio.AudioStream;
 
 public abstract class DebuffSpell extends SpellAttack {
 

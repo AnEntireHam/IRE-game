@@ -1,6 +1,6 @@
-package IRE.Combat.Actions;
+package ire.combat.actions;
 
-import IRE.Entities.Entity;
+import ire.entities.Entity;
 
 public abstract class Action {
 

@@ -1,4 +1,4 @@
-package IRE.World;
+package ire.world;
 
 public class Item {
 

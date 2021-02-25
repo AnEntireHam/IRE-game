@@ -1,7 +1,7 @@
-package IRE.Combat.Actions.AttackActions.PhysicalAttacks;
+package ire.combat.actions.attackactions.physicalattacks;
 
-import IRE.Audio.AudioStream;
-import IRE.Combat.Actions.AttackActions.AttackAction;
+import ire.audio.AudioStream;
+import ire.combat.actions.attackactions.AttackAction;
 
 public abstract class PhysicalAttack extends AttackAction {
 
