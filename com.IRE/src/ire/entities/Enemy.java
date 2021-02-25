@@ -118,21 +118,19 @@ public abstract class Enemy extends Entity {
             choice = rand.nextInt(attacks.size());
 
             switch (attacks.get(choice)) {
-                case "Stab" -> {
+                case "Stab":
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.stab);
                         confirmed = true;
                     }
-                }
-
-                case "Lunge" -> {
+                    break;
+                case "Lunge":
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.lunge);
                         confirmed = true;
                     }
-                }
-
-                case "Cast" -> {
+                    break;
+                case "Cast":
                     while (true) {
 
                         choice = SpellAttack.menu(this.spells, false);
@@ -145,8 +143,9 @@ public abstract class Enemy extends Entity {
                             confirmed = true;
                         }
                     }
-                }
-                default -> throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
             }
         } while (!confirmed);
     }
@@ -159,30 +158,26 @@ public abstract class Enemy extends Entity {
         boolean confirmed = false;
 
         do {
-
             choice = rand.nextInt(defenses.size());
 
             switch (defenses.get(choice)) {
-
-                case "Shield" -> {
+                case "Shield":
                     this.setCurrentAction(this.shield);
                     confirmed = true;
-                }
-
-                case "Counter" -> {
+                    break;
+                case "Counter":
                     this.setCurrentAction(this.counter);
                     confirmed = true;
-                }
-
-                case "Ward" -> {
+                    break;
+                case "Ward":
                     choice = SpellDefense.menu(this.wards, false);
                     if (choice != 0) {
                         this.setCurrentAction(wards.get(choice - 1));
                         confirmed = true;
                     }
-                }
-
-                default -> throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
             }
         } while (!confirmed);
     }

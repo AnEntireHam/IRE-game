@@ -151,11 +151,21 @@ public abstract class Entity {
             if (this.buffDurations[i] != 0) {
 
                 switch (i) {
-                    case 0 -> output.append("Hlh: ");
-                    case 1 -> output.append("Atk: ");
-                    case 2 -> output.append("Def: ");
-                    case 3 -> output.append("Mag: ");
-                    case 4 -> output.append("Spd: ");
+                    case 0:
+                        output.append("Hlh: ");
+                        break;
+                    case 1:
+                        output.append("Atk: ");
+                        break;
+                    case 2:
+                        output.append("Def: ");
+                        break;
+                    case 3:
+                        output.append("Mag: ");
+                        break;
+                    case 4:
+                        output.append("Spd: ");
+                        break;
                 }
                 output.append(this.buffStrengths[i]).append("%, ").append(this.buffDurations[i]).append("  ");
 
@@ -265,21 +275,34 @@ public abstract class Entity {
 
     public int getStat(int index) {
 
-        return switch (index) {
-            case 0 -> getBaseHlh();
-            case 1 -> getBaseAtk();
-            case 2 -> getBaseDef();
-            case 3 -> getBaseMag();
-            case 4 -> getBaseSpd();
-            case 5 -> getMaxHlh();
-            case 6 -> getCurAtk();
-            case 7 -> getCurDef();
-            case 8 -> getCurMag();
-            case 9 -> getCurSpd();
-            case 10 -> getHlh();
-            case 11 -> getMan();
-            default -> -1;
-        };
+        switch (index) {
+            case 0:
+                return getBaseHlh();
+            case 1:
+                return getBaseAtk();
+            case 2:
+                return getBaseDef();
+            case 3:
+                return getBaseMag();
+            case 4:
+                return getBaseSpd();
+            case 5:
+                return getMaxHlh();
+            case 6:
+                return getCurAtk();
+            case 7:
+                return getCurDef();
+            case 8:
+                return getCurMag();
+            case 9:
+                return getCurSpd();
+            case 10:
+                return getHlh();
+            case 11:
+                return getMan();
+            default:
+                throw new IllegalArgumentException("Unexpected value: " + index);
+        }
     }
 
     public int getBaseHlh() {
@@ -333,19 +356,44 @@ public abstract class Entity {
     public void setStat(int index, int strength) {
 
         switch (index) {
-            case 0 -> setBaseHlh(strength);
-            case 1 -> setBaseAtk(strength);
-            case 2 -> setBaseDef(strength);
-            case 3 -> setBaseMag(strength);
-            case 4 -> setBaseSpd(strength);
-            case 5 -> setMaxHlh(strength);
-            case 6 -> setCurAtk(strength);
-            case 7 -> setCurDef(strength);
-            case 8 -> setCurMag(strength);
-            case 9 -> setCurSpd(strength);
-            case 10 -> setHlh(strength);
-            case 11 -> setMan(strength);
-            default -> throw new IllegalStateException("Unexpected value: " + index);
+            case 0:
+                setBaseHlh(strength);
+                break;
+            case 1:
+                setBaseAtk(strength);
+                break;
+            case 2:
+                setBaseDef(strength);
+                break;
+            case 3:
+                setBaseMag(strength);
+                break;
+            case 4:
+                setBaseSpd(strength);
+                break;
+            case 5:
+                setMaxHlh(strength);
+                break;
+            case 6:
+                setCurAtk(strength);
+                break;
+            case 7:
+                setCurDef(strength);
+                break;
+            case 8:
+                setCurMag(strength);
+                break;
+            case 9:
+                setCurSpd(strength);
+                break;
+            case 10:
+                setHlh(strength);
+                break;
+            case 11:
+                setMan(strength);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + index);
         }
     }
 

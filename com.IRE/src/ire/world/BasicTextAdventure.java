@@ -64,15 +64,24 @@ public class BasicTextAdventure {
         String target = parts[1];
 
         //. Second word doesn't matter: inventory ************me
-        return switch (action) {
-            case "move", "go" -> move(target);
-            case "get", "take" -> get(target);
-            case "drop" -> drop(target);
-            case "use" -> use(target);
-            case "inventory" -> inventory();
-            case "help" -> help();
-            default -> "Unknown command: " + command;
-        };
+        switch (action) {
+            case "move":
+            case "go":
+                return move(target);
+            case "get":
+            case "take":
+                return get(target);
+            case "drop":
+                return drop(target);
+            case "use":
+                return use(target);
+            case "inventory":
+                return inventory();
+            case "help":
+                return help();
+            default:
+                return "Unknown command: " + command;
+        }
 
     }
 

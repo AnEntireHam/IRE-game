@@ -112,21 +112,41 @@ public class Player extends Entity {
                 for (int l = 0; l <= 5; l++) {
 
                     switch (l) {
-                        case 0 -> System.out.print("[1] Hlh " + this.baseHlh);
-                        case 1 -> System.out.print("[2] Atk " + this.baseAtk);
-                        case 2 -> System.out.print("[3] Def " + this.baseDef);
-                        case 3 -> System.out.print("[4] Mag " + this.baseMag);
-                        case 4 -> System.out.print("[5] Spd " + this.baseSpd);
+                        case 0:
+                            System.out.print("[1] Hlh " + this.baseHlh);
+                            break;
+                        case 1:
+                            System.out.print("[2] Atk " + this.baseAtk);
+                            break;
+                        case 2:
+                            System.out.print("[3] Def " + this.baseDef);
+                            break;
+                        case 3:
+                            System.out.print("[4] Mag " + this.baseMag);
+                            break;
+                        case 4:
+                            System.out.print("[5] Spd " + this.baseSpd);
+                            break;
                     }
 
                     if (statChoice[l] != 0) {
                         System.out.print(" -> ");
                         switch (l) {
-                            case 0 -> System.out.println(this.baseHlh + statChoice[l]);
-                            case 1 -> System.out.println(this.baseAtk + statChoice[l]);
-                            case 2 -> System.out.println(this.baseDef + statChoice[l]);
-                            case 3 -> System.out.println(this.baseMag + statChoice[l]);
-                            case 4 -> System.out.println(this.baseSpd + statChoice[l]);
+                            case 0:
+                                System.out.println(this.baseHlh + statChoice[l]);
+                                break;
+                            case 1:
+                                System.out.println(this.baseAtk + statChoice[l]);
+                                break;
+                            case 2:
+                                System.out.println(this.baseDef + statChoice[l]);
+                                break;
+                            case 3:
+                                System.out.println(this.baseMag + statChoice[l]);
+                                break;
+                            case 4:
+                                System.out.println(this.baseSpd + statChoice[l]);
+                                break;
                         }
                     } else {
                         System.out.println();
@@ -134,31 +154,31 @@ public class Player extends Entity {
                 }
 
                 switch (k) {
-                    case 1 -> {
+                    case 1:
                         this.baseHlh += 1;
                         System.out.println(this.name + " added 1 point to health.");
                         statChoice[0] = 1;
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         this.baseAtk += 1;
                         System.out.println(this.name + " added 1 point to attack.");
                         statChoice[1] = 1;
-                    }
-                    case 3 -> {
+                        break;
+                    case 3:
                         this.baseDef += 1;
                         System.out.println(this.name + " added 1 point to defense.");
                         statChoice[2] = 1;
-                    }
-                    case 4 -> {
+                        break;
+                    case 4:
                         this.baseMag += 1;
                         System.out.println(this.name + " added 1 point to magic.");
                         statChoice[3] = 1;
-                    }
-                    case 5 -> {
+                        break;
+                    case 5:
                         this.baseSpd += 1;
                         System.out.println(this.name + " added 1 point to speed.");
                         statChoice[4] = 1;
-                    }
+                        break;
                 }
             }
 
@@ -203,20 +223,20 @@ public class Player extends Entity {
             System.out.println("Enemies are defending. Select an action.");
             choice = Tools.menu(options, 1);
 
-            primary: switch (attacks.get(choice - 1)) {
-                case "Stab" -> {
+            switch (attacks.get(choice - 1)) {
+                case "Stab":
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.stab);
                         confirmed = true;
                     }
-                }
-                case "Lunge" -> {
+                    break;
+                case "Lunge":
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.lunge);
                         confirmed = true;
                     }
-                }
-                case "Cast" -> {
+                    break;
+                case "Cast":
                     while (true) {
                         choice = SpellAttack.menu(this.spells, true);
 
@@ -226,10 +246,10 @@ public class Player extends Entity {
                         } else if (promptTargetIndex(targets)) {
                             this.setCurrentAction(spells.get(choice - 1));
                             confirmed = true;
-                            break primary;
+                            break;
                         }
                     }
-                }
+                    break;
             }
         } while (!confirmed);
     }
@@ -250,21 +270,21 @@ public class Player extends Entity {
             choice = Tools.menu(options, 1);
 
             switch (defenses.get(choice - 1)) {
-                case "Shield" -> {
+                case "Shield":
                     this.setCurrentAction(this.shield);
                     confirmed = true;
-                }
-                case "Counter" -> {
+                    break;
+                case "Counter":
                     this.setCurrentAction(this.counter);
                     confirmed = true;
-                }
-                case "Ward" -> {
+                    break;
+                case "Ward":
                     choice = SpellDefense.menu(this.wards, true);
                     if (choice != 0) {
                         this.setCurrentAction(wards.get(choice - 1));
                         confirmed = true;
                     }
-                }
+                    break;
             }
         } while (!confirmed);
     }
