@@ -8,8 +8,8 @@ import ire.combat.actions.attackactions.spellattacks.Solar;
 import ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
-import ire.entities.enemies.Skeleton;
 import ire.entities.Player;
+import ire.entities.enemies.Skeleton;
 
 public class Test {
 
