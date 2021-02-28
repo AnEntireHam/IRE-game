@@ -12,6 +12,7 @@ public abstract class StatusEffect {
 
     public StatusEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
                         int stacks, int duration) {
+
         this.name = name;
         this.abbreviation = abbreviation;
         this.description = description;

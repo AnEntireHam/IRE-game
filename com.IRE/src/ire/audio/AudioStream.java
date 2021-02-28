@@ -16,7 +16,6 @@ public class AudioStream extends Thread {
 
         this.path = "sounds/" + path + ".wav";
         this.start();
-
     }
 
     public void play() {
@@ -28,10 +27,8 @@ public class AudioStream extends Thread {
     public void run() {
 
         while (true) {
-
             if (this.play) {
                 try {
-
                     File audioFile = new File(path);
                     AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
 
@@ -78,9 +75,6 @@ public class AudioStream extends Thread {
             } else {
                 Tools.sleep(5);
             }
-
         }
     }
-
-
 }

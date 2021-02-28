@@ -15,9 +15,10 @@ public abstract class AttackAction extends Action {
     protected int damage;
     protected float coefficient;
 
-    public AttackAction(String name, String description, AudioStream SOUND, int DURATION, int DELAY, float coefficient) {
-
+    public AttackAction(String name, String description, AudioStream SOUND, int DURATION,
+                        int DELAY, float coefficient) {
         super(name, description);
+
         this.SOUND = SOUND;
         this.DURATION = DURATION;
         this.DELAY = DELAY;

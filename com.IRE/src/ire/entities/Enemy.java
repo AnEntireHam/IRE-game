@@ -52,7 +52,6 @@ public abstract class Enemy extends Entity {
         this.rewardItem = new Item(rewardName, rewardUnequippedDescription, rewardEquippedDescription);
 
         levelUp(level);
-
     }
 
     // ***********************************
@@ -81,23 +80,18 @@ public abstract class Enemy extends Entity {
                 }
             }
         }
-
         bEffects.fullHeal();
-
     }
 
     public boolean calculateReward() {
-
         return Math.random() * 100 < this.rewardChance;
     }
 
     public String getRewardName() {
-
         return this.rewardName;
     }
 
     public Item giveReward() {
-
         return this.rewardItem;
     }
 
@@ -114,7 +108,6 @@ public abstract class Enemy extends Entity {
         boolean confirmed = false;
 
         do {
-
             choice = rand.nextInt(attacks.size());
 
             switch (attacks.get(choice)) {
@@ -159,21 +152,17 @@ public abstract class Enemy extends Entity {
         boolean confirmed = false;
 
         do {
-
             choice = rand.nextInt(defenses.size());
 
             switch (defenses.get(choice)) {
-
                 case "Shield" -> {
                     this.setCurrentAction(this.shield);
                     confirmed = true;
                 }
-
                 case "Counter" -> {
                     this.setCurrentAction(this.counter);
                     confirmed = true;
                 }
-
                 case "Ward" -> {
                     choice = SpellDefense.menu(this.wards, false);
                     if (choice != 0) {
@@ -181,7 +170,6 @@ public abstract class Enemy extends Entity {
                         confirmed = true;
                     }
                 }
-
                 default -> throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
             }
         } while (!confirmed);

@@ -36,7 +36,6 @@ public class StatEffect extends StatusEffect {
     }
 
     public void setStrength(int strength) {
-
         if (strength < 1) {
             System.err.println("Strength must be greater than 0");
         }  //  Handle max strength values in each spell?
