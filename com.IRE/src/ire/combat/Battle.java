@@ -64,13 +64,13 @@ public class Battle {
         if (surprise != 0) {
             if (surprise == 1) {
                 for (Entity p: players) {
-                    p.bEffects.buff(4, 200, 1);
-                    p.bEffects.incrementBuffs(false);
+                    /*p.bEffects.buff(4, 200, 1);
+                    p.bEffects.incrementStatusEffects(false);*/
                 }
             } else {
                 for (Entity e: enemies) {
-                    e.bEffects.buff(4, 200, 1);
-                    e.bEffects.incrementBuffs(false);
+                    /*e.bEffects.buff(4, 200, 1);
+                    e.bEffects.incrementStatusEffects(false);*/
                 }
             }
         }
@@ -80,7 +80,7 @@ public class Battle {
         while (checkDead() == 0) {
             if (playerTurn) {
                 for (Entity p: players) {
-                    p.bEffects.incrementBuffs(true);
+                    p.bEffects.incrementStatusEffects(true);
                 }
                 defend(enemies);
                 attack(players, enemies);
@@ -88,7 +88,7 @@ public class Battle {
             } else {
 
                 for (Entity e: enemies) {
-                    e.bEffects.incrementBuffs(true);
+                    e.bEffects.incrementStatusEffects(true);
                 }
 
                 if (checkDead() == 1) {
@@ -123,7 +123,6 @@ public class Battle {
 
         for (Entity a: attackers) {
             if (a.isAlive()) {
-                a.setDefenseIndex(-1);
                 a.promptAttack((ArrayList<Entity>) defenders);
             }
         }

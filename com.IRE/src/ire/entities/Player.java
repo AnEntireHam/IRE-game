@@ -165,7 +165,7 @@ public class Player extends Entity {
             this.level += 1;
             Tools.emptyPrompt();
             Tools.clear();
-            bEffects.fullHeal();
+            // bEffects.fullHeal();  Replace with appropriate method in Entity
         }
         Tools.clear();
     }

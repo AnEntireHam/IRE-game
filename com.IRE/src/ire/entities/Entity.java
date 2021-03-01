@@ -9,6 +9,7 @@ import ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import ire.combat.BattleEffect;
+import ire.combat.statuseffects.StatusEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,20 +52,13 @@ public abstract class Entity {
     protected int targetIndex;
     protected Action currentAction;
 
-    protected int attackIndex;
-    protected int spellIndex;
-    protected int offTechIndex;
-
-
-    protected int defenseIndex;
-    protected int wardIndex;
-    protected int defTechIndex;
-
-
     // These may need to be handled differently. For now assume one true "techniques" list.
 
     // protected ArrayList<String> techs = new ArrayList<>();
 
+
+    // the NEW implementation babey!!
+    protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
     // ON JAH why did you do this to yourself, you heathen, you pleb, you jester, you clown, you circus!?
     protected int[] buffStrengths = {0, 0, 0, 0, 0, 0, 0};
@@ -227,12 +221,8 @@ public abstract class Entity {
     public abstract void promptDefend();
     protected abstract boolean promptTargetIndex(ArrayList<Entity> enemies);
 
-    public Action getCurrentAction() {
-        return currentAction;
-    }
-
-    public void setCurrentAction(Action currentAction) {
-        this.currentAction = currentAction;
+    public void addStatusEffect(StatusEffect effect) {
+        this.statusEffects.add(effect);
     }
 
     public void addAttack(String attack) {
@@ -243,6 +233,10 @@ public abstract class Entity {
         defenses.add(defense);
     }
 
+    public void removeStatusEffect(StatusEffect effect) {
+        this.statusEffects.remove(effect);
+    }
+
     public void removeAttack(int index) {
         attacks.remove(index);
     }
@@ -251,16 +245,8 @@ public abstract class Entity {
         defenses.remove(index);
     }
 
-    public ArrayList<String> getAttacks() {
-        return attacks;
-    }
-
-    public ArrayList<String> getDefenses() {
-        return defenses;
-    }
-
     // ***********************************
-    // Stat Accessors
+    // Stat Accessors and Mutators
     // ***********************************
 
     public int getStat(int index) {
@@ -402,50 +388,39 @@ public abstract class Entity {
     }
 
     // ***********************************
-    // Other Accessors
+    // Battle Accessors and Mutators
     // ***********************************
-
-    public String getName() {
-        return this.name;
-    }
-
-    public boolean isAlive() {
-        return this.alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
-    public int getLevel() {
-        return this.level;
-    }
-
-    public boolean isDebug() {
-        return this.debug;
-    }
-
-    public void setDebug(boolean bool) {
-        this.debug = bool;
-    }
 
     public int getTargetIndex() {
         return this.targetIndex;
     }
 
-    public int getAttackIndex() {
-        return this.attackIndex;
+    public Action getCurrentAction() {
+        return currentAction;
     }
 
-    public int getDefenseIndex() {
-        return this.defenseIndex;
+    public ArrayList<StatusEffect> getStatusEffects() {
+        return this.statusEffects;
     }
 
-    public void setDefenseIndex(int defenseIndex) {
-        this.defenseIndex = defenseIndex;
+    // Probably move this elsewhere, or attack/strike SFX back here.
+    public AudioStream getHealSound() {
+        return healSound;
     }
 
-    public int getNewBuff() {
+    public AudioStream getDeathSound() {
+        return deathSound;
+    }
+
+    public StatusEffect getStatusEffect(int index) {
+        return this.statusEffects.get(index);
+    }
+
+    public void setCurrentAction(Action currentAction) {
+        this.currentAction = currentAction;
+    }
+
+    /*public int getNewBuff() {
         return this.newBuff;
     }
 
@@ -475,23 +450,35 @@ public abstract class Entity {
 
     public void setBuffStacks(int stacks) {
         this.buffStacks[this.newBuff] = stacks;
+    }*/
+
+    // ***********************************
+    // Other Accessors and Mutators
+    // ***********************************
+
+
+    public String getName() {
+        return this.name;
     }
 
-
-    public AudioStream getHitSound() {
-        return hitSound;
+    public boolean isAlive() {
+        return this.alive;
     }
 
-    public AudioStream getStrikeSound() {
-        return strikeSound;
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
-    public AudioStream getHealSound() {
-        return healSound;
+    public int getLevel() {
+        return this.level;
     }
 
-    public AudioStream getDeathSound() {
-        return deathSound;
+    public boolean isDebug() {
+        return this.debug;
+    }
+
+    public void setDebug(boolean bool) {
+        this.debug = bool;
     }
 
     // Unimplemented/legacy accessors

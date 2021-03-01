@@ -1,6 +1,7 @@
 package ire.combat.statuseffects.generativeeffect;
 
 import ire.combat.statuseffects.StatusEffect;
+import ire.entities.Entity;
 
 public abstract class GenerativeEffect extends StatusEffect {
 
@@ -10,17 +11,16 @@ public abstract class GenerativeEffect extends StatusEffect {
     }
 
     @Override
-    protected boolean apply() {
-        return false;
+    protected void apply(Entity attacker, Entity defender, int damage) {
     }
 
     @Override
-    protected void incrementEffect() {
+    protected void incrementEffect(Entity target, boolean tick) {
         System.out.println("Method under construction");
     }
 
     @Override
-    protected void remove() {
+    protected void remove(Entity target) {
         System.out.println("Method under construction");
     }
 }

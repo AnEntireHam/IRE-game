@@ -80,7 +80,7 @@ public abstract class Enemy extends Entity {
                 }
             }
         }
-        bEffects.fullHeal();
+        //  bEffects.fullHeal();  Replace with appropriate method in Entity
     }
 
     public boolean calculateReward() {

@@ -1,10 +1,12 @@
 package ire.combat.statuseffects.stateffects;
 
 import ire.combat.statuseffects.StatusEffect;
+import ire.entities.Entity;
 
 public class StatEffect extends StatusEffect {
 
     protected int strength;
+    protected float statMultiplier;
 
     public StatEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
                             int stacks, int duration, int strength) {
@@ -13,21 +15,19 @@ public class StatEffect extends StatusEffect {
         this.strength = strength;
     }
 
-    //  Calculates to see if a status effect or stack should be added.
     @Override
-    protected boolean apply() {
-        return false;
+    protected void apply(Entity attacker, Entity defender, int damage) {
     }
 
     //  Reduces duration by 1 and executes effects if either are applicable.
     @Override
-    protected void incrementEffect() {
+    protected void incrementEffect(Entity target, boolean tick) {
         System.out.println("Method under construction");
     }
 
-    //  Removes the status effect from its host. Probably also does math to figure out if it should.
+    //  For status effects with specific or unique conditions, add separate methods.
     @Override
-    protected void remove() {
+    protected void remove(Entity target) {
         System.out.println("Method under construction");
     }
 
@@ -41,5 +41,15 @@ public class StatEffect extends StatusEffect {
         }  //  Handle max strength values in each spell?
     }
 
-    //  For status effects with specific or unique conditions, add separate methods.
+    public float getStatMultiplier() {
+        return statMultiplier;
+    }
+
+    public void setStatMultiplier(float statMultiplier) {
+        this.statMultiplier = statMultiplier;
+    }
+
+    public void incrementStatMultiplier(float increment) {
+        this.statMultiplier += increment;
+    }
 }

@@ -127,7 +127,7 @@ public class BattleEffect {
     }
 */
 
-    public void buff(int stat, int strength, int duration) {
+    /*public void buff(int stat, int strength, int duration) {
 
         // More advanced logic will probably be needed for balancing purposes in the future.
         this.e.setNewBuff(stat);
@@ -167,13 +167,13 @@ public class BattleEffect {
         }
 
         this.e.setNewBuff(-1);
-    }
+    }*/
 
-    public void incrementBuffs(boolean tick) {
+    public void incrementStatusEffects(boolean tick) {
 
         // 0-4 represents stats, 5 represents bleeds, 6 represents mana bleeds
 
-        this.e.setNewBuff(0);
+        /*this.e.setNewBuff(0);
 
         if (e.getBuffDurations() != 0) {
 
@@ -272,10 +272,10 @@ public class BattleEffect {
             for (int i = 0; i < 12; i++) {
                 System.out.println(e.getStat(i));
             }
-        }
+        }*/
     }
 
-    public void fullHeal() {
+    /*public void fullHeal() {
 
         this.e.setNewBuff(0);
 
@@ -300,14 +300,14 @@ public class BattleEffect {
                 if (i < 6) {
                     this.e.setStat(i + 4, e.getStat(i - 1));
                 }
-                /*switch (i) {
+                *//*switch (i) {
                     case 1 -> this.maxHlh = this.baseHlh;
                     case 2 -> this.curAtk = this.baseAtk;
                     case 3 -> this.curDef = this.baseDef;
                     case 4 -> this.curMag = this.baseMag;
                     case 5 -> this.curSpd = this.baseSpd;
                     case 6 -> this.man = this.curMag;
-                }*/
+                }*//*
 
             }
 
@@ -316,17 +316,7 @@ public class BattleEffect {
         this.e.setHlh(e.getMaxHlh());
         this.e.setMan(e.getCurMag());
 
-    }
-
-    public void resetStats() {
-
-        this.e.setMaxHlh(e.getBaseHlh());
-        this.e.setCurAtk(e.getBaseAtk());
-        this.e.setCurDef(e.getBaseDef());
-        this.e.setCurMag(e.getBaseMag());
-        this.e.setCurSpd(e.getBaseSpd());
-        this.e.setMan(e.getCurMag());
-    }
+    }*/
 
     // ***********************************
     // Damage Functions
