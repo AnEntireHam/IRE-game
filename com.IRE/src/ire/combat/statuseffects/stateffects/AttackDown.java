@@ -15,13 +15,17 @@ public class AttackDown extends StatEffect {
     //  Consider moving class to "typicalStatEffect" package?
 
     @Override
-    public void apply(Entity attacker, Entity defender, int damage) {
+    public void apply(Entity attacker, Entity defender) {
 
         double rand = Math.random();
-        float baseChance = (1.60f + ((strength - 1) * 0.075f));
-        float baseResistance = (0.3333f * (attacker.getCurAtk() - defender.getCurAtk()));  // Potentially outsource.
+        float baseChance = (0.60f + ((strength - 1) * 0.075f));
+        float baseResistance = (0.003333f * (attacker.getCurMag() - defender.getCurAtk()));  // Potentially outsource.
         boolean original = true;
 
+        System.out.println("rand: " + rand);
+        System.out.println("baseChance: " + baseChance);
+        System.out.println("baseResistance: " + baseResistance);
+        System.out.println("combined chance: " + (baseChance + baseResistance));
         if (rand < (baseChance + baseResistance)) {
 
             this.statMultiplier = (1 - (0.70f + ((strength - 1) * 0.075f)));
@@ -41,6 +45,7 @@ public class AttackDown extends StatEffect {
 
                 System.out.println(defender.getName() + " had their <stat> lowered!");
                 defender.addStatusEffect(this);
+                System.out.println("Multiplier: " + statMultiplier);
             }
 
         } else {

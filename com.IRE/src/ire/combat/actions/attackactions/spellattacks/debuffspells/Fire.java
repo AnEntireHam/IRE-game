@@ -33,6 +33,6 @@ public class Fire extends DebuffSpell {
         }
 
         defender.bEffects.takeDamage(damage, true);
-        this.debuff.apply(attacker, defender, damage);
+        this.debuff.apply(attacker, defender);
     }
 }

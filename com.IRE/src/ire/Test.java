@@ -16,7 +16,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Player p2 = new Player(1, 70, 3, 3, 8, 6,
+        Player p2 = new Player(1, 70, 3, 3, 10, 6,
                 "Mage Test 1", "humanDeath",
                 1, 0, 0, 2, 1);
 
@@ -34,7 +34,9 @@ public class Test {
 
         AttackDown ad = new AttackDown(1);
 
-        ad.apply(p2, e1, 10);
+        // HP 70, ATK 3, DEF 3, MAG 8, SPD 6
+        // HP 10, ATK 7, DEF 1, MAG 2, SPD 1
+        ad.apply(p2, e1);
 
         System.out.println("okay");
 

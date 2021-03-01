@@ -11,7 +11,7 @@ public abstract class GenerativeEffect extends StatusEffect {
     }
 
     @Override
-    protected void apply(Entity attacker, Entity defender, int damage) {
+    protected void apply(Entity attacker, Entity defender) {
     }
 
     @Override
