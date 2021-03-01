@@ -5,6 +5,7 @@ import ire.combat.Battle;
 import ire.combat.actions.attackactions.spellattacks.Celestial;
 import ire.combat.actions.attackactions.spellattacks.Lunar;
 import ire.combat.actions.attackactions.spellattacks.Solar;
+import ire.combat.actions.attackactions.spellattacks.debuffspells.Fire;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
 import ire.entities.Player;
 import ire.entities.enemies.Skeleton;
@@ -58,11 +59,14 @@ public class Main {
         Celestial celestial = new Celestial(1);
         Lunar lunar = new Lunar(1);
         Solar solar = new Solar(1);
+        Fire fire = new Fire(1);
         Screen screen = new Screen();
 
         p2.addSpell(celestial);
         p2.addSpell(lunar);
         p2.addSpell(solar);
+        p2.addSpell(fire);
+
         p2.addWard(screen);
 
         e1.setName("Skeleton 1");

@@ -8,19 +8,17 @@ public class AttackDown extends StatEffect {
 
     public AttackDown(int strength) {
         super("Attack Down", "ATK", "Lowers the attack stat of the afflicted target.",
-                true, true, 0, 5, strength);
+                true, true, 1, 5, strength);
     }
 
     //  Not sure if stacks and duration should be in constructor in the first place.
     //  Consider moving class to "typicalStatEffect" package?
 
-    //  Calculates to see if a status effect or stack should be added.
-    //  if application is successful, and there's a pre-existing copy, make pre-existing one stronger.
     @Override
-    protected void apply(Entity attacker, Entity defender, int damage) {
+    public void apply(Entity attacker, Entity defender, int damage) {
 
         double rand = Math.random();
-        float baseChance = (0.60f + ((strength - 1) * 0.075f));
+        float baseChance = (1.60f + ((strength - 1) * 0.075f));
         float baseResistance = (0.3333f * (attacker.getCurAtk() - defender.getCurAtk()));  // Potentially outsource.
         boolean original = true;
 
@@ -51,18 +49,21 @@ public class AttackDown extends StatEffect {
         Tools.sleep(1000);
     }
 
-    //  Reduces duration by 1 and executes effects if either are applicable.
-    //  When applying a status effect, first loop through the target's status effects. If there's a SE with a matching
-    //  abbreviation and display/percentage, consider that in the final display.
-    //  If duration == 0, call remove.
     @Override
     protected void incrementEffect(Entity target, boolean tick) {
-        System.out.println("Method under construction");
+
+        this.incrementDuration(-1);
+        if (this.duration < 0) {
+            remove(target);
+        }
     }
 
     @Override
     protected void remove(Entity target) {
+
         target.removeStatusEffect(this);
+        System.out.println(target.getName() + "'s status effect " + this.getName() + " expired.");
+        Tools.sleep(1000);
     }
 
     @Override

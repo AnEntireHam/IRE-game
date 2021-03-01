@@ -16,7 +16,7 @@ public class StatEffect extends StatusEffect {
     }
 
     @Override
-    protected void apply(Entity attacker, Entity defender, int damage) {
+    public void apply(Entity attacker, Entity defender, int damage) {
     }
 
     //  Reduces duration by 1 and executes effects if either are applicable.

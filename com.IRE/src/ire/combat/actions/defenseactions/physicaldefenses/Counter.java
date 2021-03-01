@@ -36,10 +36,9 @@ public class Counter extends PhysicalDefense {
             Tools.sleep(1000);
             attacker.bEffects.takeDamage(counterDamage, true);
 
-        } else if (attack instanceof PhysicalAttack) {
+        } else {
 
-            ((PhysicalAttack) attacker.getCurrentAction()).incrementDamage(
-                    Tools.round(defender.getCurDef() * physCoefficientDef));
+            super.execute(attacker, defender);
         }
     }
 }

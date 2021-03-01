@@ -61,8 +61,8 @@ public abstract class Entity {
     protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
     // ON JAH why did you do this to yourself, you heathen, you pleb, you jester, you clown, you circus!?
-    protected int[] buffStrengths = {0, 0, 0, 0, 0, 0, 0};
-    protected int[] buffDurations = {0, 0, 0, 0, 0, 0, 0};
+    protected int[] buffStrengths = {0, 0, 0, 0, 0, 0, 0, 0};
+    protected int[] buffDurations = {0, 0, 0, 0, 0, 0, 0, 0};
     protected int[] buffStacks =    {1, 1, 1, 1, 1};
     protected int newBuff = 0;
 

@@ -25,6 +25,7 @@ public class Screen extends SpellDefense {
             ((SpellAttack) attack).incrementDamage(
                     Tools.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
         } else {
+
             super.execute(attacker, defender);
         }
     }

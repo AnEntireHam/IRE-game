@@ -17,7 +17,7 @@ public class Lunar extends SpellAttack {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        damage = (int) (attacker.getCurMag() * coefficient);
+        damage = Tools.round(attacker.getCurMag() * coefficient);
         damage = Tools.round(damage * ((spellLevel - 1) * 0.5 + 1));
 
         int healthCost = Tools.round((baseHealthCost * attacker.getCurMag()));

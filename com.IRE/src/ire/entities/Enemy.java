@@ -117,14 +117,12 @@ public abstract class Enemy extends Entity {
                         confirmed = true;
                     }
                 }
-
                 case "Lunge" -> {
                     if (promptTargetIndex(targets)) {
                         this.setCurrentAction(this.lunge);
                         confirmed = true;
                     }
                 }
-
                 case "Cast" -> {
                     while (true) {
 
