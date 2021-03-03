@@ -5,13 +5,17 @@ import ire.entities.Entity;
 
 public class StatEffect extends StatusEffect {
 
+    protected final float statCoefficient = 0.003333f;
+    protected float baseProbability;
     protected int strength;
+    protected float strengthCoefficient;
     protected float statMultiplier;
 
     public StatEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
-                            int stacks, int duration, int strength) {
+                      int stacks, int duration, float baseProbability, int strength, float strengthCoefficient) {
         super(name, abbreviation, description, display, percentage, stacks, duration);
 
+        this.baseProbability = baseProbability;
         this.strength = strength;
     }
 

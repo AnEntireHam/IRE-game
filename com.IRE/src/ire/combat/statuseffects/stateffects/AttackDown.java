@@ -8,7 +8,7 @@ public class AttackDown extends StatEffect {
 
     public AttackDown(int strength) {
         super("Attack Down", "ATK", "Lowers the attack stat of the afflicted target.",
-                true, true, 1, 5, strength);
+                true, true, 1, 5, 0.60f, strength, 0.075f);
     }
 
     //  Not sure if stacks and duration should be in constructor in the first place.
@@ -18,31 +18,33 @@ public class AttackDown extends StatEffect {
     public void apply(Entity attacker, Entity defender) {
 
         double rand = Math.random();
-        float baseChance = (0.60f + ((strength - 1) * 0.075f));
-        float baseResistance = (0.003333f * (attacker.getCurMag() - defender.getCurAtk()));  // Potentially outsource.
-        boolean original = true;
+        float effectProbability = -(baseProbability + strengthCoefficient * (strength - 1));
+        float statProbability = (statCoefficient * (attacker.getBaseMag() - defender.getBaseAtk()));
+        float totalProbability = effectProbability + statProbability;
 
-        System.out.println("rand: " + rand);
-        System.out.println("baseChance: " + baseChance);
-        System.out.println("baseResistance: " + baseResistance);
-        System.out.println("combined chance: " + (baseChance + baseResistance));
-        if (rand < (baseChance + baseResistance)) {
+        if (attacker.isDebug()) {
+            System.out.println("rand: " + rand);
+            System.out.println("effectProbability: " + effectProbability);
+            System.out.println("statProbability: " + statProbability);
+            System.out.println("combined chance: " + (effectProbability + statProbability));
+        }
 
-            this.statMultiplier = (1 - (0.70f + ((strength - 1) * 0.075f)));
+        if (rand < (totalProbability)) {
 
             for (StatusEffect se: defender.getStatusEffects()) {
                 if (se.getName().equals(this.getName())) {
 
                     se.incrementStacks(1);
                     se.incrementDuration(this.duration);
+                    //  This needs to be edited so that "this.statMultiplier" is the severity formula.
                     ((StatEffect) se).incrementStatMultiplier(this.statMultiplier / se.getStacks());
-                    original = false;
                     break;
                 }
             }
 
-            if (original) {
+            if (stacks == 1) {
 
+                this.statMultiplier = (-(0.70f + ((strength - 1) * 0.075f)));
                 System.out.println(defender.getName() + " had their <stat> lowered!");
                 defender.addStatusEffect(this);
                 System.out.println("Multiplier: " + statMultiplier);
@@ -50,6 +52,10 @@ public class AttackDown extends StatEffect {
 
         } else {
             System.out.println(defender.getName() + " didn't have their <stat> lowered!");
+        }
+
+        if (attacker.isDebug()) {
+            System.out.println(this.statMultiplier);
         }
         Tools.sleep(1000);
     }

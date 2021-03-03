@@ -36,6 +36,7 @@ public class Test {
 
         // HP 70, ATK 3, DEF 3, MAG 8, SPD 6
         // HP 10, ATK 7, DEF 1, MAG 2, SPD 1
+        p2.setDebug(true);
         ad.apply(p2, e1);
 
         System.out.println("okay");
