@@ -1,9 +1,5 @@
 package ire.combat.statuseffects.stateffects;
 
-import ire.combat.statuseffects.StatusEffect;
-import ire.entities.Entity;
-import ire.tools.Tools;
-
 public class AttackDown extends StatEffect {
 
     public AttackDown(int effectLevel) {

@@ -8,7 +8,9 @@ import ire.combat.actions.attackactions.spellattacks.Solar;
 import ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
+import ire.combat.statuseffects.StatusEffect;
 import ire.combat.statuseffects.stateffects.AttackDown;
+import ire.combat.statuseffects.stateffects.AttackUp;
 import ire.entities.Player;
 import ire.entities.enemies.Skeleton;
 import ire.tools.Tools;
@@ -34,15 +36,20 @@ public class Test {
         Solar solar = new Solar(1);
 
         AttackDown ad = new AttackDown(1);
+        AttackUp au = new AttackUp(1);
 
         // HP 70, ATK 3, DEF 3, MAG 8, SPD 6
         // HP 10, ATK 7, DEF 1, MAG 2, SPD 1
         p2.setDebug(true);
+        au.apply(p2, e1);
+        //ad.apply(p2, e1);
+        /*ad.apply(p2, e1);
         ad.apply(p2, e1);
         ad.apply(p2, e1);
-        ad.apply(p2, e1);
-        ad.apply(p2, e1);
-
+        ad.apply(p2, e1);*/
+        for (StatusEffect se: e1.getStatusEffects()) {
+            System.out.println(se.toString());
+        }
 
 
 

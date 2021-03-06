@@ -264,7 +264,19 @@ public abstract class Entity {
             case 9 -> getCurSpd();
             case 10 -> getHlh();
             case 11 -> getMan();
-            default -> -1;
+            default -> throw new IllegalArgumentException("Unexpected value: " + index);
+        };
+    }
+
+    public int getBaseStat(String prefix) {
+
+        return switch (prefix.toLowerCase()) {
+          case "hlh" -> getBaseHlh();
+          case "atk" -> getBaseAtk();
+          case "def" -> getBaseDef();
+          case "mag" -> getBaseMag();
+          case "spd" -> getBaseSpd();
+          default -> throw new IllegalArgumentException("Unexpected value: " + prefix.toLowerCase());
         };
     }
 
@@ -331,7 +343,7 @@ public abstract class Entity {
             case 9 -> setCurSpd(strength);
             case 10 -> setHlh(strength);
             case 11 -> setMan(strength);
-            default -> throw new IllegalStateException("Unexpected value: " + index);
+            default -> throw new IllegalArgumentException("Unexpected value: " + index);
         }
     }
 

@@ -68,4 +68,8 @@ public abstract class StatusEffect {
         this.duration += increment;
     }
 
+    @Override
+    public String toString() {
+        return ("Name: " + name + "  Stacks: " + stacks + "  Duration: " + duration);
+    }
 }

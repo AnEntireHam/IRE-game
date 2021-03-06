@@ -4,7 +4,7 @@ import ire.combat.statuseffects.StatusEffect;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
-public class StatEffect extends StatusEffect {
+public abstract class StatEffect extends StatusEffect {
 
     protected static final float STAT_COEFFICIENT = 0.003333f;
     protected static final float STACK_COEFFICIENT = 0.50f;
@@ -19,7 +19,8 @@ public class StatEffect extends StatusEffect {
     protected float levelProbability;
 
     public StatEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
-                      int stacks, int duration, int effectLevel, float baseProbability, float levelProbability, float baseMultiplier, float levelMultiplier) {
+                      int stacks, int duration, int effectLevel, float baseProbability, float levelProbability,
+                      float baseMultiplier, float levelMultiplier) {
         super(name, abbreviation, description, display, percentage, stacks, duration);
 
         this.effectLevel = effectLevel;
@@ -34,12 +35,17 @@ public class StatEffect extends StatusEffect {
 
         double rand = Math.random();
         float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
-        float statProbability = (STAT_COEFFICIENT * (attacker.getBaseMag() - defender.getBaseAtk()));
+        float statProbability = 0.0f;
+
+        if (baseMultiplier < 0) {
+            statProbability = (STAT_COEFFICIENT * (attacker.getBaseMag() - defender.getBaseStat(abbreviation)));
+        }
+
         float totalProbability = effectProbability + statProbability;
         String[] parts = name.split(" ");
         String statName = parts[0].toLowerCase();
 
-        if (rand < (totalProbability)) {
+        if (rand <= (totalProbability)) {
 
             float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
 
@@ -72,7 +78,7 @@ public class StatEffect extends StatusEffect {
             if (baseMultiplier < 0.0) {
                 System.out.println(defender.getName() + " didn't have their " + statName + " lowered!");
             } else {
-                System.out.println(defender.getName() + " had their " + statName + " increased!");
+                System.out.println(defender.getName() + " didn't have their " + statName + " increased!");
             }
         }
 
@@ -97,7 +103,7 @@ public class StatEffect extends StatusEffect {
     protected void remove(Entity target) {
 
         target.removeStatusEffect(this);
-        System.out.println(target.getName() + "'s status effect " + this.name + " expired.");
+        System.out.println(target.getName() + "'s status effect " + name.toLowerCase() + " expired.");
         Tools.sleep(1000);
     }
 
@@ -127,5 +133,11 @@ public class StatEffect extends StatusEffect {
 
     public void incrementStatMultiplier(float increment) {
         this.statMultiplier += increment;
+    }
+
+    @Override
+    public String toString() {
+        return ("Name: " + name + "  Multiplier: " + statMultiplier
+                + "  Stacks: " + stacks + "  Duration: " + duration + "  Level: " + effectLevel);
     }
 }
