@@ -4,6 +4,8 @@ import ire.combat.statuseffects.StatusEffect;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
+import java.text.DecimalFormat;
+
 public abstract class StatEffect extends StatusEffect {
 
     protected static final float STAT_COEFFICIENT = 0.003333f;
@@ -45,7 +47,7 @@ public abstract class StatEffect extends StatusEffect {
         String[] parts = name.split(" ");
         String statName = parts[0].toLowerCase();
 
-        if (rand <= (totalProbability)) {
+        if (0 <= (totalProbability)) {
 
             float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
 
@@ -87,6 +89,8 @@ public abstract class StatEffect extends StatusEffect {
         }
 
         Tools.sleep(1000);  //  Eventually factor in global text speed
+
+        defender.calculateCurAll();
     }
 
     //  Reduces duration by 1 and executes effects if either are applicable.
@@ -110,7 +114,6 @@ public abstract class StatEffect extends StatusEffect {
     public int getEffectLevel() {
         return effectLevel;
     }
-
 
     public float getStatMultiplier() {
         return statMultiplier;

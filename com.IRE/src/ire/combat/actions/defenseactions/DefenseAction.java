@@ -18,7 +18,6 @@ public abstract class DefenseAction extends Action {
         super(NAME, DESCRIPTION);
     }
 
-
     @Override
     public void execute(Entity attacker, Entity defender) {
 

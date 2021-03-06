@@ -11,7 +11,6 @@ public class Shield extends PhysicalDefense {
         super("Shield", "Reduces damage of physical attacks", 1.4f, 1);
     }
 
-    // Add clause to handle spell-based attacks
     @Override
     public void execute(Entity attacker, Entity defender) {
 

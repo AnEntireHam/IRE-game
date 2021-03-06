@@ -365,21 +365,21 @@ public class BattleEffect {
     // This will have to change in the future if overhealing is implemented.
     public void heal(int heal, boolean message) {
 
-        if (e.getHlh() == e.getMaxHlh()) {
+        if (e.getHlh() == e.getCurHlh()) {
 
             if (message) {
                 System.out.println(e.getName() + " was healed, but was already at full health.");
             }
 
-        } else if ((e.getHlh() + heal) > e.getMaxHlh()) {
+        } else if ((e.getHlh() + heal) > e.getCurHlh()) {
 
-            if (e.getMaxHlh() < e.getMaxHlh()) {
+            if (e.getCurHlh() < e.getCurHlh()) {
 
                 if (message) {
-                    System.out.println(e.getName() + " healed " + (e.getMaxHlh() - e.getHlh()) + " health.");
+                    System.out.println(e.getName() + " healed " + (e.getCurHlh() - e.getHlh()) + " health.");
                 }
                 e.getHealSound().play();
-                e.setHlh(e.getMaxHlh());
+                e.setHlh(e.getCurHlh());
 
             } else {
 

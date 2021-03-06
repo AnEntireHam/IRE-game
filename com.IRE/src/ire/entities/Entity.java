@@ -10,6 +10,8 @@ import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import ire.combat.BattleEffect;
 import ire.combat.statuseffects.StatusEffect;
+import ire.combat.statuseffects.stateffects.StatEffect;
+import ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +26,7 @@ public abstract class Entity {
 
     protected String name;
     protected int level;
-    protected int baseHlh, maxHlh, hlh;
+    protected int baseHlh, curHlh, hlh;
     protected int baseAtk, curAtk;
     protected int baseDef, curDef;
     protected int baseMag, curMag, man;
@@ -95,7 +97,7 @@ public abstract class Entity {
         this.name = name;
         this.alive = true;
 
-        this.maxHlh = baseHlh;
+        this.curHlh = baseHlh;
         this.curAtk = baseAtk;
         this.curDef = baseDef;
         this.curMag = baseMag;
@@ -107,7 +109,7 @@ public abstract class Entity {
 
         this.deathSound = new AudioStream(deathSound);
 
-        this.hlh = this.maxHlh;
+        this.hlh = this.curHlh;
         this.man = this.curMag;
 
         this.bEffects = new BattleEffect(this);
@@ -126,7 +128,7 @@ public abstract class Entity {
             System.out.print(" ");
         }
 
-        int quotient = (int) (Math.round((double) this.hlh / this.maxHlh * 20));
+        int quotient = (int) (Math.round((double) this.hlh / this.curHlh * 20));
 
         for (int i = 0; i < quotient; i++) {
             System.out.print("█");
@@ -246,6 +248,63 @@ public abstract class Entity {
     }
 
     // ***********************************
+    // curStat and Attack Calculations
+    // ***********************************
+
+    protected float calculateMultiplier(String prefix) {
+
+        float multiplier = 1.0f;
+
+        for (StatusEffect se: this.statusEffects) {
+            //  Consider StatEffects which affect multiple stats
+            if (se instanceof StatEffect && se.getAbbreviation().equals(prefix)) {
+                multiplier += (Math.round(((StatEffect) se).getStatMultiplier() * 100f) / 100f);
+            }
+        }
+
+        return multiplier;
+    }
+
+    public void calculateCurAll() {
+
+        calculateCurHlh();
+        calculateCurAtk();
+        calculateCurDef();
+        calculateCurMag();
+        calculateCurSpd();
+    }
+
+    protected void calculateCurHlh() {
+
+        int prevMax = this.curHlh;
+        this.curHlh = Math.round(this.baseHlh * calculateMultiplier("HLH"));
+
+        if (prevMax != this.curHlh && this.hlh > this.curHlh) {
+            System.out.println(this.hlh + " " + this.curHlh);
+            int damage = this.hlh - this.curHlh;
+            this.bEffects.takeDamage(damage, false);
+            System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
+            Tools.sleep(2000);
+        }
+    }
+
+    protected void calculateCurAtk() {
+        this.curAtk = Math.round(this.baseAtk * calculateMultiplier("ATK"));
+    }
+
+    protected void calculateCurDef() {
+        this.curDef = Math.round(this.baseDef * calculateMultiplier("DEF"));
+    }
+
+    protected void calculateCurMag() {
+        this.curMag = Math.round(this.baseMag * calculateMultiplier("MAG"));
+    }
+
+    protected void calculateCurSpd() {
+        this.curSpd = Math.round(this.baseSpd * calculateMultiplier("SPD"));
+    }
+
+    // ***********************************
     // Stat Accessors and Mutators
     // ***********************************
 
@@ -257,7 +316,7 @@ public abstract class Entity {
             case 2 -> getBaseDef();
             case 3 -> getBaseMag();
             case 4 -> getBaseSpd();
-            case 5 -> getMaxHlh();
+            case 5 -> getCurHlh();
             case 6 -> getCurAtk();
             case 7 -> getCurDef();
             case 8 -> getCurMag();
@@ -300,8 +359,8 @@ public abstract class Entity {
         return baseSpd;
     }
 
-    public int getMaxHlh() {
-        return this.maxHlh;
+    public int getCurHlh() {
+        return this.curHlh;
     }
 
     public int getCurAtk() {
@@ -336,7 +395,7 @@ public abstract class Entity {
             case 2 -> setBaseDef(strength);
             case 3 -> setBaseMag(strength);
             case 4 -> setBaseSpd(strength);
-            case 5 -> setMaxHlh(strength);
+            case 5 -> setCurHlh(strength);
             case 6 -> setCurAtk(strength);
             case 7 -> setCurDef(strength);
             case 8 -> setCurMag(strength);
@@ -367,8 +426,8 @@ public abstract class Entity {
         this.baseSpd = baseSpd;
     }
 
-    public void setMaxHlh(int maxHlh) {
-        this.maxHlh = maxHlh;
+    public void setCurHlh(int curHlh) {
+        this.curHlh = curHlh;
     }
 
     public void setCurAtk(int curAtk) {
