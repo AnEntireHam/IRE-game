@@ -39,18 +39,13 @@ public class Test {
         // HP 10, ATK 7, DEF 1, MAG 2, SPD 1
         p2.setDebug(true);
         ad.apply(p2, e1);
-        Tools.sleep(100);
         ad.apply(p2, e1);
-        Tools.sleep(100);
         ad.apply(p2, e1);
-        Tools.sleep(100);
         ad.apply(p2, e1);
-        Tools.sleep(100);
-        ad.apply(p2, e1);
-        Tools.sleep(100);
 
-        System.out.println(ad.getStatMultiplier());
-        System.out.println("okay");
 
+
+
+        System.out.println("Test Finished.");
     }
 }

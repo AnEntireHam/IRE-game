@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 public class Tools {
 
-    protected static AudioStream beep = new AudioStream("menuBoop");
-    protected static AudioStream error = new AudioStream("menuError");
+    protected static AudioStream menuBoop = new AudioStream("menuBoop");
+    protected static AudioStream menuError = new AudioStream("menuError");
 
     // Probably include a text speed/manual skip option, and or always emptyPrompt() / always sleep
     public static void sleep(int time) {
@@ -46,6 +46,7 @@ public class Tools {
     public static void emptyPrompt() {
         Scanner s = new Scanner(System.in);
         s.nextLine();
+        s.close();
     }
 
     public static int round(double number) {
@@ -73,15 +74,16 @@ public class Tools {
             if (!invalid) {
                 if (input < min || input > max) {
                     //System.out.println("Please input a whole number between " + min + " and " + max + ".");
-                    error.play();
+                    menuError.play();
                     invalid = true;
                 }
             }
 
         } while (invalid);
 
-        beep.play();
+        menuBoop.play();
         clear();
+        s.close();
         return (input);
     }
 
