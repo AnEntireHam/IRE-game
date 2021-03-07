@@ -225,7 +225,7 @@ public abstract class Entity {
 
     public void incrementStatusDurations() {
         for (int i = 0; i < statusEffects.size(); i++) {
-            if (statusEffects.get(i).incrementEffect(this, true)) {
+            if (statusEffects.get(i).incrementEffect(this)) {
                 i--;
             }
         }

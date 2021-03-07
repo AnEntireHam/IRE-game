@@ -100,7 +100,7 @@ public abstract class StatEffect extends StatusEffect {
 
     //  Reduces duration by 1 and executes effects if either are applicable.
     @Override
-    public boolean incrementEffect(Entity target, boolean tick) {
+    public boolean incrementEffect(Entity target) {
 
         this.incrementDuration(-1);
         if (this.duration <= 0) {
