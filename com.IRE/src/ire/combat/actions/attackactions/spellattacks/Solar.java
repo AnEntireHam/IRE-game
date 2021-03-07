@@ -4,6 +4,8 @@ import ire.audio.AudioStream;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
+import java.util.Formatter;
+
 public class Solar extends SpellAttack {
 
     //private final AudioStream leech = new AudioStream("leech");
@@ -12,18 +14,22 @@ public class Solar extends SpellAttack {
     public Solar(int spellLevel) {
         super("Solar", "Deals modest damage, but heals the user.",
                 new AudioStream("solar"), 2000, 1200, 0.75f,
-                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel);
+                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel,
+                "%s locks eyes with %s and... praises the sun?");
     }
 
     @Override
     public void execute(Entity attacker, Entity defender) {
+
+        Formatter parser = new Formatter();
 
         damage = Tools.round(attacker.getCurMag() * coefficient);
         damage = Tools.round(damage * ((spellLevel - 1) * 0.5 + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 
-        System.out.println(attacker.getName() + " locks eyes with " + defender.getName() + " and... praises the sun?");
+        System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
+
         Tools.sleep(DELAY);
         this.SOUND.play();
 

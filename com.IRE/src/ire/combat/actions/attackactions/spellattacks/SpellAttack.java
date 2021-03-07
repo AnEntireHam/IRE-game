@@ -20,10 +20,8 @@ public abstract class SpellAttack extends AttackAction {
     protected int spellLevel;
     protected String flavorText;
 
-    protected Formatter parser = new Formatter();
-
     public SpellAttack(String name, String description, AudioStream SOUND, int DURATION, int DELAY, float coefficient,
-                       String[] postfixNames, int baseManaCost, int spellLevel) {
+                       String[] postfixNames, int baseManaCost, int spellLevel, String flavorText) {
         super(name, description, SOUND, DURATION, DELAY, coefficient);
 
         this.prefixName = name;
@@ -38,12 +36,15 @@ public abstract class SpellAttack extends AttackAction {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
+        Formatter parser = new Formatter();
+
         damage = Tools.round(attacker.getCurMag() * coefficient);
         damage = Tools.round(damage * ((spellLevel - 1) * levelDamage + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
+
         Tools.sleep(DELAY);
         this.SOUND.play();
 

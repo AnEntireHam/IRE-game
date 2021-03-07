@@ -46,7 +46,6 @@ public class Tools {
     public static void emptyPrompt() {
         Scanner s = new Scanner(System.in);
         s.nextLine();
-        s.close();
     }
 
     public static int round(double number) {
@@ -83,7 +82,6 @@ public class Tools {
 
         menuBoop.play();
         clear();
-        s.close();
         return (input);
     }
 

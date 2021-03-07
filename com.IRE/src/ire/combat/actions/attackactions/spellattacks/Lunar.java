@@ -4,6 +4,8 @@ import ire.audio.AudioStream;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
+import java.util.Formatter;
+
 public class Lunar extends SpellAttack {
 
     private float baseHealthCost = 0.5f;
@@ -11,11 +13,14 @@ public class Lunar extends SpellAttack {
     public Lunar(int spellLevel) {
         super("Lunar", "Deals substantial damage, but also hurts the caster",
                 new AudioStream("lunar"), 2000, 500, 3,
-                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel);
+                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel,
+                "%s inflicts %d damage on themselves to charge a spell...");
     }
 
     @Override
     public void execute(Entity attacker, Entity defender) {
+
+        Formatter parser = new Formatter();
 
         damage = Tools.round(attacker.getCurMag() * coefficient);
         damage = Tools.round(damage * ((spellLevel - 1) * 0.5 + 1));
@@ -24,7 +29,8 @@ public class Lunar extends SpellAttack {
 
         defender.getCurrentAction().execute(attacker, defender);
 
-        System.out.println(attacker.getName() + " inflicts " + healthCost + " damage on themselves to charge a spell...");
+        System.out.println(parser.format(flavorText, attacker.getName(), healthCost));
+
         Tools.sleep(DELAY);
         this.SOUND.play();
 
