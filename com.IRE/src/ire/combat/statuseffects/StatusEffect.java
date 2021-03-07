@@ -24,9 +24,9 @@ public abstract class StatusEffect {
         this.duration = duration;
     }
 
-    protected abstract void apply(Entity attacker, Entity defender);
-    protected abstract void incrementEffect(Entity target, boolean tick);
-    protected abstract void remove(Entity target);
+    public abstract void apply(Entity attacker, Entity defender);
+    public abstract boolean incrementEffect(Entity target, boolean tick);
+    public abstract void remove(Entity target);
 
     public String getName() {
         return name;

@@ -11,16 +11,17 @@ public abstract class GenerativeEffect extends StatusEffect {
     }
 
     @Override
-    protected void apply(Entity attacker, Entity defender) {
+    public void apply(Entity attacker, Entity defender) {
     }
 
     @Override
-    protected void incrementEffect(Entity target, boolean tick) {
+    public boolean incrementEffect(Entity target, boolean tick) {
         System.out.println("Method under construction");
+        return false;
     }
 
     @Override
-    protected void remove(Entity target) {
+    public void remove(Entity target) {
         System.out.println("Method under construction");
     }
 }

@@ -1,5 +1,8 @@
 package ire.combat.statuseffects.stateffects;
 
+import ire.entities.Entity;
+import ire.tools.Tools;
+
 public class Surprise extends StatEffect {
 
     //  Fix "x had this Surprise! increased text". Probably add Formatter or @Override or boolean doDisplay.
@@ -18,5 +21,13 @@ public class Surprise extends StatEffect {
             System.out.println(defender + " couldn't surprise the enemy.");
         }*/
         //  Probably just print "xTeam could(n't) surprise the enemy!" in battle.
+    }
+
+    @Override
+    public void remove(Entity target) {
+
+        target.removeStatusEffect(this);
+        /*System.out.println(target.getName() + "'s status effect " + name.toLowerCase() + " expired.");
+        Tools.sleep(1250);*/  //  It may be worthwhile adding some logic to only print this once per party.
     }
 }

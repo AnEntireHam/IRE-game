@@ -42,7 +42,6 @@ public class Battle {
             i++;
         }
 
-        // Integer division moment??
         playersSpd = s / i;
         s = 0;
         i = 0;
@@ -86,7 +85,7 @@ public class Battle {
                 defend(enemies);
                 attack(players, enemies);
                 for (Entity p: players) {
-                    p.bEffects.incrementStatusEffects(true);
+                    p.incrementStatusDurations();
                 }
 
             } else {
@@ -97,7 +96,7 @@ public class Battle {
                 defend(players);
                 attack(enemies, players);
                 for (Entity e: enemies) {
-                    e.bEffects.incrementStatusEffects(true);
+                    e.incrementStatusDurations();
                 }
             }
 

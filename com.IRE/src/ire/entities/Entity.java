@@ -223,6 +223,14 @@ public abstract class Entity {
     public abstract void promptDefend();
     protected abstract boolean promptTargetIndex(ArrayList<Entity> enemies);
 
+    public void incrementStatusDurations() {
+        for (int i = 0; i < statusEffects.size(); i++) {
+            if (statusEffects.get(i).incrementEffect(this, true)) {
+                i--;
+            }
+        }
+    }
+
     public void addStatusEffect(StatusEffect effect) {
         this.statusEffects.add(effect);
     }

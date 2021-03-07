@@ -100,20 +100,22 @@ public abstract class StatEffect extends StatusEffect {
 
     //  Reduces duration by 1 and executes effects if either are applicable.
     @Override
-    protected void incrementEffect(Entity target, boolean tick) {
+    public boolean incrementEffect(Entity target, boolean tick) {
 
         this.incrementDuration(-1);
         if (this.duration <= 0) {
             remove(target);
+            return true;
         }
+        return false;
     }
 
     @Override
-    protected void remove(Entity target) {
+    public void remove(Entity target) {
 
         target.removeStatusEffect(this);
-        System.out.println(target.getName() + "'s status effect " + name.toLowerCase() + " expired.");
-        Tools.sleep(1000);
+        System.out.println(target.getName() + "'s status effect \"" + name + "\" expired.");
+        Tools.sleep(1250);
     }
 
     public int getEffectLevel() {
