@@ -26,22 +26,20 @@ public class Tools {
         }
     }
 
-    // Unsure if this works on non-windows.
+    // Not sure if \033 works, but the for loop puts text at bottom of screen.
     public static void clear() {
-
         try {
             if (System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             }
             else {
-                //System.out.print("\033\143");
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 75; i++) {
                     System.out.println();
                 }
+                System.out.print("\033");
             }
         } catch (IOException | InterruptedException ignored) {}
     }
-
 
     public static void emptyPrompt() {
         Scanner s = new Scanner(System.in);

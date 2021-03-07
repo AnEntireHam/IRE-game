@@ -67,35 +67,38 @@ public class Battle {
             if (surprise == 1) {
                 for (Entity p: players) {
                     this.surprise.apply(p, p);
+                    System.out.println("the GAMERS got the surpriseo n the enemy!)");
                 }
             } else {
                 for (Entity e: enemies) {
                     this.surprise.apply(e, e);
+                    System.out.println("you got GANKED!!!!)");
                 }
             }
+            Tools.sleep(1000);
         }
 
         boolean playerTurn = getAverageSpd();
 
         while (checkDead() == 0) {
             if (playerTurn) {
+
+                defend(enemies);
+                attack(players, enemies);
                 for (Entity p: players) {
                     p.bEffects.incrementStatusEffects(true);
                 }
-                defend(enemies);
-                attack(players, enemies);
 
             } else {
-
-                for (Entity e: enemies) {
-                    e.bEffects.incrementStatusEffects(true);
-                }
 
                 if (checkDead() == 1) {
                     continue;
                 }
                 defend(players);
                 attack(enemies, players);
+                for (Entity e: enemies) {
+                    e.bEffects.incrementStatusEffects(true);
+                }
             }
 
             playerTurn = !(playerTurn);

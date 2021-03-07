@@ -5,7 +5,7 @@ import ire.combat.Battle;
 import ire.combat.actions.attackactions.spellattacks.Celestial;
 import ire.combat.actions.attackactions.spellattacks.Lunar;
 import ire.combat.actions.attackactions.spellattacks.Solar;
-import ire.combat.actions.attackactions.spellattacks.debuffspells.Fire;
+import ire.combat.actions.attackactions.spellattacks.debuffspells.*;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
 import ire.entities.Player;
 import ire.entities.enemies.Skeleton;
@@ -16,7 +16,6 @@ import ire.tools.Tools;
 public class Main {
 
     public static void main(String[] args) {
-
 
         /*BasicTextAdventure game = new BasicTextAdventure();
         game.setup();
@@ -35,10 +34,7 @@ public class Main {
         Tools.emptyPrompt();
 
 
-
-
         //Uncanny mockery, shattering grip, impotent prayer, bolster
-
 
         Player p1 = new Player(1, 12, 8, 4, 2, 5,
                 "Warrior Test 1", "humanDeath",
@@ -60,12 +56,20 @@ public class Main {
         Lunar lunar = new Lunar(1);
         Solar solar = new Solar(1);
         Fire fire = new Fire(1);
+        Ice ice = new Ice(1);
+        Lightning lightning = new Lightning(1);
+        Rock rock = new Rock(1);
+        Soul soul = new Soul(1);
         Screen screen = new Screen();
 
         p2.addSpell(celestial);
         p2.addSpell(lunar);
         p2.addSpell(solar);
         p2.addSpell(fire);
+        p2.addSpell(ice);
+        p2.addSpell(lightning);
+        p2.addSpell(rock);
+        p2.addSpell(soul);
 
         p2.addWard(screen);
 

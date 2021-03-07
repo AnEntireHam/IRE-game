@@ -1,7 +1,7 @@
 package ire.combat.actions.attackactions.spellattacks.debuffspells;
 
 import ire.audio.AudioStream;
-import ire.combat.statuseffects.stateffects.AttackDown;
+import ire.combat.statuseffects.stateffects.SpeedDown;
 
 public class Lightning extends DebuffSpell {
 
@@ -9,6 +9,6 @@ public class Lightning extends DebuffSpell {
         super("Lightning", "Deals moderate damage, and may lower speed",
                 new AudioStream("lightning"), 2000, 778, 0.85f,
                 new String[]{"Bolt", "Ball", "Storm"}, 3, spellLevel,
-                "%s summons enraged and thunderous clouds above %s.", new AttackDown(spellLevel));
+                "%s summons enraged and thunderous clouds above %s.", new SpeedDown(spellLevel));
     }
 }

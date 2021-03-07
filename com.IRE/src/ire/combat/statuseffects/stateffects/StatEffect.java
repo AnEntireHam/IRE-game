@@ -36,6 +36,7 @@ public abstract class StatEffect extends StatusEffect {
         double rand = Math.random();
         float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
         float statProbability = 0.0f;
+        boolean success = false;
 
         if (baseMultiplier < 0) {
             statProbability = (STAT_COEFFICIENT * (attacker.getBaseMag() - defender.getBaseStat(abbreviation)));
@@ -48,6 +49,7 @@ public abstract class StatEffect extends StatusEffect {
         if (rand <= (totalProbability)) {
 
             float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
+            success = true;
 
             for (StatusEffect se: defender.getStatusEffects()) {
                 if (se.getName().equals(this.name)) {
@@ -66,29 +68,34 @@ public abstract class StatEffect extends StatusEffect {
                 this.statMultiplier = statMultiplier;
                 defender.addStatusEffect(this);
             }
-
-            //  Improve sentence fluency later.
-            if (baseMultiplier < 0.0) {
-                System.out.println(defender.getName() + " had their " + statName + " lowered!");
-            } else {
-                System.out.println(defender.getName() + " had their " + statName + " increased!");
-            }
-
-        } else {
-            if (baseMultiplier < 0.0) {
-                System.out.println(defender.getName() + " didn't have their " + statName + " lowered!");
-            } else {
-                System.out.println(defender.getName() + " didn't have their " + statName + " increased!");
-            }
         }
 
+        displayResult(defender.getName(), statName, baseMultiplier < 0.0, success);
         if (attacker.isDebug()) {
             System.out.println("Stat Multiplier: " + this.statMultiplier);
         }
 
-        Tools.sleep(1000);  //  Eventually factor in global text speed
-
         defender.calculateCurAll();
+    }
+
+    //  This feels jank but works.
+    //  Improve sentence fluency later.
+    protected void displayResult(String defender, String statName, boolean debuff, boolean success) {
+
+        if (debuff) {
+            if (success) {
+                System.out.println(defender + " had their " + statName + " decreased!");
+            } else {
+                System.out.println(defender + " didn't have their " + statName + " decreased.");
+            }
+        } else {
+            if (success) {
+                System.out.println(defender + " had their " + statName + " increased!");
+            } else {
+                System.out.println(defender + " didn't have their " + statName + " increased.");
+            }
+        }
+        Tools.sleep(1000);  //  Eventually factor in global text speed
     }
 
     //  Reduces duration by 1 and executes effects if either are applicable.
