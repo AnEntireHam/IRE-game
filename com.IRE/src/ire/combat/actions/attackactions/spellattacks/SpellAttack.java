@@ -2,18 +2,25 @@ package ire.combat.actions.attackactions.spellattacks;
 
 import ire.audio.AudioStream;
 import ire.combat.actions.attackactions.AttackAction;
+import ire.entities.Entity;
 import ire.tools.Tools;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.Random;
 
 public abstract class SpellAttack extends AttackAction {
 
+    protected float levelDamage = 0.5f;
+
     protected final String prefixName;
     protected final String[] postfixNames;
 
-    protected int spellLevel;
     protected int baseManaCost;
+    protected int spellLevel;
+    protected String flavorText;
+
+    protected Formatter parser = new Formatter();
 
     public SpellAttack(String name, String description, AudioStream SOUND, int DURATION, int DELAY, float coefficient,
                        String[] postfixNames, int baseManaCost, int spellLevel) {
@@ -23,8 +30,31 @@ public abstract class SpellAttack extends AttackAction {
         this.postfixNames = postfixNames;
         this.baseManaCost = baseManaCost;
         this.spellLevel = spellLevel;
+        this.flavorText = flavorText;
 
         this.updateName();
+    }
+
+    @Override
+    public void execute(Entity attacker, Entity defender) {
+
+        damage = Tools.round(attacker.getCurMag() * coefficient);
+        damage = Tools.round(damage * ((spellLevel - 1) * levelDamage + 1));
+
+        defender.getCurrentAction().execute(attacker, defender);
+
+        System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
+        Tools.sleep(DELAY);
+        this.SOUND.play();
+
+        attacker.incrementMan(-baseManaCost);
+
+        if (defender.isAlive()) {
+            System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
+            Tools.sleep(DURATION - DELAY);
+        }
+
+        defender.bEffects.takeDamage(damage, true);
     }
 
     public static int menu(ArrayList<SpellAttack> spells, boolean input) {
@@ -49,7 +79,7 @@ public abstract class SpellAttack extends AttackAction {
         return choice;
     }
 
-    private void updateName() {
+    protected void updateName() {
         this.name = (this.prefixName + " " + this.postfixNames[this.spellLevel - 1]);
     }
 

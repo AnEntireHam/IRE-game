@@ -9,7 +9,7 @@ public class Fire extends DebuffSpell {
 
     public Fire(int spellLevel) {
         super("Fire", "Deals moderate damage, and may lower attack",
-                new AudioStream("fire"), 2000, 778, 0.85f,
+                new AudioStream("fire"), 2000, 1620, 0.85f,
                 new String[]{"Bolt", "Ball", "Storm"}, 3, spellLevel, new AttackDown(spellLevel));
     }
 

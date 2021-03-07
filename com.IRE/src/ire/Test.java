@@ -25,9 +25,6 @@ public class Test {
         Skeleton e1 = new Skeleton(1);
         e1.setName("MISTER JANGELY BONE");
 
-        e1.setBaseHlh(100);
-        e1.setHlh(81);
-
         Stab stab = new Stab();
         Shield shield = new Shield();
         Lunge lunge = new Lunge();

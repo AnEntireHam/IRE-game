@@ -1,16 +1,16 @@
-package ire.combat.actions.attackactions.spellattacks;
+package ire.combat.actions.attackactions.spellattacks.debuffspells;
 
 import ire.audio.AudioStream;
+import ire.combat.statuseffects.stateffects.AttackDown;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
+public class Lightning extends DebuffSpell {
 
-public class Celestial extends SpellAttack {
-
-    public Celestial(int spellLevel) {
-        super("Celestial", "Deals considerable magical damage.",
-                new AudioStream("celestial"), 2000, 1200, 1.2f,
-                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel);
+    public Lightning(int spellLevel) {
+        super("Lightning", "Deals moderate damage, and may lower speed",
+                new AudioStream("lightning"), 2000, 778, 0.85f,
+                new String[]{"Bolt", "Ball", "Storm"}, 3, spellLevel, new AttackDown(spellLevel));
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Celestial extends SpellAttack {
 
         defender.getCurrentAction().execute(attacker, defender);
 
-        System.out.println(attacker.getName() + " concentrates the ferocity of the stars on " + defender.getName() + ".");
+        System.out.println(attacker.getName() + " summons enraged and thunderous clouds above " + defender.getName() + ".");
         Tools.sleep(DELAY);
         this.SOUND.play();
 
@@ -33,5 +33,6 @@ public class Celestial extends SpellAttack {
         }
 
         defender.bEffects.takeDamage(damage, true);
+        this.debuff.apply(attacker, defender);
     }
 }

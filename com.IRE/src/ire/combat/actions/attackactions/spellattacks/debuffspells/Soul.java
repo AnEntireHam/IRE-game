@@ -1,16 +1,16 @@
-package ire.combat.actions.attackactions.spellattacks;
+package ire.combat.actions.attackactions.spellattacks.debuffspells;
 
 import ire.audio.AudioStream;
+import ire.combat.statuseffects.stateffects.MagicDown;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
+public class Soul extends DebuffSpell {
 
-public class Celestial extends SpellAttack {
-
-    public Celestial(int spellLevel) {
-        super("Celestial", "Deals considerable magical damage.",
-                new AudioStream("celestial"), 2000, 1200, 1.2f,
-                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel);
+    public Soul(int spellLevel) {
+        super("Soul", "Deals moderate damage, and may lower magic",
+                new AudioStream("soul"), 2000, 1581, 0.85f,
+                new String[]{"Suck", "Sap", "Drain"}, 3, spellLevel, new MagicDown(spellLevel));
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Celestial extends SpellAttack {
 
         defender.getCurrentAction().execute(attacker, defender);
 
-        System.out.println(attacker.getName() + " concentrates the ferocity of the stars on " + defender.getName() + ".");
+        System.out.println(attacker.getName() + " unleashes a litany of binding hexes upon " + defender.getName() + ".");
         Tools.sleep(DELAY);
         this.SOUND.play();
 
@@ -33,5 +33,6 @@ public class Celestial extends SpellAttack {
         }
 
         defender.bEffects.takeDamage(damage, true);
+        this.debuff.apply(attacker, defender);
     }
 }

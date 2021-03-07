@@ -4,8 +4,6 @@ import ire.combat.statuseffects.StatusEffect;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
-import java.text.DecimalFormat;
-
 public abstract class StatEffect extends StatusEffect {
 
     protected static final float STAT_COEFFICIENT = 0.003333f;
@@ -47,7 +45,7 @@ public abstract class StatEffect extends StatusEffect {
         String[] parts = name.split(" ");
         String statName = parts[0].toLowerCase();
 
-        if (0 <= (totalProbability)) {
+        if (rand <= (totalProbability)) {
 
             float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
 

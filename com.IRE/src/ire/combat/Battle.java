@@ -1,5 +1,6 @@
 package ire.combat;
 
+import ire.combat.statuseffects.stateffects.Surprise;
 import ire.entities.Enemy;
 import ire.entities.Entity;
 import ire.entities.Player;
@@ -13,6 +14,7 @@ public class Battle {
 
     public ArrayList<Player> players = new ArrayList<>();
     public ArrayList<Enemy> enemies = new ArrayList<>();
+    private final Surprise surprise = new Surprise();
 
     // ***********************************
     // Constructor & Pre-battle Functions
@@ -64,13 +66,11 @@ public class Battle {
         if (surprise != 0) {
             if (surprise == 1) {
                 for (Entity p: players) {
-                    /*p.bEffects.buff(4, 200, 1);
-                    p.bEffects.incrementStatusEffects(false);*/
+                    this.surprise.apply(p, p);
                 }
             } else {
                 for (Entity e: enemies) {
-                    /*e.bEffects.buff(4, 200, 1);
-                    e.bEffects.incrementStatusEffects(false);*/
+                    this.surprise.apply(e, e);
                 }
             }
         }
