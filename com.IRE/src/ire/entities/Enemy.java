@@ -64,7 +64,7 @@ public abstract class Enemy extends Entity {
 
         float tenTotal = tenHlh + tenAtk + tenDef + tenMag + tenSpd;
 
-        for (int i = this.level; i < targetLevel; i++) {
+        for (; this.level < targetLevel; this.level++) {
             for (int j = 5; j > 0; j--) {
                 double r = Math.random() * tenTotal;
                 if (r < tenHlh) {

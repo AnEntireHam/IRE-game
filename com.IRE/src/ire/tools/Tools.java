@@ -4,10 +4,7 @@ import ire.audio.AudioStream;
 import ire.entities.Entity;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Tools {
 
@@ -50,34 +47,60 @@ public class Tools {
 
         Scanner s = new Scanner(System.in);
         int input = 0;
-        boolean invalid;
+        boolean valid;
 
         do {
-            invalid = false;
+            valid = true;
 
             try {
                 System.out.print("> ");
                 input = s.nextInt();
             } catch(InputMismatchException n) {
                 s.next();
-                //System.out.println("Please input a whole number between " + min + " and " + max + ".");
                 menuError.play();
-                invalid = true;
+                valid = false;
             }
 
-            if (!invalid) {
-                if (input < min || input > max) {
-                    //System.out.println("Please input a whole number between " + min + " and " + max + ".");
-                    menuError.play();
-                    invalid = true;
-                }
+            if (valid && (input < min || input > max)) {
+                menuError.play();
+                valid = false;
             }
 
-        } while (invalid);
+        } while (!valid);
 
         menuBoop.play();
         clear();
-        return (input);
+        return input;
+    }
+
+    public static int getUserInt(int min, int max, ArrayList<Integer> excluded) {
+
+        Scanner s = new Scanner(System.in);
+        int input = 0;
+        boolean valid;
+
+        do {
+            valid = true;
+
+            try {
+                System.out.print("> ");
+                input = s.nextInt();
+            } catch(InputMismatchException n) {
+                s.next();
+                menuError.play();
+                valid = false;
+            }
+
+            if (valid && (input < min || input > max || excluded.contains(input))) {
+                menuError.play();
+                valid = false;
+            }
+
+        } while (!valid);
+
+        menuBoop.play();
+        clear();
+        return input;
     }
 
     public static int menu(ArrayList<String> options, int startIndex) {
@@ -97,6 +120,20 @@ public class Tools {
         System.out.println("\n[0] Cancel\n");
 
         return Tools.getUserInt(0, options.size());
+    }
+
+    public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded) {
+
+        for (int i = 1; i < options.size() + 1; i++) {
+            if (excluded.contains(i)) {
+                System.out.println("[X] " + options.get(i - 1));
+            } else {
+                System.out.println("[" + (i) + "] " + options.get(i - 1));
+            }
+        }
+        System.out.println("\n[0] Cancel\n");
+
+        return Tools.getUserInt(0, options.size(), excluded);
     }
 
     public static void sortEntityList(ArrayList<Entity> entities) {

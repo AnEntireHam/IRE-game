@@ -79,12 +79,6 @@ public class Main {
 
         p2.addWard(screen);
 
-        e1.setName("Skeleton 1");
-        e2.setName("Skeleton 2");
-        e3.setName("Skeleton 3");
-        e4.setName("Skeleton 4");
-        e5.setName("Skeleton 5");
-
         /*e1.buffDurations[5] = 3;
         e1.buffStrengths[5] = 1;
         e1.buffDurations[1] = 3;

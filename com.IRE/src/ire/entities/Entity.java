@@ -124,12 +124,13 @@ public abstract class Entity {
 
     public String generateStatus() {
 
+        //  Fix health bar for dead men.
         StringBuffer output = new StringBuffer();
 
         //  If J8 supports this, convert later.
-        for (int j = this.name.length(); j < 15; j++) {
+        /*for (int j = this.name.length(); j < 15; j++) {
             output.append(" ");
-        }
+        }*/
 
         int quotient = (int) (Math.round(((double) this.hlh / this.curHlh) * 20));
 

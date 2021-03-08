@@ -6,6 +6,7 @@ import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import ire.tools.Tools;
 import ire.world.Inventory;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Player extends Entity {
@@ -273,18 +274,23 @@ public class Player extends Entity {
     protected boolean promptTargetIndex(ArrayList<Entity> targets) {
 
         ArrayList<String> options = new ArrayList<>();
+        ArrayList<Integer> exclusions = new ArrayList<>();
         int choice;
 
         Tools.sortEntityList(targets);
 
-        for (Entity e: targets) {
+        for (int i = 0; i < targets.size(); i++) {
+            Entity e = targets.get(i);
             if (e.isAlive()) {
-                options.add(e.getName() + e.generateStatus());
+                options.add(e.getName() + " Lv. " + e.getLevel() + "  " + e.generateStatus());
+            } else {
+                options.add(e.getName() + " Lv. " + e.getLevel() + "  " + e.generateStatus());
+                exclusions.add(i + 1);
             }
         }
 
         System.out.println("Select a target.");
-        choice = Tools.cancelableMenu(options) - 1;
+        choice = Tools.cancelableMenu((options), exclusions) - 1;
 
         if (choice != -1) {
             this.targetIndex = choice;
