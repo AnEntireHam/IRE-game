@@ -76,7 +76,7 @@ public abstract class StatEffect extends StatusEffect {
             System.out.println("Stat Multiplier: " + this.statMultiplier);
         }
 
-        defender.calculateCurAll();
+        defender.recalculateCurStats();
     }
 
     //  This feels jank but works.

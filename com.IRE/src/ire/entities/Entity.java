@@ -122,60 +122,65 @@ public abstract class Entity {
 
     protected abstract void levelUp(int targetLevel);
 
-    public void displayStatus() {
+    public String generateStatus() {
 
+        StringBuffer output = new StringBuffer();
+
+        //  If J8 supports this, convert later.
         for (int j = this.name.length(); j < 15; j++) {
-            System.out.print(" ");
+            output.append(" ");
         }
 
-        int quotient = (int) (Math.round((double) this.hlh / this.curHlh * 20));
+        int quotient = (int) (Math.round(((double) this.hlh / this.curHlh) * 20));
 
         for (int i = 0; i < quotient; i++) {
-            System.out.print("█");
+            output.append("█");
         }
 
         for (int i = 0; i < 20 - quotient; i++) {
-            System.out.print("░");
+            output.append("░");
         }
 
-        System.out.print("  ");
+        output.append("  ");
 
-        for (int i = 0; i < 4; i++) {
+        String[] stats = {"Hlh: ", "Atk: ", "Def: ", "Mag: " + "Spd: "};
+        float[] multiplier = {1, 1, 1, 1, 1};
+        StringBuilder others = new StringBuilder();
 
-            StringBuilder output = new StringBuilder();
+        for (StatusEffect se: this.statusEffects) {
 
-            if (this.buffDurations[i] != 0) {
-
-                switch (i) {
-                    case 0 -> output.append("Hlh: ");
-                    case 1 -> output.append("Atk: ");
-                    case 2 -> output.append("Def: ");
-                    case 3 -> output.append("Mag: ");
-                    case 4 -> output.append("Spd: ");
+            if (se instanceof StatEffect && se.isDisplay()) {
+                switch (se.getAbbreviation()) {
+                    case "HLH":
+                        multiplier[0] += ((StatEffect) se).getStatMultiplier();
+                        break;
+                    case "ATK":
+                        multiplier[1] += ((StatEffect) se).getStatMultiplier();
+                        break;
+                    case "DEF":
+                        multiplier[2] += ((StatEffect) se).getStatMultiplier();
+                        break;
+                    case "MAG":
+                        multiplier[3] += ((StatEffect) se).getStatMultiplier();
+                        break;
+                    case "SPD":
+                        multiplier[4] += ((StatEffect) se).getStatMultiplier();
+                        break;
                 }
-                output.append(this.buffStrengths[i]).append("%, ").append(this.buffDurations[i]).append("  ");
 
-                System.out.print(output);
+            } else if (se.isDisplay() && !se.isPercentage()) {
+                others.append(se.getAbbreviation()).append(" placeholder").append(" ");
             }
         }
-
-        if (this.buffDurations[5] != 0) {
-
-            if (this.buffStrengths[5] < 100) {
-                System.out.print("Bleed: " + this.buffStrengths[5] + ", " + this.buffDurations[5] + "  ");
-            } else {
-                System.out.print("Regen: " + this.buffStrengths[5] + ", " + this.buffDurations[5] + "  ");
+        for (int i = 0; i < 4; i++) {
+            multiplier[i] = Math.round(multiplier[i] * 100f);
+            if (multiplier[i] != 100) {
+                output.append(stats[i]).append((int) multiplier[i]).append("% ");
             }
         }
+        output.append(others);
 
-        if (this.buffDurations[6] != 0) {
-
-            if (this.buffStrengths[6] < 100) {
-                System.out.print("Mana Bleed: " + -1 * this.buffStrengths[6] + ", " + this.buffDurations[6] + "  ");
-            } else {
-                System.out.print("Mana Regen: " + this.buffStrengths[6] + ", " + this.buffDurations[6] + "  ");
-            }
-        }
+        return output.toString();
     }
 
     public void addSpell(SpellAttack spell) {
@@ -187,15 +192,6 @@ public abstract class Entity {
         spells.add(spell);
     }
 
-    public void removeSpell(int i) {
-
-        spells.remove(i);
-
-        if (spells.size() == 0) {
-            attacks.remove("Cast");
-        }
-    }
-
     public void addWard(SpellDefense ward) {
 
         if (!defenses.contains("Ward")) {
@@ -203,6 +199,15 @@ public abstract class Entity {
         }
 
         wards.add(ward);
+    }
+
+    public void removeSpell(int i) {
+
+        spells.remove(i);
+
+        if (spells.size() == 0) {
+            attacks.remove("Cast");
+        }
     }
 
     public void removeWard(int i) {
@@ -229,6 +234,9 @@ public abstract class Entity {
                 i--;
             }
         }
+        int manaRegen = (int) Math.round((this.curMag / 4.0));
+        this.man += manaRegen;
+        if (this.man > this.curMag) {this.man = this.curMag;}  //  THIS IS SHOEHORNED IN AND BUG-PRONE. MOVE LATER
     }
 
     public void addStatusEffect(StatusEffect effect) {
@@ -273,43 +281,13 @@ public abstract class Entity {
         return multiplier;
     }
 
-    public void calculateCurAll() {
+    public void recalculateCurStats() {
 
-        calculateCurHlh();
-        calculateCurAtk();
-        calculateCurDef();
-        calculateCurMag();
-        calculateCurSpd();
-    }
-
-    protected void calculateCurHlh() {
-
-        int prevMax = this.curHlh;
-        this.curHlh = Math.round(this.baseHlh * calculateMultiplier("HLH"));
-
-        if (prevMax != this.curHlh && this.hlh > this.curHlh) {
-            System.out.println(this.hlh + " " + this.curHlh);
-            int damage = this.hlh - this.curHlh;
-            this.bEffects.takeDamage(damage, false);
-            System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
-            Tools.sleep(2000);
-        }
-    }
-
-    protected void calculateCurAtk() {
-        this.curAtk = Math.round(this.baseAtk * calculateMultiplier("ATK"));
-    }
-
-    protected void calculateCurDef() {
-        this.curDef = Math.round(this.baseDef * calculateMultiplier("DEF"));
-    }
-
-    protected void calculateCurMag() {
-        this.curMag = Math.round(this.baseMag * calculateMultiplier("MAG"));
-    }
-
-    protected void calculateCurSpd() {
-        this.curSpd = Math.round(this.baseSpd * calculateMultiplier("SPD"));
+        getCurHlh();
+        getCurAtk();
+        getCurDef();
+        getCurMag();
+        getCurSpd();
     }
 
     // ***********************************
@@ -368,22 +346,38 @@ public abstract class Entity {
     }
 
     public int getCurHlh() {
+
+        int prevMax = this.curHlh;
+        this.curHlh = Math.round(this.baseHlh * calculateMultiplier("HLH"));
+
+        if (prevMax != this.curHlh && this.hlh > this.curHlh) {
+            System.out.println(this.hlh + " " + this.curHlh);
+            int damage = this.hlh - this.curHlh;
+            this.bEffects.takeDamage(damage, false);
+            System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
+            Tools.sleep(2000);
+        }
+
         return this.curHlh;
     }
 
     public int getCurAtk() {
+        this.curAtk = Math.round(this.baseAtk * calculateMultiplier("ATK"));
         return this.curAtk;
     }
 
     public int getCurDef() {
+        this.curDef = Math.round(this.baseDef * calculateMultiplier("DEF"));
         return this.curDef;
     }
 
     public int getCurMag() {
+        this.curMag = Math.round(this.baseMag * calculateMultiplier("MAG"));
         return this.curMag;
     }
 
     public int getCurSpd() {
+        this.curSpd = Math.round(this.baseSpd * calculateMultiplier("SPD"));
         return this.curSpd;
     }
 

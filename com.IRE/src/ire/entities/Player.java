@@ -279,7 +279,7 @@ public class Player extends Entity {
 
         for (Entity e: targets) {
             if (e.isAlive()) {
-                options.add(e.getName());
+                options.add(e.getName() + e.generateStatus());
             }
         }
 

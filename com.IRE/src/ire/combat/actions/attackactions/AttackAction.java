@@ -2,8 +2,6 @@ package ire.combat.actions.attackactions;
 
 import ire.audio.AudioStream;
 import ire.combat.actions.Action;
-import ire.combat.actions.defenseactions.DefenseAction;
-import ire.entities.Entity;
 
 public abstract class AttackAction extends Action {
 
@@ -23,13 +21,6 @@ public abstract class AttackAction extends Action {
         this.DURATION = DURATION;
         this.DELAY = DELAY;
         this.coefficient = coefficient;
-    }
-
-    @Override
-    public void execute(Entity attacker, Entity defender) {
-
-        DefenseAction choice = (DefenseAction) defender.getCurrentAction();
-
     }
 
     public int getDamage() {

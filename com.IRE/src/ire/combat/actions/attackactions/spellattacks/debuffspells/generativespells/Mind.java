@@ -13,9 +13,10 @@ public class Mind extends DebuffSpell {
 
     public Mind(int spellLevel) {
         super("Mind", "Deals modest damage, and may inflict mana drain.",
-                new AudioStream("placeholder"), 2000, 1152, 0.60f,
+                new AudioStream("mind"), 2000, 2000, 0.75f,
                 new String[]{"Draw", "Sap", "Drain"}, 3, spellLevel,
                 "%s stupefies %s with sorcerous paradoxes.", new ManaDrain(spellLevel));
+        //  Eventually change placeholder length.
     }
 
     @Override

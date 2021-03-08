@@ -8,7 +8,7 @@ public class ManaDrain extends GenerativeEffect {
     float statCoefficient = 0.003333f;
 
     public ManaDrain(int effectLevel) {
-        super("Mana Drain", "DRN", "Target loses mana at end of each turn.",
+        super("Mana Drain", "M DRN", "Target loses mana at end of each turn.",
                 true, false, 1, 5, effectLevel, 0.6f, 0.075f);
     }
 
