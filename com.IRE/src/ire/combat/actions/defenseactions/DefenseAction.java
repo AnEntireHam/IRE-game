@@ -4,7 +4,6 @@ import ire.combat.actions.Action;
 import ire.combat.actions.attackactions.physicalattacks.PhysicalAttack;
 import ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import ire.entities.Entity;
-import ire.tools.Tools;
 
 public abstract class DefenseAction extends Action {
 

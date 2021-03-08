@@ -1,7 +1,6 @@
 package ire.combat.statuseffects.stateffects;
 
 import ire.entities.Entity;
-import ire.tools.Tools;
 
 public class Surprise extends StatEffect {
 

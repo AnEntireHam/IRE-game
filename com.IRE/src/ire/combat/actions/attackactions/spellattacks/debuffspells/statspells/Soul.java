@@ -3,8 +3,6 @@ package ire.combat.actions.attackactions.spellattacks.debuffspells.statspells;
 import ire.audio.AudioStream;
 import ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpell;
 import ire.combat.statuseffects.stateffects.MagicDown;
-import ire.entities.Entity;
-import ire.tools.Tools;
 
 public class Soul extends DebuffSpell {
 

@@ -2,7 +2,6 @@ package ire.combat.actions.defenseactions.physicaldefenses;
 
 import ire.combat.actions.Action;
 import ire.combat.actions.attackactions.physicalattacks.Lunge;
-import ire.combat.actions.attackactions.physicalattacks.PhysicalAttack;
 import ire.entities.Entity;
 import ire.tools.Tools;
 

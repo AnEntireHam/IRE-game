@@ -1,6 +1,7 @@
 package ire.entities;
 
 import ire.audio.AudioStream;
+import ire.combat.BattleEffect;
 import ire.combat.actions.Action;
 import ire.combat.actions.attackactions.physicalattacks.Lunge;
 import ire.combat.actions.attackactions.physicalattacks.Stab;
@@ -8,7 +9,6 @@ import ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
-import ire.combat.BattleEffect;
 import ire.combat.statuseffects.StatusEffect;
 import ire.combat.statuseffects.stateffects.StatEffect;
 import ire.tools.Tools;
@@ -62,11 +62,11 @@ public abstract class Entity {
     // the NEW implementation babey!!
     protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
-    // ON JAH why did you do this to yourself, you heathen, you pleb, you jester, you clown, you circus!?
+    /*// ON JAH why did you do this to yourself, you heathen, you pleb, you jester, you clown, you circus!?
     protected int[] buffStrengths = {0, 0, 0, 0, 0, 0, 0, 0};
     protected int[] buffDurations = {0, 0, 0, 0, 0, 0, 0, 0};
     protected int[] buffStacks =    {1, 1, 1, 1, 1};
-    protected int newBuff = 0;
+    protected int newBuff = 0;*/
 
     protected AudioStream deathSound;
     protected static AudioStream hitSound = new AudioStream("hit1");
@@ -552,6 +552,12 @@ public abstract class Entity {
 
     public void setDebug(boolean bool) {
         this.debug = bool;
+    }
+
+    @Override
+    public String toString() {
+        return ("Name: " + name + "  Level: " + level + "  Health: " + hlh + "/" + curHlh +
+                "  Attack: " + curAtk + "  Defense: " + curDef + "  Magic: " + curMag + "  Speed: " + curSpd);
     }
 
     // Unimplemented/legacy accessors

@@ -8,11 +8,9 @@ import ire.combat.actions.attackactions.spellattacks.Solar;
 import ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
-import ire.combat.statuseffects.StatusEffect;
 import ire.combat.statuseffects.stateffects.*;
 import ire.entities.Player;
 import ire.entities.enemies.Skeleton;
-import ire.tools.Tools;
 
 public class Test {
 

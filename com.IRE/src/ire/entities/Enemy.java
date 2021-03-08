@@ -248,10 +248,4 @@ public abstract class Enemy extends Entity {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return ("Name: " + name + ", Alive: " + alive + ", Health: " + hlh);
-    }
-
 }

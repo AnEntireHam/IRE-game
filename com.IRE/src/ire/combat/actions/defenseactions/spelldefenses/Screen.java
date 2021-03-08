@@ -3,7 +3,6 @@ package ire.combat.actions.defenseactions.spelldefenses;
 import ire.combat.actions.Action;
 import ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import ire.entities.Entity;
-import ire.tools.Tools;
 
 public class Screen extends SpellDefense {
 
