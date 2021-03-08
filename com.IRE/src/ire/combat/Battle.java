@@ -66,12 +66,12 @@ public class Battle {
             if (surprise == 1) {
                 for (Entity p: players) {
                     this.surprise.apply(p, p);
-                    System.out.println("the GAMERS got the surpriseo n the enemy!)");
+                    System.out.println("You got the surprise on the enemy!");
                 }
             } else {
                 for (Entity e: enemies) {
                     this.surprise.apply(e, e);
-                    System.out.println("you got GANKED!!!!)");
+                    System.out.println("You got surprised!");
                 }
             }
             Tools.sleep(1000);

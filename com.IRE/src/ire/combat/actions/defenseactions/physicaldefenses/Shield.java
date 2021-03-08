@@ -25,7 +25,7 @@ public class Shield extends PhysicalDefense {
         if (attack instanceof PhysicalAttack) {
 
             ((PhysicalAttack) attack).incrementDamage(
-                Tools.round((curDef * this.physBoost * physCoefficientDef) + (curMag * physCoefficientMag)));
+                Math.round((curDef * this.physBoost * physCoefficientDef) + (curMag * physCoefficientMag)));
         } else {
 
             super.execute(attacker, defender);

@@ -28,12 +28,12 @@ public abstract class DefenseAction extends Action {
         if (action instanceof PhysicalAttack) {
 
             ((PhysicalAttack) action).incrementDamage(
-                    Tools.round((curDef * physCoefficientDef) + (curMag * physCoefficientMag)));
+                    Math.round((curDef * physCoefficientDef) + (curMag * physCoefficientMag)));
 
         } else if (action instanceof SpellAttack) {
 
             ((SpellAttack) action).incrementDamage(
-                    Tools.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
+                    Math.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
         }
     }
 }

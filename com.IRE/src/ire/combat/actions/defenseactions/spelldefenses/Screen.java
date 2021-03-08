@@ -20,10 +20,10 @@ public class Screen extends SpellDefense {
 
         if (attack instanceof SpellAttack) {
             ((SpellAttack) attack).incrementDamage(
-                    Tools.round(((SpellAttack) attack).getDamage() * spellResist));
+                    Math.round(((SpellAttack) attack).getDamage() * spellResist));
 
             ((SpellAttack) attack).incrementDamage(
-                    Tools.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
+                    Math.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
         } else {
 
             super.execute(attacker, defender);

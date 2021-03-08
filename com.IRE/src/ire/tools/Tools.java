@@ -46,10 +46,6 @@ public class Tools {
         s.nextLine();
     }
 
-    public static int round(double number) {
-        return (int) Math.round(number);
-    }
-
     public static int getUserInt(int min, int max) {
 
         Scanner s = new Scanner(System.in);
@@ -64,7 +60,8 @@ public class Tools {
                 input = s.nextInt();
             } catch(InputMismatchException n) {
                 s.next();
-                System.out.println("Please input a whole number between " + min + " and " + max + ".");
+                //System.out.println("Please input a whole number between " + min + " and " + max + ".");
+                menuError.play();
                 invalid = true;
             }
 
@@ -106,6 +103,5 @@ public class Tools {
 
         entities.sort(Comparator.comparing(Entity::isAlive).reversed()
                 .thenComparing(Entity::getLevel).thenComparing(Entity::getName));
-
     }
 }

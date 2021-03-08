@@ -24,8 +24,8 @@ public class Mind extends DebuffSpell {
 
         Formatter parser = new Formatter();
 
-        damage = Tools.round(attacker.getCurMag() * coefficient);
-        damage = Tools.round(damage * ((spellLevel - 1) * levelDamage + 1));
+        damage = Math.round(attacker.getCurMag() * coefficient);
+        damage = Math.round(damage * ((spellLevel - 1) * levelDamage + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 

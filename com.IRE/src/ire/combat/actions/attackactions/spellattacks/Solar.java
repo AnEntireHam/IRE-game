@@ -23,8 +23,8 @@ public class Solar extends SpellAttack {
 
         Formatter parser = new Formatter();
 
-        damage = Tools.round(attacker.getCurMag() * coefficient);
-        damage = Tools.round(damage * ((spellLevel - 1) * 0.5 + 1));
+        damage = Math.round(attacker.getCurMag() * coefficient);
+        damage = Math.round(damage * ((spellLevel - 1) * 0.5f + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 

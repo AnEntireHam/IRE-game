@@ -22,10 +22,10 @@ public class Lunar extends SpellAttack {
 
         Formatter parser = new Formatter();
 
-        damage = Tools.round(attacker.getCurMag() * coefficient);
-        damage = Tools.round(damage * ((spellLevel - 1) * 0.5 + 1));
+        damage = Math.round(attacker.getCurMag() * coefficient);
+        damage = Math.round(damage * ((spellLevel - 1) * 0.5f + 1));
 
-        int healthCost = Tools.round((baseHealthCost * attacker.getCurMag()));
+        int healthCost = Math.round((baseHealthCost * attacker.getCurMag()));
 
         defender.getCurrentAction().execute(attacker, defender);
 

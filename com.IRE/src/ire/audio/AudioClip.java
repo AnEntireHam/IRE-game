@@ -35,7 +35,7 @@ public class AudioClip extends Thread {
             //System.out.println(this.startTime);
             System.out.println(this.endTime);
             System.out.println((this.endTime - 10 ) / multiplier);
-            audioClip.setLoopPoints(Tools.round(this.startTime / multiplier), (int) Math.floor((this.endTime - 10) / multiplier));
+            audioClip.setLoopPoints((int) Math.round(this.startTime / multiplier), (int) Math.floor((this.endTime - 10) / multiplier));
             audioClip.setMicrosecondPosition(this.startTime);
             audioClip.start();
             //audioClip.loop(1);
