@@ -1,6 +1,7 @@
-package ire.combat.actions.attackactions.spellattacks.debuffspells;
+package ire.combat.actions.attackactions.spellattacks.debuffspells.statspells;
 
 import ire.audio.AudioStream;
+import ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpell;
 import ire.combat.statuseffects.stateffects.SpeedDown;
 
 public class Lightning extends DebuffSpell {

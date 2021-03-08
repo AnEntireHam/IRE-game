@@ -5,7 +5,9 @@ import ire.combat.Battle;
 import ire.combat.actions.attackactions.spellattacks.Celestial;
 import ire.combat.actions.attackactions.spellattacks.Lunar;
 import ire.combat.actions.attackactions.spellattacks.Solar;
-import ire.combat.actions.attackactions.spellattacks.debuffspells.*;
+import ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Life;
+import ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Mind;
+import ire.combat.actions.attackactions.spellattacks.debuffspells.statspells.*;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
 import ire.entities.Player;
 import ire.entities.enemies.Skeleton;
@@ -60,6 +62,8 @@ public class Main {
         Lightning lightning = new Lightning(1);
         Rock rock = new Rock(1);
         Soul soul = new Soul(1);
+        Life life = new Life(1);
+        Mind mind = new Mind(1);
         Screen screen = new Screen();
 
         p2.addSpell(celestial);
@@ -70,6 +74,8 @@ public class Main {
         p2.addSpell(lightning);
         p2.addSpell(rock);
         p2.addSpell(soul);
+        p2.addSpell(life);
+        p2.addSpell(mind);
 
         p2.addWard(screen);
 

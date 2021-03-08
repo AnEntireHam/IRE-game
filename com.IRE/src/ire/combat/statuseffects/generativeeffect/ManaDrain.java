@@ -3,29 +3,28 @@ package ire.combat.statuseffects.generativeeffect;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
-public class Bleed extends GenerativeEffect {
+public class ManaDrain extends GenerativeEffect {
 
-    public Bleed(int effectLevel) {
-        super("Bleed", "BLD", "Target loses health at end of each turn.",
-                true, false, 1, 5, effectLevel, 0.2f, 0.1f);
+    float statCoefficient = 0.003333f;
+
+    public ManaDrain(int effectLevel) {
+        super("Mana Drain", "DRN", "Target loses mana at end of each turn.",
+                true, false, 1, 5, effectLevel, 0.6f, 0.075f);
     }
 
     @Override
     public void apply(Entity attacker, Entity defender) {
 
-        statProbability = (strengthCoefficient * ((float) strength / (float) defender.getCurHlh()));
-        if (statProbability < 0.05f) {
-            statProbability = 0;
-        }
+        statProbability = (statCoefficient * (attacker.getBaseMag() - defender.getBaseMag()));
         super.apply(attacker, defender);
     }
 
     @Override
     protected void displayResult(String defender, boolean success) {
         if (success) {
-            System.out.println(defender + " started bleeding!");
+            System.out.println(defender + " started losing mana!");
         } else {
-            System.out.println(defender + " didn't start bleeding.");
+            System.out.println(defender + " didn't start losing mana.");
         }
         Tools.sleep(1000);
     }
@@ -33,13 +32,18 @@ public class Bleed extends GenerativeEffect {
     @Override
     public boolean incrementEffect(Entity target) {
 
-        if (target.isAlive()) {
-            System.out.println(target.getName() + " bled for " + strength + " damage.");
-            target.bEffects.takeDamage(strength, false);
-            Tools.sleep(1000);
+        if (target.getMan() - strength > 0) {
+            if (target.isAlive()) {
+                System.out.println(target.getName() + " lost " + strength + " mana.");
+            }
+            target.incrementMan(-strength);
         } else {
-            target.bEffects.takeDamage(strength, false);
+            if (target.isAlive()) {
+                System.out.println(target.getName() + " lost " + target.getMan() + " mana.");
+            }
+            target.setMan(0);
         }
+        Tools.sleep(1000);
 
         this.incrementDuration(-1);
         if (this.duration <= 0) {
@@ -53,7 +57,7 @@ public class Bleed extends GenerativeEffect {
     public void remove(Entity target) {
 
         target.removeStatusEffect(this);
-        System.out.println(target.getName() + " stopped bleeding.");
+        System.out.println(target.getName() + " stopped losing mana.");
         Tools.sleep(1250);
     }
 
@@ -62,7 +66,7 @@ public class Bleed extends GenerativeEffect {
         if (strength > 0) {
             this.strength = strength;
         } else {
-            System.err.println("Bleed's strength must be greater than 0");
+            System.err.println("Mana Drain's strength must be greater than 0");
         }
     }
 

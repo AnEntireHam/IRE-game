@@ -64,6 +64,7 @@ public abstract class StatEffect extends StatusEffect {
                 }
             }
 
+            //  This might become faulty if the starting stacks of a debuff ever exceed 1.
             if (stacks == 1) {
                 this.statMultiplier = statMultiplier;
                 defender.addStatusEffect(this);
