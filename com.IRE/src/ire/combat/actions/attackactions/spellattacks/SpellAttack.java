@@ -72,7 +72,7 @@ public abstract class SpellAttack extends AttackAction {
             if (input) {
                 output.append(s.getName());
 
-                for (int j = 0; j < (20 - s.getName().length()); j++) {
+                for (int j = 0; j < (18 - s.getName().length()); j++) {
                     output.append(" ");
                 }
                 //    Add clause for spells that cost health

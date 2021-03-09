@@ -103,6 +103,7 @@ public class Tools {
         return input;
     }
 
+    //  Can probably shove this into cancelableStructure somehow
     public static int menu(ArrayList<String> options, int startIndex) {
 
         for (int i = startIndex; i < options.size() + startIndex; i++) {
@@ -112,27 +113,34 @@ public class Tools {
         return getUserInt(startIndex, options.size() + startIndex - 1);
     }
 
-    public static int cancelableMenu(ArrayList<String> options) {
+    private static void cancelableStructure(ArrayList<String> options, ArrayList<Integer> excluded) {
 
         for (int i = 1; i < options.size() + 1; i++) {
-            System.out.println("[" + (i) + "] " + options.get(i - 1));
-        }
-        System.out.println("\n[0] Cancel\n");
 
+            if (!excluded.contains(i)) {
+                System.out.print("[" + (i) + "] ");
+            } else {
+                System.out.print("[X] ");
+            }
+
+            if (options.size() + 1 > 9 && i < 10) {
+                System.out.print(" ");
+            }
+            System.out.println(options.get(i - 1));
+        }
+
+        System.out.println("\n[0] Cancel\n");
+    }
+
+    public static int cancelableMenu(ArrayList<String> options) {
+
+        cancelableStructure(options, new ArrayList<>());
         return Tools.getUserInt(0, options.size());
     }
 
     public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded) {
 
-        for (int i = 1; i < options.size() + 1; i++) {
-            if (excluded.contains(i)) {
-                System.out.println("[X] " + options.get(i - 1));
-            } else {
-                System.out.println("[" + (i) + "] " + options.get(i - 1));
-            }
-        }
-        System.out.println("\n[0] Cancel\n");
-
+        cancelableStructure(options, excluded);
         return Tools.getUserInt(0, options.size(), excluded);
     }
 
@@ -141,4 +149,5 @@ public class Tools {
         entities.sort(Comparator.comparing(Entity::isAlive).reversed()
                 .thenComparing(Entity::getLevel).thenComparing(Entity::getName));
     }
+
 }

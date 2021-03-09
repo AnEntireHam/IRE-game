@@ -69,9 +69,9 @@ public class Main {
         p2.addSpell(lunar);
         p2.addSpell(solar);
         p2.addSpell(fire);
-        /*p2.addSpell(ice);
+        p2.addSpell(ice);
         p2.addSpell(lightning);
-        p2.addSpell(rock);*/
+        p2.addSpell(rock);
         p2.addSpell(soul);
         p2.addSpell(life);
         p2.addSpell(mind);

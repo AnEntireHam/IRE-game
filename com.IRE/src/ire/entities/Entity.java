@@ -10,11 +10,14 @@ import ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import ire.combat.statuseffects.StatusEffect;
+import ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import ire.combat.statuseffects.stateffects.StatEffect;
 import ire.tools.Tools;
 
+import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public abstract class Entity {
 
@@ -230,11 +233,43 @@ public abstract class Entity {
     protected abstract boolean promptTargetIndex(ArrayList<Entity> enemies);
 
     public void incrementStatusDurations() {
+
+        ArrayList<GenerativeEffect> generativeEffects = new ArrayList<>();
+        HashMap<String, HashMap<GenerativeEffect, Integer>> sums = new HashMap<>();
+
         for (int i = 0; i < statusEffects.size(); i++) {
+
             if (statusEffects.get(i).incrementEffect(this)) {
                 i--;
+            } else if (statusEffects.get(i) instanceof GenerativeEffect) {
+                generativeEffects.add((GenerativeEffect) statusEffects.get(i));
             }
         }
+
+        for (GenerativeEffect ge: generativeEffects) {
+
+            if (!sums.containsKey(ge.getAbbreviation())) {
+
+                HashMap<GenerativeEffect, Integer> temp = new HashMap<>();
+                temp.put(ge, ge.getStrength());
+                sums.put(ge.getAbbreviation(), temp);
+
+            } else {
+
+                Integer temp = (sums.get(ge.getName()).get(ge) + ge.getStrength());
+                sums.get(ge.getName()).put(ge, temp);
+            }
+        }
+
+        for (String name: sums.keySet()) {
+
+            GenerativeEffect temp = (GenerativeEffect) sums.get(name).keySet().toArray()[0];
+            Integer temp2 = sums.get(name).get(temp);
+
+            ((GenerativeEffect) sums.get(name).keySet().toArray()[0]).combineEffects(this, temp2);
+
+        }
+
         int manaRegen = (int) Math.round((this.curMag / 4.0));
         this.man += manaRegen;
         if (this.man > this.curMag) {this.man = this.curMag;}  //  THIS IS SHOEHORNED IN AND BUG-PRONE. MOVE LATER
@@ -276,6 +311,9 @@ public abstract class Entity {
             //  Consider StatEffects which affect multiple stats
             if (se instanceof StatEffect && se.getAbbreviation().equals(prefix)) {
                 multiplier += (Math.round(((StatEffect) se).getStatMultiplier() * 100f) / 100f);
+            } else if (se instanceof GenerativeEffect) {
+
+                //  fetch magnitude and sign, sum it, then apply as a whole.
             }
         }
 

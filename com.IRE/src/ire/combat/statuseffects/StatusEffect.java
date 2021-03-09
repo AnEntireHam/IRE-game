@@ -27,6 +27,7 @@ public abstract class StatusEffect {
     public abstract void apply(Entity attacker, Entity defender);
     public abstract boolean incrementEffect(Entity target);
     public abstract void remove(Entity target);
+    public abstract String generateDisplay();
 
     public String getName() {
         return name;

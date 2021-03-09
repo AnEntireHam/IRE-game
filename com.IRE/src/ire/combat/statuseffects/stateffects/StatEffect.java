@@ -99,6 +99,12 @@ public abstract class StatEffect extends StatusEffect {
         Tools.sleep(1000);  //  Eventually factor in global text speed
     }
 
+    @Override
+    public String generateDisplay() {
+
+        return "YEET";
+    }
+
     //  Reduces duration by 1 and executes effects if either are applicable.
     @Override
     public boolean incrementEffect(Entity target) {
