@@ -58,20 +58,37 @@ public abstract class SpellAttack extends AttackAction {
         defender.bEffects.takeDamage(damage, true);
     }
 
-    public static int menu(ArrayList<SpellAttack> spells, boolean input) {
-
-        // Include mana cost n stuff in the future, make method more sophisticated
+    public int menu(ArrayList<SpellAttack> spells, int mana, boolean input) {
 
         ArrayList<String> options = new ArrayList<>();
+        ArrayList<Integer> exclusions = new ArrayList<>();
         int choice;
 
-        for (SpellAttack s: spells) {
-            options.add(s.getName());
+        for (int i = 0; i < spells.size(); i++) {
+
+            SpellAttack s = spells.get(i);
+            StringBuilder output = new StringBuilder();
+
+            if (input) {
+                output.append(s.getName());
+
+                for (int j = 0; j < (20 - s.getName().length()); j++) {
+                    output.append(" ");
+                }
+                //    Add clause for spells that cost health
+                output.append(s.getBaseManaCost()).append(" mana").append("    ").append(s.getDescription());
+            }
+
+            options.add(output.toString());
+            if (mana < s.getBaseManaCost()) {
+                exclusions.add(i + 1);
+            }
         }
 
         if (input) {
             System.out.println("Select a spell");
-            choice = Tools.cancelableMenu(options);
+            System.out.println("Mana: " + mana);
+            choice = Tools.cancelableMenu(options, exclusions);
         } else {
             Random rand = new Random();
             choice = rand.nextInt(options.size());

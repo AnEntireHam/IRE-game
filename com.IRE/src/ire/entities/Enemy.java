@@ -126,7 +126,7 @@ public abstract class Enemy extends Entity {
                 case "Cast" -> {
                     while (true) {
 
-                        choice = SpellAttack.menu(this.spells, false);
+                        choice = this.spells.get(0).menu(spells, man, false);
 
                         if (choice == 0) {
                             break;

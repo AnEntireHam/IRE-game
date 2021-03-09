@@ -1,6 +1,5 @@
 package ire;
 
-
 import ire.combat.Battle;
 import ire.combat.actions.attackactions.spellattacks.Celestial;
 import ire.combat.actions.attackactions.spellattacks.Lunar;
@@ -25,7 +24,7 @@ public class Main {
 
         Tools.clear();
 
-        SaveData s = new SaveData();
+        /*SaveData s = new SaveData();
         s.Create();
         s.Write("Placeholder save data text!");
 
@@ -33,26 +32,26 @@ public class Main {
 
         System.out.println("\nPress ENTER to begin...");
 
-        Tools.emptyPrompt();
+        Tools.emptyPrompt();*/
 
 
         //Uncanny mockery, shattering grip, impotent prayer, bolster
 
         Player p1 = new Player(1, 12, 8, 4, 2, 5,
-                "Warrior Test 1", "humanDeath",
+                "Warrior", "humanDeath",
                 1, 2, 1, 0, 0);
 
         Player p2 = new Player(1, 70, 3, 3, 8, 6,
-                "Mage Test 1", "humanDeath",
+                "Mage", "humanDeath",
                 1, 0, 0, 2, 1);
 
-        Skeleton e1 = new Skeleton(2);
-        Skeleton e2 = new Skeleton(2);
-        Skeleton e3 = new Skeleton(2);
-        Skeleton e4 = new Skeleton(2);
-        Skeleton e5 = new Skeleton(2);
+        Skeleton s1 = new Skeleton(2);
+        Skeleton s2 = new Skeleton(2);
+        Skeleton s3 = new Skeleton(2);
+        Skeleton s4 = new Skeleton(2);
+        Skeleton s5 = new Skeleton(2);
 
-        TrainingDummy e6 = new TrainingDummy(1);
+        TrainingDummy t1 = new TrainingDummy(1);
 
         Celestial celestial = new Celestial(1);
         Lunar lunar = new Lunar(1);
@@ -70,27 +69,18 @@ public class Main {
         p2.addSpell(lunar);
         p2.addSpell(solar);
         p2.addSpell(fire);
-        p2.addSpell(ice);
+        /*p2.addSpell(ice);
         p2.addSpell(lightning);
-        p2.addSpell(rock);
+        p2.addSpell(rock);*/
         p2.addSpell(soul);
         p2.addSpell(life);
         p2.addSpell(mind);
 
         p2.addWard(screen);
 
-        /*e1.buffDurations[5] = 3;
-        e1.buffStrengths[5] = 1;
-        e1.buffDurations[1] = 3;
-        e1.buffStrengths[1] = 120;*/
-
-        //e6.setDebug(true);
-        //p2.setDebug(true);
 
         Battle b = new Battle(p2);
-        b.addEnemy(e1, e2);
-
-        //e2.setDebug(true);
+        b.addEnemy(s1, s2);
 
         if (b.runBattle(1)) {
             System.out.println("Players won!!");
@@ -99,8 +89,6 @@ public class Main {
         }
 
         System.out.println("\nTiny demo finished. Thanks for playing.");
-        Tools.emptyPrompt();
-
     }
 
 }

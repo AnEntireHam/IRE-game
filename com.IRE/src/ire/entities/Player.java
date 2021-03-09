@@ -219,7 +219,7 @@ public class Player extends Entity {
                 }
                 case "Cast" -> {
                     while (true) {
-                        choice = SpellAttack.menu(this.spells, true);
+                        choice = this.spells.get(0).menu(spells, man, true);
 
                         if (choice == 0) {
                             break;
@@ -279,13 +279,10 @@ public class Player extends Entity {
 
         Tools.sortEntityList(targets);
 
-        for (int i = 0; i < targets.size(); i++) {
-            Entity e = targets.get(i);
-            if (e.isAlive()) {
-                options.add(e.getName() + " Lv. " + e.getLevel() + "  " + e.generateStatus());
-            } else {
-                options.add(e.getName() + " Lv. " + e.getLevel() + "  " + e.generateStatus());
-                exclusions.add(i + 1);
+        for (Entity t : targets) {
+            if (t.isAlive()) {
+                options.add(t.getName() + " Lv. " + t.getLevel() +
+                        "  " + t.generateStatus());
             }
         }
 

@@ -132,7 +132,7 @@ public abstract class Entity {
             output.append(" ");
         }*/
 
-        int quotient = (int) (Math.round(((double) this.hlh / this.curHlh) * 20));
+        int quotient = (this.alive) ? (int) (Math.round(((double) this.hlh / this.curHlh) * 20)) : (0);
 
         for (int i = 0; i < quotient; i++) {
             output.append("█");
