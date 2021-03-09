@@ -235,7 +235,8 @@ public abstract class Entity {
     public void incrementStatusDurations() {
 
         ArrayList<GenerativeEffect> generativeEffects = new ArrayList<>();
-        HashMap<String, HashMap<GenerativeEffect, Integer>> sums = new HashMap<>();
+        //  HashMap<String, HashMap<GenerativeEffect, Integer>> sums = new HashMap<>();
+        HashMap<String, Integer> sums = new HashMap<>();
 
         for (int i = 0; i < statusEffects.size(); i++) {
 
@@ -246,9 +247,23 @@ public abstract class Entity {
             }
         }
 
+        System.out.println("GEs: " + generativeEffects);
+
         for (GenerativeEffect ge: generativeEffects) {
 
-            if (!sums.containsKey(ge.getAbbreviation())) {
+            String abbrev = ge.getAbbreviation().toLowerCase();
+
+            if (!sums.containsKey(abbrev)) {
+
+                sums.put(abbrev, ge.getStrength());
+
+            } else {
+
+                int temp = sums.get(abbrev) + ge.getStrength();
+                sums.put(abbrev, temp);
+            }
+        }
+            /*if (!sums.containsKey(ge.getAbbreviation())) {
 
                 HashMap<GenerativeEffect, Integer> temp = new HashMap<>();
                 temp.put(ge, ge.getStrength());
@@ -258,9 +273,28 @@ public abstract class Entity {
 
                 Integer temp = (sums.get(ge.getName()).get(ge) + ge.getStrength());
                 sums.get(ge.getName()).put(ge, temp);
+            }*/
+
+            //if (!sums.containsKey(ge.getAbbreviation())) {
+
+
+
+            //} else
+
+
+        System.out.println("Sums: " + sums);
+
+        ArrayList<String> processedAbbrev = new ArrayList<>();
+
+        for (GenerativeEffect ge: generativeEffects) {
+
+            if (!processedAbbrev.contains(ge.getAbbreviation())) {
+                ge.combineEffects(this, sums.get(ge.getAbbreviation().toLowerCase()));
+                processedAbbrev.add(ge.getAbbreviation());
             }
         }
 
+        /*//  for (HashMap hs: sums.values())
         for (String name: sums.keySet()) {
 
             GenerativeEffect temp = (GenerativeEffect) sums.get(name).keySet().toArray()[0];
@@ -268,7 +302,7 @@ public abstract class Entity {
 
             ((GenerativeEffect) sums.get(name).keySet().toArray()[0]).combineEffects(this, temp2);
 
-        }
+        }*/
 
         int manaRegen = (int) Math.round((this.curMag / 4.0));
         this.man += manaRegen;

@@ -47,7 +47,7 @@ public abstract class GenerativeEffect extends StatusEffect {
                     se.incrementStacks(1);
                     se.incrementDuration(this.duration);
 
-                    ((GenerativeEffect) se).incrementStrength(defender, strength);
+                    ((GenerativeEffect) se).incrementStrength(strength);
                     break;
                 }
             }
@@ -59,7 +59,7 @@ public abstract class GenerativeEffect extends StatusEffect {
 
         displayResult(defender.getName(), success);
         if (attacker.isDebug()) {
-            System.out.println("Strength: " + strength);
+            System.out.println("Strength " + strength);
         }
     }
 
@@ -86,25 +86,19 @@ public abstract class GenerativeEffect extends StatusEffect {
     protected abstract void displayResult(String defender, boolean success);
 
     public int getStrength() {
-        return strength;
+        return this.strength;
     }
 
     public void setStrength(int strength) {
-
-        if (strength > 0) {
-            this.strength = strength;
-        } else {
-            System.err.println("A GenerativeEffect's strength must be greater than 0");
-            this.strength = 1;
-        }
+        this.strength = strength;
     }
 
-    public void incrementStrength(Entity target, int strength) {
+    public void incrementStrength(int strength) {
 
         this.strength += strength;
-        if (this.strength < 1) {
+        /*if (this.strength < 1) {
             remove(target);
             //  Possibly include text indicated that GenerativeEffect has stopped due to < 1 strength.
-        }
+        }*/
     }
 }
