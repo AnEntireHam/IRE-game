@@ -3,7 +3,7 @@ package ire.combat.actions.attackactions.spellattacks.debuffspells.generativespe
 import ire.audio.AudioStream;
 import ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpell;
 import ire.combat.statuseffects.generativeeffect.GenerativeEffect;
-import ire.combat.statuseffects.generativeeffect.ManaDrain;
+import ire.combat.statuseffects.generativeeffect.ManaBleed;
 import ire.entities.Entity;
 import ire.tools.Tools;
 
@@ -15,7 +15,7 @@ public class Mind extends DebuffSpell {
         super("Mind", "Deals modest damage, and may inflict mana drain.",
                 new AudioStream("mind"), 2000, 2000, 0.75f,
                 new String[]{"Draw", "Sap", "Drain"}, 3, spellLevel,
-                "%s stupefies %s with sorcerous paradoxes.", new ManaDrain(spellLevel));
+                "%s stupefies %s with sorcerous paradoxes.", new ManaBleed(spellLevel));
         //  Eventually change placeholder length.
     }
 

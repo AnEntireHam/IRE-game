@@ -33,9 +33,9 @@ public abstract class GenerativeEffect extends StatusEffect {
         double rand = Math.random();
         float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
         boolean success = false;
+        boolean original = true;
 
         float totalProbability = effectProbability + statProbability;
-        //  Extracting damageProbability out as a variable might be jank, but maybe not.
 
         if (rand <= (totalProbability)) {
 
@@ -44,20 +44,22 @@ public abstract class GenerativeEffect extends StatusEffect {
             for (StatusEffect se: defender.getStatusEffects()) {
                 if (se.getName().equals(this.name)) {
 
+                    original = false;
+
                     se.incrementStacks(1);
                     se.incrementDuration(this.duration);
-
                     ((GenerativeEffect) se).incrementStrength(strength);
+
                     break;
                 }
             }
 
-            if (stacks == 1) {
+            if (original) {
                 defender.addStatusEffect(this);
             }
         }
 
-        displayResult(defender.getName(), success);
+        displayResult(defender.getName(), success, original);
         if (attacker.isDebug()) {
             System.out.println("Strength " + strength);
         }
@@ -83,7 +85,7 @@ public abstract class GenerativeEffect extends StatusEffect {
     }
 
     public abstract void combineEffects(Entity target, int total);
-    protected abstract void displayResult(String defender, boolean success);
+    protected abstract void displayResult(String defender, boolean success, boolean original);
 
     public int getStrength() {
         return this.strength;

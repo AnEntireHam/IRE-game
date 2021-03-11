@@ -10,13 +10,12 @@ import ire.combat.actions.attackactions.spellattacks.debuffspells.generativespel
 import ire.combat.actions.attackactions.spellattacks.debuffspells.statspells.*;
 import ire.combat.actions.defenseactions.spelldefenses.Screen;
 import ire.combat.statuseffects.generativeeffect.Bleed;
-import ire.combat.statuseffects.generativeeffect.ManaDrain;
+import ire.combat.statuseffects.generativeeffect.ManaBleed;
 import ire.combat.statuseffects.generativeeffect.ManaRegeneration;
 import ire.combat.statuseffects.generativeeffect.Regeneration;
 import ire.entities.Player;
 import ire.entities.enemies.Skeleton;
 import ire.entities.enemies.TrainingDummy;
-import ire.tools.SaveData;
 import ire.tools.Tools;
 
 public class Main {
@@ -89,20 +88,20 @@ public class Main {
 
         Bleed bleed = new Bleed(1);
         Regeneration regen = new Regeneration(1);
-        ManaDrain mBleed = new ManaDrain(1);
+        ManaBleed mBleed = new ManaBleed(1);
         ManaRegeneration mRegen = new ManaRegeneration(1);
 
-        regen.setStrength(4);
+        /*regen.setStrength(4);
         regen.apply(p1, s1);
 
         bleed.setStrength(-5);
-        bleed.apply(p1, s1);
+        bleed.apply(p1, s1);*/
 
         mRegen.setStrength(4);
-        mRegen.apply(p1, s1);
+        mRegen.apply(s1, p2);
 
         mBleed.setStrength(-6);
-        mBleed.apply(p1, s1);
+        mBleed.apply(s1, p2);
 
 
         Battle b = new Battle(p2);

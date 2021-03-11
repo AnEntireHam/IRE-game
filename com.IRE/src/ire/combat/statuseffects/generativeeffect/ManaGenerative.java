@@ -22,42 +22,25 @@ public abstract class ManaGenerative extends GenerativeEffect {
     }
 
     @Override
-    protected void displayResult(String defender, boolean success) {
-        if (success) {
-            System.out.println(defender + " started losing mana!");
-        } else {
-            System.out.println(defender + " didn't start losing mana.");
-        }
-        Tools.sleep(1000);
-    }
-
-    @Override
     public void combineEffects(Entity target, int total) {
-        return;
-    }
 
-    @Override
-    public boolean incrementEffect(Entity target) {
+        if (total < 0) {
 
-        if (target.getMan() - strength > 0) {
             if (target.isAlive()) {
-                System.out.println(target.getName() + " lost " + strength + " mana.");
+                System.out.println(target.getName() + " lost " + -total + " mana.");
+                Tools.sleep(1000);
             }
-            target.incrementMan(-strength);
+            target.bleedMana(-total, false, false);
+
+        } else if (total > 0) {
+
+            target.regenerateMana(total, true, false);
+            Tools.sleep(1000);
+
         } else {
-            if (target.isAlive()) {
-                System.out.println(target.getName() + " lost " + target.getMan() + " mana.");
-            }
-            target.setMan(0);
-        }
-        Tools.sleep(1000);
 
-        this.incrementDuration(-1);
-        if (this.duration <= 0) {
-            remove(target);
-            return true;
+            System.out.println(target.getName() + " regenerated a normal amount of mana.");
         }
-        return false;
     }
 
     @Override

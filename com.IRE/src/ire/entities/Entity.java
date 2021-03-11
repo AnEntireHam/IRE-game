@@ -128,6 +128,7 @@ public abstract class Entity {
     public String generateStatus() {
 
         //  Fix health bar for dead men.
+        //  Fix health bar for HEALTHY men.
         StringBuffer output = new StringBuffer();
 
         //  If J8 supports this, convert later.
@@ -144,6 +145,8 @@ public abstract class Entity {
         for (int i = 0; i < 20 - quotient; i++) {
             output.append("░");
         }
+
+        output.append(this.hlh).append("/").append(this.curHlh);
 
         output.append("  ");
 
@@ -238,6 +241,9 @@ public abstract class Entity {
         //  HashMap<String, HashMap<GenerativeEffect, Integer>> sums = new HashMap<>();
         HashMap<String, Integer> sums = new HashMap<>();
 
+        int manaRegen = (int) Math.round((this.curMag / 4.0));
+        this.regenerateMana(manaRegen, false, false);
+
         for (int i = 0; i < statusEffects.size(); i++) {
 
             if (statusEffects.get(i).incrementEffect(this)) {
@@ -250,15 +256,12 @@ public abstract class Entity {
         System.out.println("GEs: " + generativeEffects);
 
         for (GenerativeEffect ge: generativeEffects) {
-
             String abbrev = ge.getAbbreviation().toLowerCase();
 
             if (!sums.containsKey(abbrev)) {
-
                 sums.put(abbrev, ge.getStrength());
 
             } else {
-
                 int temp = sums.get(abbrev) + ge.getStrength();
                 sums.put(abbrev, temp);
             }
@@ -273,14 +276,9 @@ public abstract class Entity {
 
                 Integer temp = (sums.get(ge.getName()).get(ge) + ge.getStrength());
                 sums.get(ge.getName()).put(ge, temp);
-            }*/
-
-            //if (!sums.containsKey(ge.getAbbreviation())) {
-
-
-
-            //} else
-
+            }
+            if (!sums.containsKey(ge.getAbbreviation())) {
+            } else*/
 
         System.out.println("Sums: " + sums);
 
@@ -303,10 +301,6 @@ public abstract class Entity {
             ((GenerativeEffect) sums.get(name).keySet().toArray()[0]).combineEffects(this, temp2);
 
         }*/
-
-        int manaRegen = (int) Math.round((this.curMag / 4.0));
-        this.man += manaRegen;
-        if (this.man > this.curMag) {this.man = this.curMag;}  //  THIS IS SHOEHORNED IN AND BUG-PRONE. MOVE LATER
     }
 
     public void addStatusEffect(StatusEffect effect) {
@@ -531,6 +525,98 @@ public abstract class Entity {
 
     public void incrementMan(int man) {
         this.man += man;
+    }
+
+    public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
+
+        if ((man - bleedStrength) < 0) {
+
+            if (surplus) {
+                if (message) {
+                    System.out.println(name + " is being drained of " + bleedStrength);
+                    //  mana loss sound
+                }
+                this.man -= bleedStrength;
+
+            } else if (man < bleedStrength) {
+                if (message) {
+                    System.out.println(name + " lost " + man + " mana.");
+                    //  mana loss sound?
+                }
+                this.man = 0;
+
+            } else {
+                if (message) {
+                    System.out.println(name + " is being drained of mana, but has none left to lose.");
+                    //  mana loss error?
+                }
+            }
+
+        } else if (bleedStrength > 0) {
+
+            if (message) {
+                System.out.println(name + " lost " + bleedStrength + " mana.");
+                //  mana loss sound
+            }
+            this.man -= bleedStrength;
+
+        } else {
+
+            if (message) {
+                System.out.println(name + " resisted losing mana.");
+            }
+        }
+
+        if (message) {
+            Tools.sleep(2000);
+            System.out.println();
+        }
+    }
+
+    public void regenerateMana(int regenStrength, boolean message, boolean surplus) {
+
+        if ((man + regenStrength) > getCurMag()) {
+
+            if (surplus) {
+                if (message) {
+                    System.out.println(name + " over-regenerated, gaining " + regenStrength + " mana.");
+                }
+                this.man += regenStrength;
+
+            } else if (man < getCurMag()) {
+                if (message) {
+                    System.out.println(name + " regenerated " + (getCurMag() - man) + " mana");
+                    //  mana regen sound
+                }
+                man = getCurMag();
+
+            } else {
+                if (message) {
+                    System.out.println(name + " regenerated mana, but already had maximum mana.");
+                    //  mana regen error
+                }
+            }
+
+        } else if (regenStrength > 0) {
+
+            if (message) {
+                System.out.println(name + " regenerated " + regenStrength + " mana.");
+                //  mana regen sound
+            }
+            this.man += regenStrength;
+
+        } else {
+
+            if (message) {
+                System.out.println(name + " tried to regenerate mana, but failed.");
+                //  mana regen error
+            }
+        }
+
+        if (message) {
+            Tools.sleep(2000);
+            System.out.println();
+        }
     }
 
     // ***********************************

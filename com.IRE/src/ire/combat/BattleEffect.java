@@ -20,154 +20,6 @@ public class BattleEffect {
     // ***********************************
     // Status Functions
     // ***********************************
-/*
-
-    public void takeDebuff(int damage, int strength, Entity attacker) {
-
-        int type = attacker.getSpellType() - 3;
-        double baseChance = 0;
-        int severity = 0;
-        int stat = 0;
-        int duration;
-        double rand = Math.random();
-        boolean debug = e.isDebug();
-
-        if (debug) {
-            System.out.println("Random number: " + rand);
-        }
-
-        switch (type) {
-            case 0 -> stat = e.getMaxHlh();
-            case 1 -> stat = e.getCurAtk();
-            case 2 -> stat = e.getCurDef();
-            case 3 -> stat = e.getCurMag();
-            case 4 -> stat = e.getCurSpd();
-        }
-
-        switch (type) {
-
-            case 0, 1, 2, 3, 4 -> {
-
-                duration = 5;
-
-                switch (strength) {
-                    case 1 -> baseChance = .60;
-                    case 2 -> baseChance = .68;
-                    case 3 -> baseChance = .75;
-                }
-
-                if (debug) {
-                    System.out.println("Probability: " + (baseChance + ((float) (attacker.getCurMag() - stat) * .003333)));
-                }
-
-
-                if (rand < (baseChance + ((float) (attacker.getCurMag() - stat) * .003333))) {
-
-                    // Possibly add varying severities depending on how important a stat is to the attacker.
-                    switch (strength) {
-                        case 1 -> severity = 85;
-                        case 2 -> severity = 77;
-                        case 3 -> severity = 70;
-                    }
-
-                    this.e.bEffects.buff(type, severity, duration);
-                    System.out.println(e.getName() + " had their stats lowered.");
-
-                } else {
-
-                    System.out.println(e.getName() + " didn't have their stats lowered.");
-                }
-
-            }
-
-            case 5 -> {
-
-                duration = 3;
-
-                if (debug) {
-                    System.out.println("Probability: " + (.85 - ((float) damage / (float) e.getMaxHlh())));
-                    System.out.println(damage + "" + e.getMaxHlh());
-                }
-
-
-                if (rand < (.85 - ((float) damage / (float) e.getMaxHlh()))) {
-                    System.out.println(e.getName() + " started bleeding!");
-                    this.e.bEffects.buff(0, damage, duration);
-                } else {
-                    System.out.println(e.getName() + " didn't start bleeding.");
-                }
-            }
-
-            case 6 -> {
-
-                duration = 5;
-
-                switch (strength) {
-                    case 1 -> severity = 50;
-                    case 2 -> severity = 60;
-                    case 3 -> severity = 70;
-                }
-
-                severity = IRE.IREModule.Tools.round(IRE.IREModule.Tools.round(e.getCurMag() / 4.0) * severity);
-
-                if (debug) {
-                    System.out.println("Probability" + .85 + ((float) (attacker.getCurMag() - stat) * .3333));
-                }
-
-                if (rand > (.85 + ((float) (attacker.getCurMag() - stat) * .3333))) {
-                    this.e.bEffects.buff(6, severity, duration);
-                    System.out.println(e.getName() + " is losing mana.");
-                } else {
-                    System.out.println(e.getName() + " didn't start losing mana.");
-                }
-            }
-            //default -> throw new IllegalStateException("Unexpected value: " + type); Causes error?
-        }
-        IRE.IREModule.Tools.sleep(1000);
-    }
-*/
-
-    /*public void buff(int stat, int strength, int duration) {
-
-        // More advanced logic will probably be needed for balancing purposes in the future.
-        this.e.setNewBuff(stat);
-
-        if (e.getBuffDurations() == 0) {
-
-            this.e.setBuffStacks(1);
-            this.e.setBuffDurations(duration);
-            this.e.setBuffStrengths(strength / e.getBuffStacks());
-            this.e.setBuffStacks(e.getBuffStacks() + 1);
-
-        } else {
-
-            this.e.setBuffDurations(e.getBuffDurations());
-
-            if (stat == 5 || stat == 6) {
-                this.e.setBuffStrengths(e.getBuffStrengths() + strength);
-
-            } else {
-
-                int severity = Tools.round((float) (100 - strength) / e.getBuffStacks());
-
-                if (strength < 100) {
-                    this.e.setBuffStrengths(e.getBuffStrengths() - severity);
-
-                } else {
-                    this.e.setBuffStrengths(e.getBuffStrengths() + severity);
-                }
-
-                this.e.setBuffStacks(e.getBuffStacks() + 1);
-
-            }
-
-            // rounding can make bleeds look larger than they should be
-            // Debacle: To round or stack?
-
-        }
-
-        this.e.setNewBuff(-1);
-    }*/
 
     public void incrementStatusEffects(boolean tick) {
 
@@ -331,71 +183,71 @@ public class BattleEffect {
 
         } else {
 
-            if (!(e.isAlive())) {
+             if (e.isAlive()) {
+
+                 this.e.setHlh(e.getHlh() - damage);
+                 if (message) {
+                     System.out.println(e.getName() + " took " + damage + " damage.");
+                     Tools.sleep(2000);
+                     System.out.println(" ");
+                 }
+
+                 if (e.getHlh() < 1) {
+                     this.die(message);
+                 }
+
+            } else {
+
                 this.e.setHlh(e.getHlh() - damage);
                 if (message) {
                     System.out.println(e.getName() + " is dead, but took " + damage + " more damage.");
                     Tools.sleep(2000);
                     System.out.println(" ");
                 }
-
-            } else {
-                this.e.setHlh(e.getHlh() - damage);
-                if (message) {
-                    System.out.println(e.getName() + " took " + damage + " damage.");
-                    Tools.sleep(2000);
-                    System.out.println(" ");
-
-
-                    // Field/accessors unimplemented in Entity
-                    /*if (e.getDefenseChoice().equals("Cure") && e.isChannelDef()) {
-                        this.e.setChannelDef(false);
-                        System.out.println(e.getName() + "'s channel was interrupted.");
-                    }*/
-
-                }
-
-                if (e.getHlh() < 1) {
-                    this.die();
-                }
             }
         }
     }
 
     // This will have to change in the future if overhealing is implemented.
-    public void heal(int heal, boolean message) {
+    public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
 
-        if (e.getHlh() == e.getCurHlh()) {
+        if ((e.getHlh() + regenStrength) > e.getCurHlh()) {
 
-            if (message) {
-                System.out.println(e.getName() + " was healed, but was already at full health.");
-            }
-
-        } else if ((e.getHlh() + heal) > e.getCurHlh()) {
-
-            if (e.getCurHlh() < e.getCurHlh()) {
-
+            if (surplus) {
                 if (message) {
-                    System.out.println(e.getName() + " healed " + (e.getCurHlh() - e.getHlh()) + " health.");
+                    System.out.println(e.getName() + " healed beyond the limit for " + regenStrength + " health.");
+                    e.getHealSound().play();  //  Beyond-limit sfx
                 }
-                e.getHealSound().play();
+                e.setHlh(e.getHlh() + regenStrength);
+
+            } else if (e.getHlh() < e.getCurHlh()) {
+                if (message) {
+                    System.out.println(e.getName() + " healed for " + (e.getCurHlh() - e.getHlh()) + " health.");
+                    e.getHealSound().play();
+                }
                 e.setHlh(e.getCurHlh());
 
             } else {
-
                 if (message) {
                     System.out.println(e.getName() + " was healed, but was already beyond full health.");
+                    //  heal error
                 }
-
             }
+
+        } else if (regenStrength > 0) {
+
+            if (message) {
+                System.out.println(e.getName() + " healed " + regenStrength + " health.");
+                e.getHealSound().play();
+            }
+            e.setHlh(e.getHlh() + regenStrength);
+
         } else {
 
             if (message) {
-                System.out.println(e.getName() + " healed " + heal + " health.");
+                System.out.println(e.getName() + " received a useless heal.");
+                //  Heal error
             }
-            e.getHealSound().play();
-            e.setHlh(e.getHlh() + heal);
-
         }
 
         if (message) {
@@ -404,14 +256,15 @@ public class BattleEffect {
         }
     }
 
-    public void die() {
+    public void die(boolean message) {
 
         this.e.setAlive(false);
-        //Utilities.sleep(1000);
-        e.getDeathSound().play();
-        System.out.println(e.getName() + " has died.");
-        Tools.sleep(1500);
-        System.out.println(" ");
-        // add coffin gif for party wipe?
+        if (message) {
+            e.getDeathSound().play();
+            System.out.println(e.getName() + " has died.");
+            Tools.sleep(1500);
+            System.out.println(" ");
+        }
+        //  add coffin dance gif for party wipe?
     }
 }
