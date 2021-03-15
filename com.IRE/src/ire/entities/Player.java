@@ -1,12 +1,10 @@
 package ire.entities;
 
 import ire.audio.AudioStream;
-import ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import ire.tools.Tools;
 import ire.world.Inventory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Player extends Entity {

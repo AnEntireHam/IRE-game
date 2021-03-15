@@ -27,6 +27,6 @@ public class Stab extends PhysicalAttack {
             Tools.sleep(DURATION - DELAY);
         }
 
-        defender.bEffects.takeDamage(damage, true);
+        defender.takeDamage(damage, true);
     }
 }

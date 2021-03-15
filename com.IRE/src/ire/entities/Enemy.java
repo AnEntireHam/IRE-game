@@ -1,6 +1,5 @@
 package ire.entities;
 
-import ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import ire.tools.Tools;
 import ire.world.Item;

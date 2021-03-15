@@ -11,6 +11,8 @@ import java.util.Random;
 
 public abstract class SpellAttack extends AttackAction {
 
+    protected static final int nameLength = 18;
+
     protected float levelDamage = 0.5f;
 
     protected final String prefixName;
@@ -55,7 +57,7 @@ public abstract class SpellAttack extends AttackAction {
             Tools.sleep(DURATION - DELAY);
         }
 
-        defender.bEffects.takeDamage(damage, true);
+        defender.takeDamage(damage, true);
     }
 
     public int menu(ArrayList<SpellAttack> spells, int mana, boolean input) {
@@ -72,7 +74,7 @@ public abstract class SpellAttack extends AttackAction {
             if (input) {
                 output.append(s.getName());
 
-                for (int j = 0; j < (18 - s.getName().length()); j++) {
+                for (int j = 0; j < (nameLength - s.getName().length()); j++) {
                     output.append(" ");
                 }
                 //    Add clause for spells that cost health

@@ -35,14 +35,14 @@ public class Lunar extends SpellAttack {
         this.SOUND.play();
 
         attacker.incrementMan(-baseManaCost);
-        attacker.bEffects.takeDamage(healthCost, false);
+        attacker.takeDamage(healthCost, false);
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
 
-        defender.bEffects.takeDamage(damage, true);
+        defender.takeDamage(damage, true);
 
     }
 

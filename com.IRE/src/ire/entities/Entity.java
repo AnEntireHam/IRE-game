@@ -1,7 +1,6 @@
 package ire.entities;
 
 import ire.audio.AudioStream;
-import ire.combat.BattleEffect;
 import ire.combat.actions.Action;
 import ire.combat.actions.attackactions.physicalattacks.Lunge;
 import ire.combat.actions.attackactions.physicalattacks.Stab;
@@ -14,7 +13,6 @@ import ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import ire.combat.statuseffects.stateffects.StatEffect;
 import ire.tools.Tools;
 
-import java.lang.reflect.GenericArrayType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,8 +22,6 @@ public abstract class Entity {
     // ***********************************
     // Fields
     // ***********************************
-
-    public final BattleEffect bEffects;
 
     protected String name;
     protected int level;
@@ -115,8 +111,6 @@ public abstract class Entity {
         this.hlh = this.curHlh;
         this.man = this.curMag;
 
-        this.bEffects = new BattleEffect(this);
-
     }
 
     // ***********************************
@@ -129,7 +123,7 @@ public abstract class Entity {
 
         //  Fix health bar for dead men.
         //  Fix health bar for HEALTHY men.
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
 
         //  If J8 supports this, convert later.
         /*for (int j = this.name.length(); j < 15; j++) {
@@ -179,6 +173,7 @@ public abstract class Entity {
                 others.append(se.getAbbreviation()).append(" placeholder").append(" ");
             }
         }
+
         for (int i = 0; i < 4; i++) {
             multiplier[i] = Math.round(multiplier[i] * 100f);
             if (multiplier[i] != 100) {
@@ -291,16 +286,6 @@ public abstract class Entity {
                 processedAbbrev.add(ge.getAbbreviation());
             }
         }
-
-        /*//  for (HashMap hs: sums.values())
-        for (String name: sums.keySet()) {
-
-            GenerativeEffect temp = (GenerativeEffect) sums.get(name).keySet().toArray()[0];
-            Integer temp2 = sums.get(name).get(temp);
-
-            ((GenerativeEffect) sums.get(name).keySet().toArray()[0]).combineEffects(this, temp2);
-
-        }*/
     }
 
     public void addStatusEffect(StatusEffect effect) {
@@ -420,7 +405,7 @@ public abstract class Entity {
         if (prevMax != this.curHlh && this.hlh > this.curHlh) {
             System.out.println(this.hlh + " " + this.curHlh);
             int damage = this.hlh - this.curHlh;
-            this.bEffects.takeDamage(damage, false);
+            this.takeDamage(damage, false);
             System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
             Tools.sleep(2000);
         }
@@ -527,6 +512,88 @@ public abstract class Entity {
         this.man += man;
     }
 
+    public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
+
+        if ((this.hlh + regenStrength) > this.getCurHlh()) {
+
+            if (surplus) {
+                if (message) {
+                    System.out.println(name + " healed beyond the limit for " + regenStrength + " health.");
+                    healSound.play();  //  Beyond-limit sfx
+                }
+
+                this.hlh += regenStrength;
+
+            } else if (this.hlh < this.getCurHlh()) {
+                if (message) {
+                    System.out.println(name + " healed for " + (this.getCurHlh() - this.hlh) + " health.");
+                    healSound.play();
+                }
+                this.hlh = this.getCurHlh();
+
+            } else {
+                if (message) {
+                    System.out.println(name + " was healed, but was already beyond full health.");
+                    //  heal error
+                }
+            }
+
+        } else if (regenStrength > 0) {
+
+            if (message) {
+                System.out.println(name + " healed " + regenStrength + " health.");
+                healSound.play();
+            }
+            this.hlh += regenStrength;
+
+        } else {
+
+            if (message) {
+                System.out.println(name + " received a useless heal.");
+                //  Heal error
+            }
+        }
+
+        if (message) {
+            Tools.sleep(2000);
+            System.out.println();
+        }
+    }
+
+    public void takeDamage(int damage, boolean message) {
+
+        if (damage <= 0 && message) {
+            System.out.println(name + " was struck, but took no damage.");
+            Tools.sleep(2000);
+            System.out.println(" ");
+
+        } else {
+
+            if (alive) {
+
+                this.hlh -= damage;
+                if (message) {
+                    System.out.println(name + " took " + damage + " damage.");
+                    Tools.sleep(2000);
+                    System.out.println(" ");
+                }
+
+                if (hlh < 1) {
+                    this.die(message);
+                }
+
+            } else {
+
+                this.hlh -= damage;
+                if (message) {
+                    System.out.println(name + " is dead, but took " + damage + " more damage.");
+                    Tools.sleep(2000);
+                    System.out.println(" ");
+                }
+            }
+        }
+    }
+
     public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
 
         if ((man - bleedStrength) < 0) {
@@ -617,6 +684,18 @@ public abstract class Entity {
             Tools.sleep(2000);
             System.out.println();
         }
+    }
+
+    public void die(boolean message) {
+
+        this.alive = false;
+        if (message) {
+            this.deathSound.play();
+            System.out.println(name + " has died.");
+            Tools.sleep(1500);
+            System.out.println(" ");
+        }
+        //  add coffin dance gif for party wipe?
     }
 
     // ***********************************

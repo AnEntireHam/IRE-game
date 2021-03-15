@@ -41,7 +41,7 @@ public class Mind extends DebuffSpell {
             Tools.sleep(DURATION - DELAY);
         }
 
-        defender.bEffects.takeDamage(damage, true);
+        defender.takeDamage(damage, true);
         ((GenerativeEffect) debuff).setStrength(damage);  //  Dunno if this is OP, maybe not?
         debuff.apply(attacker, defender);
     }

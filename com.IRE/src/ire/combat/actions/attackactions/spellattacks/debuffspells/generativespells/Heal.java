@@ -40,7 +40,7 @@ public class Heal extends DebuffSpell {
             Tools.sleep(DURATION - DELAY);
         }
 
-        defender.bEffects.takeDamage(damage, true);
+        defender.takeDamage(damage, true);
         ((GenerativeEffect) debuff).setStrength(damage);
         debuff.apply(attacker, defender);
     }

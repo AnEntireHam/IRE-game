@@ -40,7 +40,7 @@ public class Solar extends SpellAttack {
             Tools.sleep(DURATION - DELAY);
         }
 
-        defender.bEffects.takeDamage(damage, true);
-        attacker.bEffects.regenerateHealth(damage, true, true);
+        defender.takeDamage(damage, true);
+        attacker.regenerateHealth(damage, true, true);
     }
 }

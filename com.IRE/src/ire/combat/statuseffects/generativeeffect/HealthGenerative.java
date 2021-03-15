@@ -31,11 +31,11 @@ public abstract class HealthGenerative extends GenerativeEffect {
                 System.out.println(target.getName() + " bled for " + -total + " damage.");
                 Tools.sleep(1000);
             }
-            target.bEffects.takeDamage(-total, false);
+            target.takeDamage(-total, false);
 
         } else if (total > 0) {
 
-            target.bEffects.regenerateHealth(total, true, false);
+            target.regenerateHealth(total, true, false);
             Tools.sleep(1000);
 
         } else {

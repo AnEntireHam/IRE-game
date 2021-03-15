@@ -31,11 +31,11 @@ public class Lunge extends PhysicalAttack {
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             this.SOUND.play();
             Tools.sleep(1000);
-            defender.bEffects.takeDamage(damage, true);
+            defender.takeDamage(damage, true);
 
         } else if (counterDamage == 0) {
             this.SOUND.play();
-            defender.bEffects.takeDamage(damage, true);
+            defender.takeDamage(damage, true);
         }
     }
 

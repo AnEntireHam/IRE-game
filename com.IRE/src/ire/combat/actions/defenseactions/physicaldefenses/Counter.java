@@ -33,7 +33,7 @@ public class Counter extends PhysicalDefense {
             System.out.println("... but was countered!");
             ((Lunge) attack).getSOUND().play();
             Tools.sleep(1000);
-            attacker.bEffects.takeDamage(counterDamage, true);
+            attacker.takeDamage(counterDamage, true);
 
         } else {
 
