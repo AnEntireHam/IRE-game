@@ -140,7 +140,7 @@ public abstract class Entity {
             output.append("░");
         }
 
-        output.append(this.hlh).append("/").append(this.curHlh);
+        output.append(" ").append(this.hlh).append("/").append(this.curHlh);
 
         output.append("  ");
 
@@ -150,7 +150,7 @@ public abstract class Entity {
 
         for (StatusEffect se: this.statusEffects) {
 
-            if (se instanceof StatEffect && se.isDisplay()) {
+            /*if (se instanceof StatEffect && se.isDisplay()) {
                 switch (se.getAbbreviation()) {
                     case "HLH":
                         multiplier[0] += ((StatEffect) se).getStatMultiplier();
@@ -171,15 +171,16 @@ public abstract class Entity {
 
             } else if (se.isDisplay() && !se.isPercentage()) {
                 others.append(se.getAbbreviation()).append(" placeholder").append(" ");
-            }
+            }*/
+            others.append(se.generateDisplay());
         }
 
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             multiplier[i] = Math.round(multiplier[i] * 100f);
             if (multiplier[i] != 100) {
                 output.append(stats[i]).append((int) multiplier[i]).append("% ");
             }
-        }
+        }*/
         output.append(others);
 
         return output.toString();

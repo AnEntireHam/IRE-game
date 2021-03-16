@@ -102,7 +102,8 @@ public abstract class StatEffect extends StatusEffect {
     @Override
     public String generateDisplay() {
 
-        return "YEET";
+        //  temporary format. probably include a condensed version, settable by global options.
+        return (name + ": " + (Math.round(statMultiplier * 100f)) + "%, " + duration + " t, " + stacks + " s.  ");
     }
 
     //  Reduces duration by 1 and executes effects if either are applicable.

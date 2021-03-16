@@ -43,8 +43,4 @@ public abstract class ManaGenerative extends GenerativeEffect {
         }
     }
 
-    @Override
-    public String generateDisplay() {
-        return null;
-    }
 }

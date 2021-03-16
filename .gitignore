@@ -1,12 +1,12 @@
 
+/.idea/
+/out/
+/target/
 SaveFile.txt
 IdeaProjects.iml
-.idea/*
-out/production/*
-out/artifacts/run.bat
-out/artifacts/runShortcut.ahk
-out/artifacts/SaveFile.txt
-out/artifacts/sounds/*
-out/artifacts/startArt.txt
 IRE.iml
-/target/
+/distributable/ire-1.0-SNAPSHOT-Main.jar
+/distributable/runShortcut.ahk
+/distributable/run.bat
+/distributable/sounds/
+/distributable/startArt.txt

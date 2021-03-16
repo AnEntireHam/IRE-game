@@ -84,6 +84,13 @@ public abstract class GenerativeEffect extends StatusEffect {
         Tools.sleep(1250);
     }
 
+    @Override
+    public String generateDisplay() {
+
+        //  temporary format. probably include a condensed version, settable by global options.
+        return (name + ": " + Math.abs(strength) + ", " + duration + " t, " + stacks + " s.  ");
+    }
+
     public abstract void combineEffects(Entity target, int total);
     protected abstract void displayResult(String defender, boolean success, boolean original);
 

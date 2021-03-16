@@ -15,6 +15,8 @@ import com.ire.combat.statuseffects.generativeeffect.Bleed;
 import com.ire.combat.statuseffects.generativeeffect.ManaBleed;
 import com.ire.combat.statuseffects.generativeeffect.ManaRegeneration;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
+import com.ire.combat.statuseffects.stateffects.AttackDown;
+import com.ire.combat.statuseffects.stateffects.AttackUp;
 import com.ire.entities.Player;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.enemies.TrainingDummy;
@@ -66,7 +68,7 @@ public class Main {
         System.out.println("Press ENTER to begin...");
 
         Tools.emptyPrompt();
-
+        Tools.clear();
 
         //Uncanny mockery, shattering grip, impotent prayer, bolster
 
@@ -74,7 +76,7 @@ public class Main {
                 "Warrior", "humanDeath",
                 1, 2, 1, 0, 0);
 
-        Player p2 = new Player(1, 18, 3, 3, 5, 6,
+        Player p2 = new Player(1, 180, 3, 3, 5, 6,
                 "Mage", "humanDeath",
                 1, 0, 0, 2, 1);
 
@@ -101,9 +103,9 @@ public class Main {
 
         //p2.addSpell(celestial);
         p2.addSpell(lunar);
-        /*p2.addSpell(solar);
+        p2.addSpell(solar);
         p2.addSpell(fire);
-        p2.addSpell(ice);
+        /*p2.addSpell(ice);
         p2.addSpell(lightning);
         p2.addSpell(rock);
         p2.addSpell(soul);*/
@@ -117,22 +119,26 @@ public class Main {
         Regeneration regen = new Regeneration(1);
         ManaBleed mBleed = new ManaBleed(1);
         ManaRegeneration mRegen = new ManaRegeneration(1);
+        AttackUp au = new AttackUp(1);
+        AttackDown ad = new AttackDown(1);
 
-        /*regen.setStrength(4);
+        regen.setStrength(4);
         regen.apply(p1, s1);
 
         bleed.setStrength(-5);
-        bleed.apply(p1, s1);*/
+        bleed.apply(p1, s1);
 
         mRegen.setStrength(1);
-        mRegen.apply(s1, p2);
+        mRegen.apply(p1, s1);
 
         /*mBleed.setStrength(-6);
         mBleed.apply(s1, p2);*/
 
+        au.apply(p2, s1);
+        ad.apply(p2, s1);
 
-        Battle b = new Battle(p1, p2);
-        b.addEnemy(s1, s2, s3, s4);
+        Battle b = new Battle(p2);
+        b.addEnemy(s1, s2);
 
         if (b.runBattle(1)) {
             System.out.println(purple + "Players won!!");

@@ -45,11 +45,6 @@ public abstract class HealthGenerative extends GenerativeEffect {
     }
 
     @Override
-    public String generateDisplay() {
-        return null;
-    }
-
-    @Override
     public String toString() {
         return (super.toString() +  " Strength: " + strength);
     }
