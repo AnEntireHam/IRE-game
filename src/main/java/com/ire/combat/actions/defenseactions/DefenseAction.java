@@ -1,0 +1,38 @@
+package com.ire.combat.actions.defenseactions;
+
+import com.ire.combat.actions.Action;
+import com.ire.combat.actions.attackactions.physicalattacks.PhysicalAttack;
+import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import com.ire.entities.Entity;
+
+public abstract class DefenseAction extends Action {
+
+    // Consider moving to Entity?
+    protected final float physCoefficientDef  = -0.5f;
+    protected final float physCoefficientMag  =  0.0f;
+    protected final float spellCoefficientDef = -0.25f;
+    protected final float spellCoefficientMag = -0.5f;
+
+    public DefenseAction(String NAME, String DESCRIPTION) {
+        super(NAME, DESCRIPTION);
+    }
+
+    @Override
+    public void execute(Entity attacker, Entity defender) {
+
+        Action action = attacker.getCurrentAction();
+        int curDef = defender.getCurDef();
+        int curMag = defender.getCurMag();
+
+        if (action instanceof PhysicalAttack) {
+
+            ((PhysicalAttack) action).incrementDamage(
+                    Math.round((curDef * physCoefficientDef) + (curMag * physCoefficientMag)));
+
+        } else if (action instanceof SpellAttack) {
+
+            ((SpellAttack) action).incrementDamage(
+                    Math.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
+        }
+    }
+}
