@@ -129,11 +129,14 @@ public abstract class Entity {
         StringBuilder output = new StringBuilder();
 
         output.append(name);
-        output.append(" Lv. ").append(level).append("  ");
 
-        for (int j = output.length(); j < 18; j++) {
+        //  I'm unhappy with this consistent spacing, but it might be preferable in the future.
+        /*for (int j = output.length(); j < 10; j++) {
             output.append(" ");
-        }
+        }*/
+
+        output.append("  Lv. ").append(level).append("  ");
+
 
         int quotient = (this.alive) ? (Math.round(((float) this.hlh / this.curHlh) * 20)) : (0);
 

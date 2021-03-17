@@ -5,14 +5,10 @@
 SaveFile.txt
 IdeaProjects.iml
 IRE.iml
-/distributable/ire-1.0-SNAPSHOT-Main.jar
 /distributable/runShortcut.ahk
-/distributable/run.bat
 /distributable/sounds/
 /distributable/startArt.txt
 /distributable/packr-all-3.0.3.jar
 /distributable/windows64/
 /distributable/linux64/
 /distributable/mac/
-/distributable/build.bat
-/distributable/build&run.bat
