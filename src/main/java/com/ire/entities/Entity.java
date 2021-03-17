@@ -119,19 +119,20 @@ public abstract class Entity {
 
     protected abstract void levelUp(int targetLevel);
 
+    //  Should be a part of battleHud(), but it doesn't necessarily have to be the entire part of enemy's display.
     public String generateStatus() {
 
-        //  Fix health bar for dead men.
-        //  Fix health bar for HEALTHY men.
         StringBuilder output = new StringBuilder();
 
-        //  If J8 supports this, convert later.
         /*for (int j = this.name.length(); j < 15; j++) {
             output.append(" ");
         }*/
 
         int quotient = (this.alive) ? (int) (Math.round(((double) this.hlh / this.curHlh) * 20)) : (0);
 
+        //  Fix health bar for dead men.
+        //  Fix health bar for HEALTHY men.
+        //  Probably extract "bar" display into separate method (maybe in tools).
         for (int i = 0; i < quotient; i++) {
             output.append("█");
         }
@@ -140,47 +141,13 @@ public abstract class Entity {
             output.append("░");
         }
 
-        output.append(" ").append(this.hlh).append("/").append(this.curHlh);
+        //  output.append(" ").append(this.hlh).append("/").append(this.curHlh).append("  ");  include if allied
 
-        output.append("  ");
-
-        String[] stats = {"Hlh: ", "Atk: ", "Def: ", "Mag: " + "Spd: "};
-        float[] multiplier = {1, 1, 1, 1, 1};
         StringBuilder others = new StringBuilder();
 
         for (StatusEffect se: this.statusEffects) {
-
-            /*if (se instanceof StatEffect && se.isDisplay()) {
-                switch (se.getAbbreviation()) {
-                    case "HLH":
-                        multiplier[0] += ((StatEffect) se).getStatMultiplier();
-                        break;
-                    case "ATK":
-                        multiplier[1] += ((StatEffect) se).getStatMultiplier();
-                        break;
-                    case "DEF":
-                        multiplier[2] += ((StatEffect) se).getStatMultiplier();
-                        break;
-                    case "MAG":
-                        multiplier[3] += ((StatEffect) se).getStatMultiplier();
-                        break;
-                    case "SPD":
-                        multiplier[4] += ((StatEffect) se).getStatMultiplier();
-                        break;
-                }
-
-            } else if (se.isDisplay() && !se.isPercentage()) {
-                others.append(se.getAbbreviation()).append(" placeholder").append(" ");
-            }*/
             others.append(se.generateDisplay());
         }
-
-        /*for (int i = 0; i < 4; i++) {
-            multiplier[i] = Math.round(multiplier[i] * 100f);
-            if (multiplier[i] != 100) {
-                output.append(stats[i]).append((int) multiplier[i]).append("% ");
-            }
-        }*/
         output.append(others);
 
         return output.toString();
