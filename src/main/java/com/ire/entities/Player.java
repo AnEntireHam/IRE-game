@@ -299,8 +299,7 @@ public class Player extends Entity {
 
         for (Entity t : targets) {
             if (t.isAlive()) {
-                options.add(t.getName() + " Lv. " + t.getLevel() +
-                        "  " + t.generateStatus());
+                options.add(t.generateStatus());
             }
         }
 

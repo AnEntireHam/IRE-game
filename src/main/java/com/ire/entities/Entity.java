@@ -1,5 +1,6 @@
 package com.ire.entities;
 
+import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.Action;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
@@ -16,6 +17,9 @@ import com.ire.combat.statuseffects.stateffects.StatEffect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import static com.diogonunes.jcolor.Ansi.colorize;
+import static com.diogonunes.jcolor.Attribute.GREEN_TEXT;
 
 public abstract class Entity {
 
@@ -124,21 +128,24 @@ public abstract class Entity {
 
         StringBuilder output = new StringBuilder();
 
-        /*for (int j = this.name.length(); j < 15; j++) {
-            output.append(" ");
-        }*/
+        output.append(name);
+        output.append(" Lv. ").append(level).append("  ");
 
-        int quotient = (this.alive) ? (int) (Math.round(((double) this.hlh / this.curHlh) * 20)) : (0);
+        for (int j = output.length(); j < 18; j++) {
+            output.append(" ");
+        }
+
+        int quotient = (this.alive) ? (Math.round(((float) this.hlh / this.curHlh) * 20)) : (0);
 
         //  Fix health bar for dead men.
         //  Fix health bar for HEALTHY men.
         //  Probably extract "bar" display into separate method (maybe in tools).
         for (int i = 0; i < quotient; i++) {
-            output.append("█");
+            output.append(colorize("█", GREEN_TEXT()));
         }
 
         for (int i = 0; i < 20 - quotient; i++) {
-            output.append("░");
+            output.append(colorize("░", GREEN_TEXT()));
         }
 
         //  output.append(" ").append(this.hlh).append("/").append(this.curHlh).append("  ");  include if allied
@@ -201,7 +208,6 @@ public abstract class Entity {
     public void incrementStatusDurations() {
 
         ArrayList<GenerativeEffect> generativeEffects = new ArrayList<>();
-        //  HashMap<String, HashMap<GenerativeEffect, Integer>> sums = new HashMap<>();
         HashMap<String, Integer> sums = new HashMap<>();
 
         int manaRegen = (int) Math.round((this.curMag / 4.0));
@@ -283,9 +289,6 @@ public abstract class Entity {
             //  Consider StatEffects which affect multiple stats
             if (se instanceof StatEffect && se.getAbbreviation().equals(prefix)) {
                 multiplier += (Math.round(((StatEffect) se).getStatMultiplier() * 100f) / 100f);
-            } else if (se instanceof GenerativeEffect) {
-
-                //  fetch magnitude and sign, sum it, then apply as a whole.
             }
         }
 

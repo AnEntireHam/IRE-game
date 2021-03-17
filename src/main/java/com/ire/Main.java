@@ -48,7 +48,7 @@ public class Main {
         /*s.Create();
         s.Write("Placeholder save data text!");*/
 
-        System.out.print(red);
+        /*System.out.print(red);
         s.Read("startArt.txt");
         System.out.println("^^ ANSI color code ^^" + reset);
 
@@ -64,6 +64,8 @@ public class Main {
         System.out.println(colorize("Brownish text", BLACK_BACK(), TEXT_COLOR(100)));
         System.out.println(colorize("Purplish text", TEXT_COLOR(125, 16, 204)));
         System.out.println();
+
+        Tools.sleep(300);*/
 
         System.out.println("Press ENTER to begin...");
 
@@ -122,7 +124,7 @@ public class Main {
         AttackUp au = new AttackUp(1);
         AttackDown ad = new AttackDown(1);
 
-        regen.setStrength(4);
+        /*regen.setStrength(4);
         regen.apply(p1, s1);
 
         bleed.setStrength(-5);
@@ -131,11 +133,11 @@ public class Main {
         mRegen.setStrength(1);
         mRegen.apply(p1, s1);
 
-        /*mBleed.setStrength(-6);
-        mBleed.apply(s1, p2);*/
+        mBleed.setStrength(-6);
+        mBleed.apply(s1, p2);
 
         au.apply(p2, s1);
-        ad.apply(p2, s1);
+        ad.apply(p2, s1);*/
 
         Battle b = new Battle(p2);
         b.addEnemy(s1, s2);

@@ -13,4 +13,6 @@ IRE.iml
 /distributable/packr-all-3.0.3.jar
 /distributable/windows64/
 /distributable/linux64/
-/distributable/mac64/
+/distributable/mac/
+/distributable/build.bat
+/distributable/build&run.bat
