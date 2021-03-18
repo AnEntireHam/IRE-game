@@ -138,18 +138,10 @@ public abstract class Entity {
         output.append("  Lv. ").append(level).append("  ");
 
 
-        int quotient = (this.alive) ? (Math.round(((float) this.hlh / this.curHlh) * 20)) : (0);
-
         //  Fix health bar for dead men.
         //  Fix health bar for HEALTHY men.
-        //  Probably extract "bar" display into separate method (maybe in tools).
-        for (int i = 0; i < quotient; i++) {
-            output.append(colorize("█", GREEN_TEXT()));
-        }
-
-        for (int i = 0; i < 20 - quotient; i++) {
-            output.append(colorize("░", GREEN_TEXT()));
-        }
+        //  Pull out the magic number later.
+        output.append(Tools.createBar(this.hlh, this.curHlh, 20));
 
         //  output.append(" ").append(this.hlh).append("/").append(this.curHlh).append("  ");  include if allied
 

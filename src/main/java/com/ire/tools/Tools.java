@@ -9,10 +9,18 @@ import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static com.diogonunes.jcolor.Ansi.colorize;
+import static com.diogonunes.jcolor.Attribute.GREEN_TEXT;
+
 public class Tools {
 
-    protected static AudioStream menuBoop = new AudioStream("menuBoop");
-    protected static AudioStream menuError = new AudioStream("menuError");
+    private static final AudioStream MENU_BOOP = new AudioStream("menuBoop");
+    private static final AudioStream MENU_ERROR = new AudioStream("menuError");
+
+
+    // ***********************************
+    // Display Methods
+    // ***********************************
 
     // Probably include a text speed/manual skip option, and or always emptyPrompt() / always sleep
     public static void sleep(int time) {
@@ -46,6 +54,11 @@ public class Tools {
         s.nextLine();
     }
 
+
+    // ***********************************
+    // User Interface
+    // ***********************************
+
     public static int getUserInt(int min, int max) {
 
         Scanner s = new Scanner(System.in);
@@ -60,18 +73,18 @@ public class Tools {
                 input = s.nextInt();
             } catch(InputMismatchException n) {
                 s.next();
-                menuError.play();
+                MENU_ERROR.play();
                 valid = false;
             }
 
             if (valid && (input < min || input > max)) {
-                menuError.play();
+                MENU_ERROR.play();
                 valid = false;
             }
 
         } while (!valid);
 
-        menuBoop.play();
+        MENU_BOOP.play();
         clear();
         return input;
     }
@@ -90,18 +103,18 @@ public class Tools {
                 input = s.nextInt();
             } catch(InputMismatchException n) {
                 s.next();
-                menuError.play();
+                MENU_ERROR.play();
                 valid = false;
             }
 
             if (valid && (input < min || input > max || excluded.contains(input))) {
-                menuError.play();
+                MENU_ERROR.play();
                 valid = false;
             }
 
         } while (!valid);
 
-        menuBoop.play();
+        MENU_BOOP.play();
         clear();
         return input;
     }
@@ -147,10 +160,37 @@ public class Tools {
         return Tools.getUserInt(0, options.size(), excluded);
     }
 
+
+    // ***********************************
+    // Miscellaneous Methods
+    // ***********************************
+
     public static void sortEntityList(ArrayList<Entity> entities) {
 
         entities.sort(Comparator.comparing(Entity::isAlive).reversed()
                 .thenComparing(Entity::getLevel).thenComparing(Entity::getName));
+    }
+
+    public static String createBar(float numerator, float denominator, int length) {
+
+        StringBuilder output = new StringBuilder();
+
+        if (denominator <= 0 || length <= 0) {
+            throw new IllegalArgumentException("The denominator or length is equal to or less than 0.");
+        }
+
+        float quotient = (numerator / denominator) * length;
+
+        //  Later, use colorization to allow bars to "wrap around".
+        for (int i = 0; i < quotient && i < length; i++) {
+            output.append(colorize("█", GREEN_TEXT()));
+        }
+
+        for (int i = 0; i < length - quotient; i++) {
+            output.append(colorize("░", GREEN_TEXT()));
+        }
+
+        return output.toString();
     }
 
 }
