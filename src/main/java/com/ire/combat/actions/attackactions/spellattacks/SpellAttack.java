@@ -38,13 +38,12 @@ public abstract class SpellAttack extends AttackAction {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        Formatter parser = new Formatter();
-
         damage = Math.round(attacker.getCurMag() * coefficient);
         damage = Math.round(damage * ((spellLevel - 1) * levelDamage + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 
+        Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
 
         Tools.sleep(DELAY);
@@ -58,6 +57,12 @@ public abstract class SpellAttack extends AttackAction {
         }
 
         defender.takeDamage(damage, true);
+    }
+
+    protected void calculateDamage(Entity attacker, Entity defender) {
+
+
+
     }
 
     public int menu(ArrayList<SpellAttack> spells, int mana, boolean input) {

@@ -22,13 +22,13 @@ public class Mind extends DebuffSpell {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        Formatter parser = new Formatter();
 
         damage = Math.round(attacker.getCurMag() * coefficient);
         damage = Math.round(damage * ((spellLevel - 1) * levelDamage + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 
+        Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
 
         Tools.sleep(DELAY);
@@ -42,7 +42,7 @@ public class Mind extends DebuffSpell {
         }
 
         defender.takeDamage(damage, true);
-        ((GenerativeEffect) debuff).setStrength(damage);  //  Dunno if this is OP, maybe not?
+        ((GenerativeEffect) debuff).setStrength(damage);
         debuff.apply(attacker, defender);
     }
 }

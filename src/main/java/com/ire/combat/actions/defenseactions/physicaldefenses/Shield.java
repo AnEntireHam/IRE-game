@@ -14,8 +14,6 @@ public class Shield extends PhysicalDefense {
     public void execute(Entity attacker, Entity defender) {
 
         Action attack = attacker.getCurrentAction();
-        int curDef = defender.getCurDef();
-        int curMag = defender.getCurMag();
 
         // Ask Myles about this schmaneuver
         //String name = attack.getName();
@@ -24,7 +22,8 @@ public class Shield extends PhysicalDefense {
         if (attack instanceof PhysicalAttack) {
 
             ((PhysicalAttack) attack).incrementDamage(
-                Math.round((curDef * this.physBoost * physCoefficientDef) + (curMag * physCoefficientMag)));
+                Math.round((defender.getCurDef() * this.physBoost * physCoefficientDef) +
+                        (defender.getCurMag() * physCoefficientMag)));
         } else {
 
             super.execute(attacker, defender);

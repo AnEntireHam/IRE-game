@@ -8,9 +8,6 @@ import java.util.Formatter;
 
 public class Solar extends SpellAttack {
 
-    //private final AudioStream leech = new AudioStream("leech");
-
-    // Text appears a bit quickly.
     public Solar(int spellLevel) {
         super("Solar", "Deals modest damage, but heals the user.",
                 new AudioStream("solar"), 2000, 1200, 0.75f,
@@ -21,13 +18,12 @@ public class Solar extends SpellAttack {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        Formatter parser = new Formatter();
-
         damage = Math.round(attacker.getCurMag() * coefficient);
         damage = Math.round(damage * ((spellLevel - 1) * 0.5f + 1));
 
         defender.getCurrentAction().execute(attacker, defender);
 
+        Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
 
         Tools.sleep(DELAY);
