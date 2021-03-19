@@ -220,7 +220,7 @@ public class Player extends Entity {
             options.clear();
             options.addAll(attacks);
             System.out.println("Enemies are defending. Select an action.");
-            choice = Tools.menu(options, 1);
+            choice = Tools.menu(options);
 
             switch (attacks.get(choice - 1)) {
                 case "Stab":
@@ -266,7 +266,7 @@ public class Player extends Entity {
             options.clear();
             options.addAll(defenses);
             System.out.println("Enemies are attacking. Select an action.");
-            choice = Tools.menu(options, 1);
+            choice = Tools.menu(options);
 
             switch (defenses.get(choice - 1)) {
                 case "Shield":

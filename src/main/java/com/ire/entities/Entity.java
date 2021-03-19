@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
-import static com.diogonunes.jcolor.Attribute.GREEN_TEXT;
+import static com.diogonunes.jcolor.Attribute.*;
 
 public abstract class Entity {
 
@@ -137,13 +137,14 @@ public abstract class Entity {
 
         output.append("  Lv. ").append(level).append("  ");
 
+        Attribute[] colors = new Attribute[] {BRIGHT_GREEN_TEXT(), YELLOW_TEXT()};
 
         //  Fix health bar for dead men.
-        //  Fix health bar for HEALTHY men.
         //  Pull out the magic number later.
-        output.append(Tools.createBar(this.hlh, this.curHlh, 20));
+        output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors));
 
-        //  output.append(" ").append(this.hlh).append("/").append(this.curHlh).append("  ");  include if allied
+        //  Include if allied
+          output.append(" ").append(this.hlh).append("/").append(this.curHlh).append("  ");
 
         StringBuilder others = new StringBuilder();
 

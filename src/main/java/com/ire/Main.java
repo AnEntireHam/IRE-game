@@ -82,7 +82,7 @@ public class Main {
                 "Mage", "humanDeath",
                 1, 0, 0, 2, 1);
 
-        Skeleton s1 = new Skeleton(2);
+        Skeleton s1 = new Skeleton(1);
         Skeleton s2 = new Skeleton(2);
         Skeleton s3 = new Skeleton(2);
         Skeleton s4 = new Skeleton(2);
@@ -138,6 +138,8 @@ public class Main {
 
         au.apply(p2, s1);
         ad.apply(p2, s1);*/
+        s1.setHlh(-s1.getCurHlh() + 5);
+        s2.setHlh(s2.getCurHlh() + 5);
 
         Battle b = new Battle(p2);
         b.addEnemy(s1, s2);

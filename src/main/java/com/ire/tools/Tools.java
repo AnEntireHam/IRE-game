@@ -1,16 +1,15 @@
 package com.ire.tools;
 
+import com.diogonunes.jcolor.AnsiFormat;
+import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioStream;
 import com.ire.entities.Entity;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
-import static com.diogonunes.jcolor.Attribute.GREEN_TEXT;
+import static com.diogonunes.jcolor.Attribute.WHITE_TEXT;
 
 public class Tools {
 
@@ -59,36 +58,6 @@ public class Tools {
     // User Interface
     // ***********************************
 
-    public static int getUserInt(int min, int max) {
-
-        Scanner s = new Scanner(System.in);
-        int input = 0;
-        boolean valid;
-
-        do {
-            valid = true;
-
-            try {
-                System.out.print("> ");
-                input = s.nextInt();
-            } catch(InputMismatchException n) {
-                s.next();
-                MENU_ERROR.play();
-                valid = false;
-            }
-
-            if (valid && (input < min || input > max)) {
-                MENU_ERROR.play();
-                valid = false;
-            }
-
-        } while (!valid);
-
-        MENU_BOOP.play();
-        clear();
-        return input;
-    }
-
     public static int getUserInt(int min, int max, ArrayList<Integer> excluded) {
 
         Scanner s = new Scanner(System.in);
@@ -119,7 +88,11 @@ public class Tools {
         return input;
     }
 
-    //  Can probably shove this into cancelableStructure somehow
+    public static int getUserInt(int min, int max) {
+
+        return getUserInt(min, max, new ArrayList<>());
+    }
+
     public static int menu(ArrayList<String> options, int startIndex) {
 
         for (int i = startIndex; i < options.size() + startIndex; i++) {
@@ -129,7 +102,12 @@ public class Tools {
         return getUserInt(startIndex, options.size() + startIndex - 1);
     }
 
-    private static void cancelableStructure(ArrayList<String> options, ArrayList<Integer> excluded) {
+    public static int menu(ArrayList<String> options) {
+
+        return menu(options, 1);
+    }
+
+    public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded) {
 
         for (int i = 1; i < options.size() + 1; i++) {
 
@@ -146,18 +124,12 @@ public class Tools {
         }
 
         System.out.println("\n[0] Cancel\n");
+        return Tools.getUserInt(0, options.size(), excluded);
     }
 
     public static int cancelableMenu(ArrayList<String> options) {
 
-        cancelableStructure(options, new ArrayList<>());
-        return Tools.getUserInt(0, options.size());
-    }
-
-    public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded) {
-
-        cancelableStructure(options, excluded);
-        return Tools.getUserInt(0, options.size(), excluded);
+        return cancelableMenu(options, new ArrayList<>());
     }
 
 
@@ -171,26 +143,135 @@ public class Tools {
                 .thenComparing(Entity::getLevel).thenComparing(Entity::getName));
     }
 
-    public static String createBar(float numerator, float denominator, int length) {
-
-        StringBuilder output = new StringBuilder();
+    // Colors must contain at least one color.
+    public static String createColoredBar(float numerator, float denominator, int length,
+                                          Attribute[] colors) {
 
         if (denominator <= 0 || length <= 0) {
-            throw new IllegalArgumentException("The denominator or length is equal to or less than 0.");
+            throw new IllegalArgumentException("The denominator or length is less than or equal to 0.");
         }
 
-        float quotient = (numerator / denominator) * length;
+        if (numerator < 0) {
+            return createNegativeBar(numerator, denominator, length, colors);
+        }
 
-        //  Later, use colorization to allow bars to "wrap around".
+        StringBuilder output = new StringBuilder();
+        String primaryShading = "█";
+        String secondaryShading = "▒";
+        Attribute primaryColor = colors[0];
+        Attribute secondaryColor = colors[0];
+        float quotient;
+        int stacks = 0;
+
+        while (numerator > denominator) {
+
+            numerator -= denominator;
+            stacks++;
+            secondaryShading = primaryShading;
+            primaryColor = colors[(Math.min((stacks), colors.length - 1))];
+            secondaryColor = colors[(Math.min((stacks - 1), colors.length - 1))];
+        }
+
+        quotient = Math.round((numerator / denominator) * length);
+
+
         for (int i = 0; i < quotient && i < length; i++) {
-            output.append(colorize("█", GREEN_TEXT()));
+            output.append(colorize(primaryShading, primaryColor));
+        }
+        for (int i = 0; i < length - quotient; i++) {
+            output.append(colorize(secondaryShading, secondaryColor));
         }
 
-        for (int i = 0; i < length - quotient; i++) {
-            output.append(colorize("░", GREEN_TEXT()));
+        if (stacks > 0) {
+
+            output.append(" +").append(stacks);
         }
 
         return output.toString();
+
+    }
+
+    public static String createBar(float numerator, float denominator, int length,
+                                   Attribute[] colors) {
+
+        if (denominator <= 0 || length <= 0) {
+            throw new IllegalArgumentException("The denominator or length is less than or equal to 0.");
+        }
+
+        if (numerator < 0) {
+            return createNegativeBar(numerator, denominator, length, colors);
+        }
+
+        StringBuilder output = new StringBuilder();
+        String primaryShading = "█";
+        String secondaryShading = "▓";
+        String[] shadingSequence = new String[] {"▒", "▓"};
+        float quotient;
+        int stacks = 0;
+
+        while (numerator > denominator) {
+
+            numerator -= denominator;
+            stacks++;
+            secondaryShading = shadingSequence[(Math.min((stacks - 1), shadingSequence.length - 1))];
+        }
+
+        quotient = Math.round((numerator / denominator) * length);
+
+
+        for (int i = 0; i < quotient && i < length; i++) {
+            output.append(colorize(primaryShading, colors[(Math.min((stacks), colors.length - 1))]));
+        }
+        for (int i = 0; i < length - quotient; i++) {
+            output.append(colorize(secondaryShading, colors[(Math.min((stacks), colors.length - 1))]));
+        }
+
+        if (stacks > 0) {
+
+            output.append(" +").append(stacks);
+        }
+
+        return output.toString();
+
+    }
+
+    private static String createNegativeBar(float numerator, float denominator, int length,
+                                            Attribute[] colors) {
+
+        StringBuilder output = new StringBuilder();
+        String primaryShading = "▒";
+        String secondaryShading = " ";
+        float quotient;
+        int stacks = 1;
+        numerator = Math.abs(numerator);
+
+        while (numerator > denominator) {
+
+            numerator -= denominator;
+            stacks++;
+            primaryShading = " ";
+        }
+
+        quotient = Math.round((numerator / denominator) * length);
+
+
+        for (int i = 0; i < quotient && i < length; i++) {
+            output.append(colorize(primaryShading, colors[0]));
+        }
+        for (int i = 0; i < length - quotient; i++) {
+            output.append(colorize(secondaryShading, colors[0]));
+        }
+
+        output.append(" -").append(stacks);
+
+        return output.toString();
+    }
+
+    public static String createBar(float numerator, float denominator, int length) {
+
+        Attribute[] colors = new Attribute[] {WHITE_TEXT()};
+
+        return createBar(numerator, denominator, length, colors);
     }
 
 }
