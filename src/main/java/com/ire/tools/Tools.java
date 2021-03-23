@@ -143,7 +143,7 @@ public class Tools {
                 .thenComparing(Entity::getLevel).thenComparing(Entity::getName));
     }
 
-    // Colors must contain at least one color.
+    // colors must contain at least one color.
     public static String createColoredBar(float numerator, float denominator, int length,
                                           Attribute[] colors) {
 
@@ -182,10 +182,10 @@ public class Tools {
             output.append(colorize(secondaryShading, secondaryColor));
         }
 
-        if (stacks > 0) {
-
+        /*if (stacks > 0) {
+            //  Currently removing for colored bars.
             output.append(" +").append(stacks);
-        }
+        }*/
 
         return output.toString();
 

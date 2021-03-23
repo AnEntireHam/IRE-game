@@ -13,37 +13,28 @@ public class Lunar extends SpellAttack {
     public Lunar(int spellLevel) {
         super("Lunar", "Deals substantial damage, but also hurts the caster",
                 new AudioStream("lunar"), 2000, 500, 2.5f,
-                new String[]{"Beam", "Blast", "Burst"}, 3, spellLevel,
+                new String[]{"Beam", "Blast", "Burst"}, 5, spellLevel,
                 "%s inflicts %d damage on themselves to charge a spell...");
     }
 
+    //  Damage is taken in here, contrary to in execute(). It shall suffice, I suppose.
     @Override
-    public void execute(Entity attacker, Entity defender) {
-
-
-        damage = Math.round(attacker.getCurMag() * coefficient);
-        damage = Math.round(damage * ((spellLevel - 1) * 0.5f + 1));
-
-        int healthCost = Math.round((baseHealthCost * attacker.getCurMag()));
-
-        defender.getCurrentAction().execute(attacker, defender);
+    protected void narrateEvents(Entity attacker, Entity defender) {
 
         Formatter parser = new Formatter();
+        int healthCost = Math.round((baseHealthCost * attacker.getCurMag()));
+
         System.out.println(parser.format(flavorText, attacker.getName(), healthCost));
 
         Tools.sleep(DELAY);
         this.SOUND.play();
 
-        attacker.incrementMan(-baseManaCost);
         attacker.takeDamage(healthCost, false);
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
-
-        defender.takeDamage(damage, true);
-
     }
 
     public float getBaseHealthCost() {

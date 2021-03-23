@@ -14,9 +14,21 @@ public class Stab extends PhysicalAttack {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        this.damage = (int) (attacker.getCurAtk() * coefficient);
+        calculateDamage(attacker, defender);
+        narrateEvents(attacker, defender);
 
+        defender.takeDamage(damage, true);
+    }
+
+    @Override
+    protected void calculateDamage(Entity attacker, Entity defender) {
+
+        this.damage = (int) (attacker.getCurAtk() * coefficient);
         defender.getCurrentAction().execute(attacker, defender);
+    }
+
+    @Override
+    protected void narrateEvents(Entity attacker, Entity defender) {
 
         System.out.println(attacker.getName() + " stabbed " + defender.getName());
         Tools.sleep(DELAY);
@@ -26,7 +38,6 @@ public class Stab extends PhysicalAttack {
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
-
-        defender.takeDamage(damage, true);
     }
+
 }

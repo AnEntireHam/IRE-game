@@ -125,7 +125,7 @@ public abstract class Enemy extends Entity {
                 case "Cast":
                     while (true) {
 
-                        choice = this.spells.get(0).menu(spells, man, false);
+                        choice = this.spells.get(0).menu(spells, man, this.getCurMag(), false);
 
                         if (choice == 0) {
                             break;

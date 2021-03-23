@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.*;
 
 public abstract class Entity {
@@ -124,37 +123,52 @@ public abstract class Entity {
     protected abstract void levelUp(int targetLevel);
 
     //  Should be a part of battleHud(), but it doesn't necessarily have to be the entire part of enemy's display.
-    public String generateStatus() {
+    public String generateBattleStatus(boolean detailed) {
 
         StringBuilder output = new StringBuilder();
 
-        output.append(name);
-
         //  I'm unhappy with this consistent spacing, but it might be preferable in the future.
-        /*for (int j = output.length(); j < 10; j++) {
-            output.append(" ");
-        }*/
-
+        output.append(name);
         output.append("  Lv. ").append(level).append("  ");
+        for (int j = output.length(); j < 16; j++) {
+            output.append(" ");
+        }
 
-        Attribute[] colors = new Attribute[] {BRIGHT_GREEN_TEXT(), YELLOW_TEXT()};
-
-        //  Fix health bar for dead men.
-        //  Pull out the magic number later.
+        //  Consider adding a "shields/armor" color?
+        //  Should a secondary bar be added for mana, or other relevant info?
+        //  Length should probably be longer depending on the enemy/character... which ones, and when?
+        Attribute[] colors = new Attribute[] {TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
         output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors));
 
-        //  Include if allied
-          output.append(" ").append(this.hlh).append("/").append(this.curHlh).append("  ");
-
-        StringBuilder others = new StringBuilder();
-
-        for (StatusEffect se: this.statusEffects) {
-            others.append(se.generateDisplay());
+        for (StatusEffect se: statusEffects) {
+            output.append(se.generateDisplay());
         }
-        output.append(others);
+
+        if (detailed) {
+            output.append("  ").append(generateStats());
+        }
 
         return output.toString();
     }
+
+    public String generateStats() {
+
+        StringBuilder output = new StringBuilder();
+
+        output.append("Hlh: ").append(getHlh()).append("/").append(getCurHlh())
+                .append("  Atk: ").append(getCurAtk())
+                .append("  Def: ").append(getCurDef())
+                .append("  Mag: ").append(getMan()).append("/").append(getCurMag())
+                .append("  Spd: ").append(getCurSpd());
+
+        if (!spells.isEmpty()) {
+            output.append(" Man: ").append(getMan());
+        }
+
+        return output.toString();
+    }
+
+
 
     public void addSpell(SpellAttack spell) {
 
@@ -304,7 +318,7 @@ public abstract class Entity {
     // Stat Accessors and Mutators
     // ***********************************
 
-    public int getStat(int index) {
+    public int getCurStat(int index) {
 
         switch (index) {
             case 0:
@@ -581,7 +595,7 @@ public abstract class Entity {
                 }
 
                 if (hlh < 1) {
-                    this.die(message);
+                    this.die(true);
                 }
 
             } else {

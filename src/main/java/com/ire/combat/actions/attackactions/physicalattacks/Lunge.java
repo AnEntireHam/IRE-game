@@ -14,30 +14,44 @@ public class Lunge extends PhysicalAttack {
                 new AudioStream("lunge1"), 2000, 1000, 2);
     }
 
-    // Remember to include Mirror functionality
-
     public void execute(Entity attacker, Entity defender) {
-
-        this.damage = (int) (attacker.getCurAtk() * coefficient);
-        this.counterDamage = 0;
 
         System.out.println(attacker.getName() + " lunged at " + defender.getName());
         Tools.sleep(1250);
 
-        defender.getCurrentAction().execute(attacker, defender);
+        calculateDamage(attacker, defender);
 
-        if (defender.isAlive() && counterDamage == 0) {
+        if (counterDamage != -1) {
+            return;
+        }
+
+        narrateEvents(attacker, defender);
+
+        defender.takeDamage(damage, true);
+    }
+
+    @Override
+    protected void calculateDamage(Entity attacker, Entity defender) {
+
+        this.damage = (int) (attacker.getCurAtk() * coefficient);
+        this.counterDamage = -1;
+        defender.getCurrentAction().execute(attacker, defender);
+    }
+
+    @Override
+    protected void narrateEvents(Entity attacker, Entity defender) {
+
+        if (defender.isAlive()) {
             Tools.sleep(250);
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             this.SOUND.play();
             Tools.sleep(1000);
-            defender.takeDamage(damage, true);
 
-        } else if (counterDamage == 0) {
+        } else {
             this.SOUND.play();
-            defender.takeDamage(damage, true);
         }
     }
+
 
     public int getCounterDamage() {
         return counterDamage;

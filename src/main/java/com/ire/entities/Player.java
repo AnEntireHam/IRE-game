@@ -237,7 +237,7 @@ public class Player extends Entity {
                     break;
                 case "Cast":
                     while (true) {
-                        choice = this.spells.get(0).menu(spells, man, true);
+                        choice = this.spells.get(0).menu(spells, man, this.getCurMag(), true);
 
                         if (choice == 0) {
                             break;
@@ -299,7 +299,7 @@ public class Player extends Entity {
 
         for (Entity t : targets) {
             if (t.isAlive()) {
-                options.add(t.generateStatus());
+                options.add(t.generateBattleStatus(true));
             }
         }
 

@@ -1,5 +1,6 @@
 package com.ire.combat.actions.attackactions.spellattacks;
 
+import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioStream;
 import com.ire.tools.Tools;
 import com.ire.combat.actions.attackactions.AttackAction;
@@ -8,6 +9,8 @@ import com.ire.entities.Entity;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Random;
+
+import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
 public abstract class SpellAttack extends AttackAction {
 
@@ -38,10 +41,23 @@ public abstract class SpellAttack extends AttackAction {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        damage = Math.round(attacker.getCurMag() * coefficient);
-        damage = Math.round(damage * ((spellLevel - 1) * levelDamage + 1));
+        calculateDamage(attacker, defender);
 
+        narrateEvents(attacker, defender);
+
+        //  Should this use Entity's mana methods instead?
+        attacker.incrementMan(-baseManaCost);
+        defender.takeDamage(damage, true);
+    }
+
+    @Override
+    protected void calculateDamage(Entity attacker, Entity defender) {
+
+        damage = Math.round(attacker.getCurMag() * coefficient * ((spellLevel - 1) * levelDamage + 1));
         defender.getCurrentAction().execute(attacker, defender);
+    }
+
+    protected void narrateEvents(Entity attacker, Entity defender) {
 
         Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
@@ -49,23 +65,13 @@ public abstract class SpellAttack extends AttackAction {
         Tools.sleep(DELAY);
         this.SOUND.play();
 
-        attacker.incrementMan(-baseManaCost);
-
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
-
-        defender.takeDamage(damage, true);
     }
 
-    protected void calculateDamage(Entity attacker, Entity defender) {
-
-
-
-    }
-
-    public int menu(ArrayList<SpellAttack> spells, int mana, boolean input) {
+    public int menu(ArrayList<SpellAttack> spells, int mana, int curMag, boolean input) {
 
         ArrayList<String> options = new ArrayList<>();
         ArrayList<Integer> exclusions = new ArrayList<>();
@@ -93,8 +99,10 @@ public abstract class SpellAttack extends AttackAction {
         }
 
         if (input) {
+            Attribute[] colors = new Attribute[] {TEXT_COLOR(0, 100, 255), TEXT_COLOR(150, 50, 255)};
             System.out.println("Select a spell");
-            System.out.println("Mana: " + mana);
+            System.out.println("Mana  " + Tools.createColoredBar(mana, curMag, 20, colors)
+                    + " " + mana + "/" + curMag);
             choice = Tools.cancelableMenu(options, exclusions);
         } else {
             Random rand = new Random();

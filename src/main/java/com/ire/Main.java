@@ -6,7 +6,6 @@ import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
 import com.ire.combat.actions.attackactions.spellattacks.Lunar;
 import com.ire.combat.actions.attackactions.spellattacks.Solar;
-import com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Heal;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Life;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Mind;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.statspells.*;
@@ -99,7 +98,6 @@ public class Main {
         Rock rock = new Rock(1);
         Soul soul = new Soul(1);
         Life life = new Life(1);
-        Heal heal = new Heal(1);
         Mind mind = new Mind(1);
         Screen screen = new Screen();
 
@@ -112,7 +110,6 @@ public class Main {
         p2.addSpell(rock);
         p2.addSpell(soul);*/
         p2.addSpell(life);
-        p2.addSpell(heal);
         p2.addSpell(mind);
 
         p2.addWard(screen);
@@ -140,6 +137,7 @@ public class Main {
         ad.apply(p2, s1);*/
         s1.setHlh(-s1.getCurHlh() + 5);
         s2.setHlh(s2.getCurHlh() + 5);
+        p2.setMan(8);
 
         Battle b = new Battle(p2);
         b.addEnemy(s1, s2);

@@ -2,6 +2,7 @@ package com.ire.combat.actions.attackactions;
 
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.Action;
+import com.ire.entities.Entity;
 
 public abstract class AttackAction extends Action {
 
@@ -22,6 +23,12 @@ public abstract class AttackAction extends Action {
         this.DELAY = DELAY;
         this.coefficient = coefficient;
     }
+
+    public abstract void execute(Entity attacker, Entity defender);
+
+    protected abstract void calculateDamage(Entity attacker, Entity defender);
+
+    protected abstract void narrateEvents(Entity attacker, Entity defender);
 
     public int getDamage() {
         return damage;

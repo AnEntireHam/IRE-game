@@ -11,6 +11,7 @@ import java.util.Formatter;
 
 public class Heal extends DebuffSpell {
 
+    //  Only for testing. Don't actually use.
     public Heal(int spellLevel) {
         super("Heal", "Deals weak damage, and inflicts regeneration.",
                 new AudioStream("placeholder"), 2000, 1152, 0.60f,
@@ -21,10 +22,7 @@ public class Heal extends DebuffSpell {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        damage = Math.round(attacker.getCurMag() * coefficient);
-        damage = Math.round(damage * ((spellLevel - 1) * levelDamage + 1));
-
-        defender.getCurrentAction().execute(attacker, defender);
+        calculateDamage(attacker, defender);
 
         Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
@@ -32,13 +30,13 @@ public class Heal extends DebuffSpell {
         Tools.sleep(DELAY);
         this.SOUND.play();
 
-        attacker.incrementMan(-baseManaCost);
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
 
+        attacker.incrementMan(-baseManaCost);
         defender.takeDamage(damage, true);
         ((GenerativeEffect) debuff).setStrength(damage);
         debuff.apply(attacker, defender);

@@ -87,11 +87,12 @@ public abstract class GenerativeEffect extends StatusEffect {
     @Override
     public String generateDisplay() {
 
-        //  temporary format. probably include a condensed version, settable by global options.
+        //  temporary format. probably include a shorter/longer version, settable by global options.
         return (name + ": " + Math.abs(strength) + ", " + duration + " t, " + stacks + " s.  ");
     }
 
     public abstract void combineEffects(Entity target, int total);
+
     protected abstract void displayResult(String defender, boolean success, boolean original);
 
     public int getStrength() {

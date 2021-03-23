@@ -7,16 +7,12 @@ import com.ire.entities.Entity;
 
 public class Counter extends PhysicalDefense {
 
-    // final keyword may change with masteries
-    @SuppressWarnings("FieldCanBeLocal")
-    private final float COUNTER_COEFFICIENT = 1.5f;
+    private static final float COUNTER_COEFFICIENT = 1.5f;
 
     public Counter() {
         super("Counter", "Parries lunging enemies for great damage", 1, 1);
     }
 
-    // URGENT: ADD IF CLAUSE TO DETERMINE IF ATTACK IS PHYSICAL OR NOT
-    // Ask myles about "defender.isAlive()" clause
     @Override
     public void execute(Entity attacker, Entity defender) {
 
@@ -27,9 +23,8 @@ public class Counter extends PhysicalDefense {
             int counterDamage = Math.round((defender.getCurAtk() * COUNTER_COEFFICIENT) +
                     (defender.getCurSpd() - attacker.getCurSpd()));
 
-            ((Lunge) attack).setCounterDamage(Math.round(defender.getCurDef() * this.physBoost));
+            ((Lunge) attack).setCounterDamage(Math.max(Math.round(defender.getCurDef() * this.physBoost), 0));
 
-            // remember to play sound
             System.out.println("... but was countered!");
             ((Lunge) attack).getSOUND().play();
             Tools.sleep(1000);
