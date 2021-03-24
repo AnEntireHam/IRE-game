@@ -12,51 +12,52 @@ import java.util.Arrays;
 
 public class Battle {
 
-    public ArrayList<Player> players = new ArrayList<>();
-    public ArrayList<Enemy> enemies = new ArrayList<>();
+    public ArrayList<Entity> team1 = new ArrayList<>();
+    public ArrayList<Entity> team2 = new ArrayList<>();
     private final Surprise surprise = new Surprise();
 
     // ***********************************
-    // Constructor & Pre-battle Functions
+    // Constructor & Pre-battle Methods
     // ***********************************
 
-    public Battle(Player... players) {
+    //  Adding teams like this might be dubious.
+    public Battle(Player... team1) {
 
-        this.players.addAll(Arrays.asList(players));
+        this.team1.addAll(Arrays.asList(team1));
     }
 
     public void addEnemy(Enemy... enemies) {
 
-        this.enemies.addAll(Arrays.asList(enemies));
+        this.team2.addAll(Arrays.asList(enemies));
     }
 
     public boolean getAverageSpd() {
 
-        float playersSpd;
-        float enemiesSpd;
+        int team1Spd;
+        int team2Spd;
         float s = 0;
         int i = 0;
 
-        for (Entity p: players) {
-            s += p.getCurSpd();
-            i++;
-        }
-
-        playersSpd = s / i;
-        s = 0;
-        i = 0;
-        for (Entity e: enemies) {
+        for (Entity e: team1) {
             s += e.getCurSpd();
             i++;
         }
-        enemiesSpd = s / i;
+        team1Spd = Math.round(s / i);
 
-        return playersSpd >= enemiesSpd;
+        s = 0;
+        i = 0;
+        for (Entity e: team2) {
+            s += e.getCurSpd();
+            i++;
+        }
+        team2Spd = Math.round(s / i);
+
+        return team1Spd >= team2Spd;
     }
 
 
     // ***********************************
-    // Mid-battle Functions
+    // Mid-battle Methods
     // ***********************************
 
     // returned boolean indicates winner
@@ -64,12 +65,12 @@ public class Battle {
 
         if (surprise != 0) {
             if (surprise == 1) {
-                for (Entity p: players) {
+                for (Entity p: team1) {
                     this.surprise.apply(p, p);
                     System.out.println("You got the surprise on the enemy!");
                 }
             } else {
-                for (Entity e: enemies) {
+                for (Entity e: team2) {
                     this.surprise.apply(e, e);
                     System.out.println("You got surprised!");
                 }
@@ -77,42 +78,39 @@ public class Battle {
             Tools.sleep(1000);
         }
 
-        boolean playerTurn = getAverageSpd();
+        boolean turn = getAverageSpd();
 
         while (checkDead() == 0) {
-            if (playerTurn) {
 
-                defend(enemies);
-                attack(players, enemies);
-                for (Entity p: players) {
-                    p.incrementStatusDurations();
-                }
-
-            } else {
-
-                if (checkDead() == 1) {
-                    continue;
-                }
-                defend(players);
-                attack(enemies, players);
-                for (Entity e: enemies) {
-                    e.incrementStatusDurations();
-                }
+            if (turn) {
+                runTurn(team1, team2);
+                turn = false;
+                continue;
             }
 
-            playerTurn = !(playerTurn);
+            runTurn(team2, team1);
+            turn = true;
         }
 
         if (checkDead() == 1) {
             Tools.clear();
-            giveRewards(enemies, players);
+            giveRewards(team2, team1);
             return true;
         } else {
             return false;
         }
     }
 
-    private void defend(ArrayList<? extends Entity> defenders) {
+    private void runTurn(ArrayList<Entity> attackers, ArrayList<Entity> defenders) {
+
+        defend(defenders);
+        attack(attackers, defenders);
+        for (Entity a: attackers) {
+            a.incrementStatusDurations();
+        }
+    }
+
+    private void defend(ArrayList<Entity> defenders) {
 
         for (Entity d: defenders) {
             if (d.isAlive()) {
@@ -121,11 +119,11 @@ public class Battle {
         }
     }
 
-    private void attack(ArrayList<? extends Entity> attackers, ArrayList<? extends Entity> defenders) {
+    private void attack(ArrayList<Entity> attackers, ArrayList<Entity> defenders) {
 
         for (Entity a: attackers) {
             if (a.isAlive()) {
-                a.promptAttack((ArrayList<Entity>) defenders);
+                a.promptAttack(defenders);
             }
         }
 
@@ -141,33 +139,29 @@ public class Battle {
     }*/
 
     // 0 battle continues 1, enemies dead, 2 players dead
-    public int checkDead() {
+    private int checkDead() {
 
         int deadCount = 0;
 
-        for (Enemy enemy : enemies) {
+        for (Entity enemy : team2) {
             if (!(enemy.isAlive())) {
                 deadCount++;
             }
         }
-
-        if (deadCount == enemies.size()) {
+        if (deadCount == team2.size()) {
             return 1;
         }
 
-
         deadCount = 0;
 
-        for (Player player : players) {
+        for (Entity player : team1) {
             if (!(player.isAlive())) {
                 deadCount++;
             }
         }
-
-        if (deadCount == players.size()) {
+        if (deadCount == team1.size()) {
             return 2;
         }
-
 
         return 0;
     }
@@ -177,31 +171,37 @@ public class Battle {
     // ***********************************
 
 
-    private void giveRewards(ArrayList<Enemy> enemies, ArrayList<Player> players) {
+    private void giveRewards(ArrayList<Entity> winners, ArrayList<Entity> losers) {
 
+        // 1. Tally and calculate rewards from losers. All entities should have a "getRewardXp" method.
+        // 2. Count number of entities eligible to gain xp, then distribute evenly.
+        // 3. Calculate items from losers. Open prompt to distribute items within party and discard.
         double xpGained = 0;
         //boolean rewardGained = false;
 
-        players.get(0).playWin();
+        // fix later
+        // players.get(0).playWin();
 
-        for (Enemy e: enemies) {
-            xpGained += e.getRewardXp();
+        for (Entity e: losers) {
+            // xpGained += e.getRewardXp();
         }
 
-        xpGained /= players.size();
+        xpGained /= winners.size();
         xpGained = Math.round(xpGained);
 
         System.out.println("Everyone got " + (int) xpGained + " xp.");
         Tools.emptyPrompt();
-        for (Player p: players) {
+        /*for (Entity p: winners) {
             p.addXp((int) xpGained);
-        }
+        }*/
+
+
 
         // Possibly include inventory limit
         // Outsource to party inventory
-        /*for (Enemy e: enemies) {
+        /*for (Enemy e: losers) {
             if (e.calculateReward())  {
-                players.get(0).playerInventory.addItem(e.giveReward());
+                winners.get(0).playerInventory.addItem(e.giveReward());
                 System.out.println(players.get(0).getName() + " received " + e.getRewardName());
                 rewardGained = true;
             }
