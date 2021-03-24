@@ -39,9 +39,11 @@ public abstract class Entity {
     protected boolean debug;
     protected boolean alive;
 
-    // and Technique (expertise/mastery/panache/style/ability/skill/craft).
     protected ArrayList<String> attacks = new ArrayList<>(Arrays.asList("Stab", "Lunge"));
     protected ArrayList<String> defenses = new ArrayList<>(Arrays.asList("Shield", "Counter"));
+
+    // These may need to be handled differently. For now assume one true "techniques" list.
+    // protected ArrayList<String> techs = new ArrayList<>();
 
     protected Stab stab = new Stab();
     protected Lunge lunge = new Lunge();
@@ -54,10 +56,10 @@ public abstract class Entity {
 
 
     protected int targetIndex;
+
+    // Naming convention discrepancy between "curStat" and "currentAction".
     protected Action currentAction;
 
-    // These may need to be handled differently. For now assume one true "techniques" list.
-    // protected ArrayList<String> techs = new ArrayList<>();
     protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
     protected AudioStream deathSound;
@@ -101,7 +103,7 @@ public abstract class Entity {
     }
 
 
-    // Misc Method
+    // Level and Xp Methods
 
     protected abstract void levelUp(int targetLevel);
 
@@ -123,7 +125,10 @@ public abstract class Entity {
         return (int) Math.pow(targetLevel, 3);
     }
 
-    //  Should be a part of battleHud(), but it doesn't necessarily have to be the entire part of enemy's display.
+
+    // generateX methods
+
+    // Should be a part of battleHud(), but it doesn't necessarily have to be the entire part of enemy's display.
     public String generateBattleStatus(boolean detailed) {
 
         StringBuilder output = new StringBuilder();
@@ -135,9 +140,11 @@ public abstract class Entity {
             output.append(" ");
         }
 
-        //  Consider adding a "shields/armor" color?
-        //  Should a secondary bar be added for mana, or other relevant info?
-        //  Length should probably be longer depending on the enemy/character... which ones, and when?
+        /*
+         * Consider adding a "shields/armor" color rather than just "yellow".
+         * Should a secondary bar be added for mana or other relevant info?
+         * Length should probably be longer depending on the enemy/character... which ones, and when?
+         */
         Attribute[] colors = new Attribute[] {TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
         output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors));
 
@@ -170,6 +177,208 @@ public abstract class Entity {
     }
 
 
+    // Healing and Damage Methods
+
+    public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
+
+        if ((this.hlh + regenStrength) > this.getCurHlh()) {
+
+            if (surplus) {
+                if (message) {
+                    System.out.println(name + " healed beyond the limit for " + regenStrength + " health.");
+                    healSound.play();  // Beyond-limit sfx
+                }
+
+                this.hlh += regenStrength;
+
+            } else if (this.hlh < this.getCurHlh()) {
+                if (message) {
+                    System.out.println(name + " healed for " + (this.getCurHlh() - this.hlh) + " health.");
+                    healSound.play();
+                }
+                this.hlh = this.getCurHlh();
+
+            } else {
+                if (message) {
+                    System.out.println(name + " was healed, but was already beyond full health.");
+                    // heal error
+                }
+            }
+
+        } else if (regenStrength > 0) {
+
+            if (message) {
+                System.out.println(name + " healed " + regenStrength + " health.");
+                healSound.play();
+            }
+            this.hlh += regenStrength;
+
+        } else {
+
+            if (message) {
+                System.out.println(name + " received a useless heal.");
+                // Heal error
+            }
+        }
+
+        if (message) {
+            Tools.sleep(2000);
+            System.out.println();
+        }
+    }
+
+    public void takeDamage(int damage, boolean message) {
+
+        if (damage <= 0 && message) {
+            System.out.println(name + " was struck, but took no damage.");
+            Tools.sleep(2000);
+            System.out.println(" ");
+
+        } else {
+
+            if (alive) {
+
+                this.hlh -= damage;
+                if (message) {
+                    System.out.println(name + " took " + damage + " damage.");
+                    Tools.sleep(2000);
+                    System.out.println(" ");
+                }
+
+                if (hlh < 1) {
+                    this.die(true);
+                }
+
+            } else {
+
+                this.hlh -= damage;
+                if (message) {
+                    System.out.println(name + " is dead, but took " + damage + " more damage.");
+                    Tools.sleep(2000);
+                    System.out.println(" ");
+                }
+            }
+        }
+    }
+
+    public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
+
+        if ((man - bleedStrength) < 0) {
+
+            if (surplus) {
+                if (message) {
+                    System.out.println(name + " is being drained of " + bleedStrength);
+                    // mana loss sound
+                }
+                this.man -= bleedStrength;
+
+            } else if (man < bleedStrength) {
+                if (message) {
+                    System.out.println(name + " lost " + man + " mana.");
+                    // mana loss sound?
+                }
+                this.man = 0;
+
+            } else {
+                if (message) {
+                    System.out.println(name + " is being drained of mana, but has none left to lose.");
+                    // mana loss error?
+                }
+            }
+
+        } else if (bleedStrength > 0) {
+
+            if (message) {
+                System.out.println(name + " lost " + bleedStrength + " mana.");
+                // mana loss sound
+            }
+            this.man -= bleedStrength;
+
+        } else {
+
+            if (message) {
+                System.out.println(name + " resisted losing mana.");
+            }
+        }
+
+        if (message) {
+            Tools.sleep(2000);
+            System.out.println();
+        }
+    }
+
+    public void regenerateMana(int regenStrength, boolean message, boolean surplus) {
+
+        if ((man + regenStrength) > getCurMag()) {
+
+            if (surplus) {
+                if (message) {
+                    System.out.println(name + " over-regenerated, gaining " + regenStrength + " mana.");
+                }
+                this.man += regenStrength;
+
+            } else if (man < getCurMag()) {
+                if (message) {
+                    System.out.println(name + " regenerated " + (getCurMag() - man) + " mana");
+                    // mana regen sound
+                }
+                man = getCurMag();
+
+            } else {
+                if (message) {
+                    System.out.println(name + " regenerated mana, but already had maximum mana.");
+                    // mana regen error
+                }
+            }
+
+        } else if (regenStrength > 0) {
+
+            if (message) {
+                System.out.println(name + " regenerated " + regenStrength + " mana.");
+                // mana regen sound
+            }
+            this.man += regenStrength;
+
+        } else {
+
+            if (message) {
+                System.out.println(name + " tried to regenerate mana, but failed.");
+                // mana regen error
+            }
+        }
+
+        if (message) {
+            Tools.sleep(2000);
+            System.out.println();
+        }
+    }
+
+    public void die(boolean message) {
+
+        this.alive = false;
+        if (message) {
+            this.deathSound.play();
+            System.out.println(name + " has died.");
+            Tools.sleep(1500);
+            System.out.println(" ");
+        }
+        // add coffin dance gif for party wipe in defiled mode?
+    }
+
+
+    // Attack and Defense Methods
+
+    public abstract void promptAttack(ArrayList<Entity> enemies);
+    public abstract void promptDefend();
+    protected abstract boolean promptTargetIndex(ArrayList<Entity> enemies);
+
+    public void addAttack(String attack) {
+        attacks.add(attack);
+    }
+
+    public void addDefense(String defense) {
+        defenses.add(defense);
+    }
 
     public void addSpell(SpellAttack spell) {
 
@@ -187,6 +396,14 @@ public abstract class Entity {
         }
 
         wards.add(ward);
+    }
+
+    public void removeAttack(int index) {
+        attacks.remove(index);
+    }
+
+    public void removeDefense(int index) {
+        defenses.remove(index);
     }
 
     public void removeSpell(int i) {
@@ -208,11 +425,7 @@ public abstract class Entity {
     }
 
 
-    // Attack and Defense Methods
-
-    public abstract void promptAttack(ArrayList<Entity> enemies);
-    public abstract void promptDefend();
-    protected abstract boolean promptTargetIndex(ArrayList<Entity> enemies);
+    // StatusEffect methods
 
     public void incrementStatusDurations() {
 
@@ -262,33 +475,6 @@ public abstract class Entity {
         }
     }
 
-    public void addStatusEffect(StatusEffect effect) {
-        this.statusEffects.add(effect);
-    }
-
-    public void addAttack(String attack) {
-        attacks.add(attack);
-    }
-
-    public void addDefense(String defense) {
-        defenses.add(defense);
-    }
-
-    public void removeStatusEffect(StatusEffect effect) {
-        this.statusEffects.remove(effect);
-    }
-
-    public void removeAttack(int index) {
-        attacks.remove(index);
-    }
-
-    public void removeDefense(int index) {
-        defenses.remove(index);
-    }
-
-
-    // curStat and Attack Calculation Methods
-
     protected float calculateMultiplier(String prefix) {
 
         float multiplier = 1.0f;
@@ -312,6 +498,13 @@ public abstract class Entity {
         getCurSpd();
     }
 
+    public void addStatusEffect(StatusEffect effect) {
+        this.statusEffects.add(effect);
+    }
+
+    public void removeStatusEffect(StatusEffect effect) {
+        this.statusEffects.remove(effect);
+    }
 
     // Stat Accessors and Mutators
 
@@ -525,192 +718,6 @@ public abstract class Entity {
         this.man += man;
     }
 
-    public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
-
-        if ((this.hlh + regenStrength) > this.getCurHlh()) {
-
-            if (surplus) {
-                if (message) {
-                    System.out.println(name + " healed beyond the limit for " + regenStrength + " health.");
-                    healSound.play();  // Beyond-limit sfx
-                }
-
-                this.hlh += regenStrength;
-
-            } else if (this.hlh < this.getCurHlh()) {
-                if (message) {
-                    System.out.println(name + " healed for " + (this.getCurHlh() - this.hlh) + " health.");
-                    healSound.play();
-                }
-                this.hlh = this.getCurHlh();
-
-            } else {
-                if (message) {
-                    System.out.println(name + " was healed, but was already beyond full health.");
-                    // heal error
-                }
-            }
-
-        } else if (regenStrength > 0) {
-
-            if (message) {
-                System.out.println(name + " healed " + regenStrength + " health.");
-                healSound.play();
-            }
-            this.hlh += regenStrength;
-
-        } else {
-
-            if (message) {
-                System.out.println(name + " received a useless heal.");
-                // Heal error
-            }
-        }
-
-        if (message) {
-            Tools.sleep(2000);
-            System.out.println();
-        }
-    }
-
-    public void takeDamage(int damage, boolean message) {
-
-        if (damage <= 0 && message) {
-            System.out.println(name + " was struck, but took no damage.");
-            Tools.sleep(2000);
-            System.out.println(" ");
-
-        } else {
-
-            if (alive) {
-
-                this.hlh -= damage;
-                if (message) {
-                    System.out.println(name + " took " + damage + " damage.");
-                    Tools.sleep(2000);
-                    System.out.println(" ");
-                }
-
-                if (hlh < 1) {
-                    this.die(true);
-                }
-
-            } else {
-
-                this.hlh -= damage;
-                if (message) {
-                    System.out.println(name + " is dead, but took " + damage + " more damage.");
-                    Tools.sleep(2000);
-                    System.out.println(" ");
-                }
-            }
-        }
-    }
-
-    public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
-
-        if ((man - bleedStrength) < 0) {
-
-            if (surplus) {
-                if (message) {
-                    System.out.println(name + " is being drained of " + bleedStrength);
-                    // mana loss sound
-                }
-                this.man -= bleedStrength;
-
-            } else if (man < bleedStrength) {
-                if (message) {
-                    System.out.println(name + " lost " + man + " mana.");
-                    // mana loss sound?
-                }
-                this.man = 0;
-
-            } else {
-                if (message) {
-                    System.out.println(name + " is being drained of mana, but has none left to lose.");
-                    // mana loss error?
-                }
-            }
-
-        } else if (bleedStrength > 0) {
-
-            if (message) {
-                System.out.println(name + " lost " + bleedStrength + " mana.");
-                // mana loss sound
-            }
-            this.man -= bleedStrength;
-
-        } else {
-
-            if (message) {
-                System.out.println(name + " resisted losing mana.");
-            }
-        }
-
-        if (message) {
-            Tools.sleep(2000);
-            System.out.println();
-        }
-    }
-
-    public void regenerateMana(int regenStrength, boolean message, boolean surplus) {
-
-        if ((man + regenStrength) > getCurMag()) {
-
-            if (surplus) {
-                if (message) {
-                    System.out.println(name + " over-regenerated, gaining " + regenStrength + " mana.");
-                }
-                this.man += regenStrength;
-
-            } else if (man < getCurMag()) {
-                if (message) {
-                    System.out.println(name + " regenerated " + (getCurMag() - man) + " mana");
-                    // mana regen sound
-                }
-                man = getCurMag();
-
-            } else {
-                if (message) {
-                    System.out.println(name + " regenerated mana, but already had maximum mana.");
-                    // mana regen error
-                }
-            }
-
-        } else if (regenStrength > 0) {
-
-            if (message) {
-                System.out.println(name + " regenerated " + regenStrength + " mana.");
-                // mana regen sound
-            }
-            this.man += regenStrength;
-
-        } else {
-
-            if (message) {
-                System.out.println(name + " tried to regenerate mana, but failed.");
-                // mana regen error
-            }
-        }
-
-        if (message) {
-            Tools.sleep(2000);
-            System.out.println();
-        }
-    }
-
-    public void die(boolean message) {
-
-        this.alive = false;
-        if (message) {
-            this.deathSound.play();
-            System.out.println(name + " has died.");
-            Tools.sleep(1500);
-            System.out.println(" ");
-        }
-        // add coffin dance gif for party wipe in defiled mode?
-    }
-
 
     // Battle Accessors and Mutators
 
@@ -743,6 +750,11 @@ public abstract class Entity {
         this.currentAction = currentAction;
     }
 
+    public int getRewardXp() {
+        return this.rewardXp;
+    }
+
+
 
     // Other Accessors and Mutators
 
@@ -764,10 +776,6 @@ public abstract class Entity {
 
     public int getLevel() {
         return this.level;
-    }
-
-    public int getRewardXp() {
-        return this.rewardXp;
     }
 
     public boolean isDebug() {
