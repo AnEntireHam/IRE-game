@@ -1,21 +1,17 @@
 package com.ire.combat.actions.defenseactions.spelldefenses;
 
-import com.ire.tools.Tools;
 import com.ire.combat.actions.defenseactions.DefenseAction;
+import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class SpellDefense extends DefenseAction {
 
-    protected float spellBoost;
-    protected float spellResist;
+    public SpellDefense(String NAME, String DESCRIPTION, float physBoost, float physResist,
+                        float spellBoost, float spellResist) {
+        super(NAME, DESCRIPTION, physBoost, physResist, spellBoost, spellResist);
 
-    public SpellDefense(String NAME, String DESCRIPTION, float spellBoost, float spellResist) {
-        super(NAME, DESCRIPTION);
-
-        this.spellBoost = spellBoost;
-        this.spellResist = spellResist;
     }
 
     public static int menu(ArrayList<SpellDefense> wards, boolean input) {
@@ -31,28 +27,12 @@ public abstract class SpellDefense extends DefenseAction {
             System.out.println("Select a ward");
             choice = Tools.cancelableMenu(options);
         } else {
+            //  Maybe replace with Math.random?
             Random rand = new Random();
-            choice = rand.nextInt(options.size());
+            choice = rand.nextInt(options.size() + 1);
         }
-
-
 
         return choice;
     }
 
-    public float getSpellBoost() {
-        return spellBoost;
-    }
-
-    public void setSpellBoost(float spellBoost) {
-        this.spellBoost = spellBoost;
-    }
-
-    public float getSpellResist() {
-        return spellResist;
-    }
-
-    public void setSpellResist(float spellResist) {
-        this.spellResist = spellResist;
-    }
 }

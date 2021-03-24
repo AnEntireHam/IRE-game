@@ -7,7 +7,7 @@ public class Skeleton extends Enemy {
     public Skeleton(int level) {
 
         //5(10?), 7, 1, 2, 8
-        super(level, 10, 6, 1, 2, 8,
+        super(level, 10, 6, 1, 2, 6,
                 5, 3, 2, 1, 2,
                 "Skeleton", "skeletonDeath",
                 10, "Mysterious Bone", "It's a strange bone",

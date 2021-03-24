@@ -12,9 +12,6 @@ import com.ire.combat.statuseffects.stateffects.*;
 import com.ire.entities.Player;
 import com.ire.entities.enemies.Skeleton;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
-import static com.diogonunes.jcolor.Attribute.*;
-
 public class Test {
 
     public static void main(String[] args) {

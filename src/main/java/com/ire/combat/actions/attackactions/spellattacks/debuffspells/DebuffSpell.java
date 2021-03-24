@@ -2,6 +2,7 @@ package com.ire.combat.actions.attackactions.spellattacks.debuffspells;
 
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
+import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.entities.Entity;
 
@@ -22,6 +23,10 @@ public abstract class DebuffSpell extends SpellAttack {
     public void execute(Entity attacker, Entity defender) {
 
         super.execute(attacker, defender);
+
+        if (defender.getCurrentAction() instanceof Mirror) {
+            this.debuff.apply(defender, attacker);
+        }
         this.debuff.apply(attacker, defender);
     }
 

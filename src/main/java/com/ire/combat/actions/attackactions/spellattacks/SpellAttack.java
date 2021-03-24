@@ -2,9 +2,10 @@ package com.ire.combat.actions.attackactions.spellattacks;
 
 import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioStream;
-import com.ire.tools.Tools;
 import com.ire.combat.actions.attackactions.AttackAction;
+import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.entities.Entity;
+import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -42,11 +43,15 @@ public abstract class SpellAttack extends AttackAction {
     public void execute(Entity attacker, Entity defender) {
 
         calculateDamage(attacker, defender);
-
         narrateEvents(attacker, defender);
 
-        //  Should this use Entity's mana methods instead?
         attacker.incrementMan(-baseManaCost);
+
+        if (defender.getCurrentAction() instanceof Mirror) {
+            ((Mirror) defender.getCurrentAction()).reflect(attacker, defender);
+            attacker.takeDamage(damage, true);
+            return;
+        }
         defender.takeDamage(damage, true);
     }
 
@@ -54,7 +59,9 @@ public abstract class SpellAttack extends AttackAction {
     protected void calculateDamage(Entity attacker, Entity defender) {
 
         damage = Math.round(attacker.getCurMag() * coefficient * ((spellLevel - 1) * levelDamage + 1));
+        System.out.println("Damage: " + damage);
         defender.getCurrentAction().execute(attacker, defender);
+        System.out.println("Damage: " + damage);
     }
 
     protected void narrateEvents(Entity attacker, Entity defender) {
@@ -106,7 +113,7 @@ public abstract class SpellAttack extends AttackAction {
             choice = Tools.cancelableMenu(options, exclusions);
         } else {
             Random rand = new Random();
-            choice = rand.nextInt(options.size());
+            choice = rand.nextInt(options.size() + 1);
         }
 
         return choice;

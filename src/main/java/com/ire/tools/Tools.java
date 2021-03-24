@@ -1,12 +1,14 @@
 package com.ire.tools;
 
-import com.diogonunes.jcolor.AnsiFormat;
 import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioStream;
 import com.ire.entities.Entity;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.WHITE_TEXT;
@@ -144,6 +146,7 @@ public class Tools {
     }
 
     // colors must contain at least one color.
+    // These methods are very unDRY.
     public static String createColoredBar(float numerator, float denominator, int length,
                                           Attribute[] colors) {
 
@@ -181,11 +184,6 @@ public class Tools {
         for (int i = 0; i < length - quotient; i++) {
             output.append(colorize(secondaryShading, secondaryColor));
         }
-
-        /*if (stacks > 0) {
-            //  Currently removing for colored bars.
-            output.append(" +").append(stacks);
-        }*/
 
         return output.toString();
 

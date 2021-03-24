@@ -2,6 +2,7 @@ package com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativ
 
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpell;
+import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import com.ire.entities.Entity;
@@ -24,6 +25,16 @@ public class GenerativeSpell extends DebuffSpell {
         narrateEvents(attacker, defender);
 
         attacker.incrementMan(-baseManaCost);
+
+        if (defender.getCurrentAction() instanceof Mirror) {
+
+            attacker.takeDamage(damage, true);
+
+            ((GenerativeEffect) debuff).setStrength(-damage);
+            debuff.apply(defender, attacker);
+            return;
+        }
+
         defender.takeDamage(damage, true);
 
         ((GenerativeEffect) debuff).setStrength(-damage);

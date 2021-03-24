@@ -2,16 +2,17 @@ package com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativ
 
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpell;
+import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
-import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 
 import java.util.Formatter;
 
 public class Heal extends DebuffSpell {
 
     //  Only for testing. Don't actually use.
+    @Deprecated
     public Heal(int spellLevel) {
         super("Heal", "Deals weak damage, and inflicts regeneration.",
                 new AudioStream("placeholder"), 2000, 1152, 0.60f,

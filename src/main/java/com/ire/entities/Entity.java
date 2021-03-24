@@ -10,15 +10,15 @@ import com.ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.combat.statuseffects.StatusEffect;
-import com.ire.tools.Tools;
 import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
+import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static com.diogonunes.jcolor.Attribute.*;
+import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
 public abstract class Entity {
 
@@ -51,35 +51,19 @@ public abstract class Entity {
     protected ArrayList<SpellDefense> wards = new ArrayList<>();
 
 
-    // Discrepancy in implementation of defenseChoice in regards to other fields.
-    // I think this is because there isn't any allDefenses or allDefenseDescriptions, or any menu.
     protected int targetIndex;
     protected Action currentAction;
 
     // These may need to be handled differently. For now assume one true "techniques" list.
 
     // protected ArrayList<String> techs = new ArrayList<>();
-
-
-    // the NEW implementation babey!!
     protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
-
-    /*// ON JAH why did you do this to yourself, you heathen, you pleb, you jester, you clown, you circus!?
-    protected int[] buffStrengths = {0, 0, 0, 0, 0, 0, 0, 0};
-    protected int[] buffDurations = {0, 0, 0, 0, 0, 0, 0, 0};
-    protected int[] buffStacks =    {1, 1, 1, 1, 1};
-    protected int newBuff = 0;*/
 
     protected AudioStream deathSound;
     protected static AudioStream hitSound = new AudioStream("hit1");
     protected static AudioStream strikeSound = new AudioStream("strike1");
     protected static AudioStream healSound = new AudioStream("leech");
 
-
-    // Unimplemented/legacy fields
-
-    //protected boolean playable;
-    //protected boolean channelDef;
     //protected String[] passSkill = {"", "", ""};
 
 
@@ -746,38 +730,6 @@ public abstract class Entity {
     public void setCurrentAction(Action currentAction) {
         this.currentAction = currentAction;
     }
-
-    /*public int getNewBuff() {
-        return this.newBuff;
-    }
-
-    public void setNewBuff(int newBuff) {
-        this.newBuff = newBuff;
-    }
-
-    public int getBuffDurations() {
-        return this.buffDurations[this.newBuff];
-    }
-
-    public void setBuffDurations(int duration) {
-        this.buffDurations[this.newBuff] = duration;
-    }
-
-    public int getBuffStrengths() {
-        return this.buffStrengths[this.newBuff];
-    }
-
-    public void setBuffStrengths(int strengths) {
-        this.buffStrengths[this.newBuff] = strengths;
-    }
-
-    public int getBuffStacks() {
-        return this.buffStacks[this.newBuff];
-    }
-
-    public void setBuffStacks(int stacks) {
-        this.buffStacks[this.newBuff] = stacks;
-    }*/
 
     // ***********************************
     // Other Accessors and Mutators

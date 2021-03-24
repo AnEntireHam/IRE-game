@@ -2,15 +2,16 @@ package com.ire.combat.actions.defenseactions.physicaldefenses;
 
 import com.ire.combat.actions.Action;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
-import com.ire.tools.Tools;
 import com.ire.entities.Entity;
+import com.ire.tools.Tools;
 
 public class Counter extends PhysicalDefense {
 
     private static final float COUNTER_COEFFICIENT = 1.5f;
 
     public Counter() {
-        super("Counter", "Parries lunging enemies for great damage", 1, 1);
+        super("Counter", "Parries lunging enemies for great damage",
+                1, 1, 1, 1);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class Counter extends PhysicalDefense {
             int counterDamage = Math.round((defender.getCurAtk() * COUNTER_COEFFICIENT) +
                     (defender.getCurSpd() - attacker.getCurSpd()));
 
-            ((Lunge) attack).setCounterDamage(Math.max(Math.round(defender.getCurDef() * this.physBoost), 0));
+            ((Lunge) attack).setCounterDamage(Math.max(Math.round(defender.getCurDef() * physBoost), 0));
 
             System.out.println("... but was countered!");
             ((Lunge) attack).getSOUND().play();

@@ -1,6 +1,7 @@
 package com.ire.combat.actions.attackactions.spellattacks;
 
 import com.ire.audio.AudioStream;
+import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.entities.Entity;
 
 public class Solar extends SpellAttack {
@@ -12,11 +13,15 @@ public class Solar extends SpellAttack {
                 "%s locks eyes with %s and... praises the sun?");
     }
 
-    //  Might clash with mirror's implementation, since aborting in the super might not abort sub.
     @Override
     public void execute(Entity attacker, Entity defender) {
 
         super.execute(attacker, defender);
+
+        if (defender.getCurrentAction() instanceof Mirror) {
+            defender.regenerateHealth(damage, true, true);
+            return;
+        }
         attacker.regenerateHealth(damage, true, true);
     }
 }

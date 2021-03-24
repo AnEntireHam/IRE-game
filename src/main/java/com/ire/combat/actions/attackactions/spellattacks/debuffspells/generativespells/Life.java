@@ -1,7 +1,7 @@
 package com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells;
 
-import com.ire.combat.statuseffects.generativeeffect.Bleed;
 import com.ire.audio.AudioStream;
+import com.ire.combat.statuseffects.generativeeffect.Bleed;
 
 public class Life extends GenerativeSpell {
 

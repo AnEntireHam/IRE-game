@@ -1,8 +1,8 @@
 package com.ire.combat.actions.attackactions.spellattacks;
 
 import com.ire.audio.AudioStream;
-import com.ire.tools.Tools;
 import com.ire.entities.Entity;
+import com.ire.tools.Tools;
 
 import java.util.Formatter;
 

@@ -9,6 +9,7 @@ import com.ire.combat.actions.attackactions.spellattacks.Solar;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Life;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells.Mind;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.statspells.*;
+import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.combat.actions.defenseactions.spelldefenses.Screen;
 import com.ire.combat.statuseffects.generativeeffect.Bleed;
 import com.ire.combat.statuseffects.generativeeffect.ManaBleed;
@@ -22,7 +23,6 @@ import com.ire.entities.enemies.TrainingDummy;
 import com.ire.tools.SaveData;
 import com.ire.tools.Tools;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.*;
 
 public class Main {
@@ -66,18 +66,18 @@ public class Main {
 
         Tools.sleep(300);*/
 
-        System.out.println("Press ENTER to begin...");
+        //System.out.println("Press ENTER to begin...");
 
-        Tools.emptyPrompt();
+        //Tools.emptyPrompt();
         Tools.clear();
 
         //Uncanny mockery, shattering grip, impotent prayer, bolster
 
-        Player p1 = new Player(1, 20, 8, 4, 2, 5,
+        Player p1 = new Player(1, 14, 8, 4, 2, 5,
                 "Warrior", "humanDeath",
                 1, 2, 1, 0, 0);
 
-        Player p2 = new Player(1, 180, 3, 3, 5, 6,
+        Player p2 = new Player(1, 8, 3, 3, 6, 6,
                 "Mage", "humanDeath",
                 1, 0, 0, 2, 1);
 
@@ -100,6 +100,7 @@ public class Main {
         Life life = new Life(1);
         Mind mind = new Mind(1);
         Screen screen = new Screen();
+        Mirror mirror = new Mirror();
 
         //p2.addSpell(celestial);
         p2.addSpell(lunar);
@@ -113,6 +114,9 @@ public class Main {
         p2.addSpell(mind);
 
         p2.addWard(screen);
+
+        s1.addWard(mirror);
+        s2.addWard(mirror);
 
         Bleed bleed = new Bleed(1);
         Regeneration regen = new Regeneration(1);
@@ -135,8 +139,8 @@ public class Main {
 
         au.apply(p2, s1);
         ad.apply(p2, s1);*/
-        s1.setHlh(-s1.getCurHlh() + 5);
-        s2.setHlh(s2.getCurHlh() + 5);
+/*        s1.setHlh(-s1.getCurHlh() + 5);
+        s2.setHlh(s2.getCurHlh() + 5);*/
         p2.setMan(8);
 
         Battle b = new Battle(p2);

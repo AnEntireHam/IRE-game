@@ -1,31 +1,9 @@
 package com.ire.combat.actions.defenseactions.spelldefenses;
 
-import com.ire.combat.actions.Action;
-import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
-import com.ire.entities.Entity;
-
 public class Screen extends SpellDefense {
 
     public Screen() {
-        super("Screen", "Reduces damage of magical attacks", 1, -0.3333f);
-    }
-
-    @Override
-    public void execute(Entity attacker, Entity defender) {
-
-        Action attack = attacker.getCurrentAction();
-        int curDef = defender.getCurDef();
-        int curMag = defender.getCurMag();
-
-        if (attack instanceof SpellAttack) {
-            ((SpellAttack) attack).incrementDamage(
-                    Math.round(((SpellAttack) attack).getDamage() * spellResist));
-
-            ((SpellAttack) attack).incrementDamage(
-                    Math.round((curDef * spellCoefficientDef) + (curMag * spellCoefficientMag)));
-        } else {
-
-            super.execute(attacker, defender);
-        }
+        super("Screen", "Reduces damage of magical attacks",
+                1, 1, 1, 0.3333f);
     }
 }

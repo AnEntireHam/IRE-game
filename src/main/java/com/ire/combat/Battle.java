@@ -1,10 +1,10 @@
 package com.ire.combat;
 
-import com.ire.tools.Tools;
 import com.ire.combat.statuseffects.stateffects.Surprise;
 import com.ire.entities.Enemy;
 import com.ire.entities.Entity;
 import com.ire.entities.Player;
+import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
