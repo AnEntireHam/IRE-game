@@ -27,7 +27,7 @@ public abstract class SpellDefense extends DefenseAction {
             System.out.println("Select a ward");
             choice = Tools.cancelableMenu(options);
         } else {
-            //  Maybe replace with Math.random?
+            // TODO: Consider replacing with Math.random. Figure out if Math.random is generally better.
             Random rand = new Random();
             choice = rand.nextInt(options.size() + 1);
         }

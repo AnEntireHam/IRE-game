@@ -6,7 +6,7 @@ import com.ire.tools.Tools;
 
 public class Lunge extends PhysicalAttack {
 
-    // add some fields for the special timing case.
+    // TODO: Consider adding some fields for the special timing case.
     private int counterDamage;
 
     public Lunge() {

@@ -19,11 +19,9 @@ public class Tools {
     private static final AudioStream MENU_ERROR = new AudioStream("menuError");
 
 
-    // ***********************************
     // Display Methods
-    // ***********************************
 
-    // Probably include a text speed/manual skip option, and or always emptyPrompt() / always sleep
+    // TODO: Include a text speed/manual skip option, and or always emptyPrompt() / always sleep
     public static void sleep(int time) {
 
         try {
@@ -35,7 +33,7 @@ public class Tools {
         }
     }
 
-    // Not sure if \033 works, but the for loop puts text at bottom of screen.
+    // TODO: Check to see if \033 works.
     public static void clear() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -56,9 +54,7 @@ public class Tools {
     }
 
 
-    // ***********************************
     // User Interface
-    // ***********************************
 
     public static int getUserInt(int min, int max, ArrayList<Integer> excluded) {
 
@@ -135,9 +131,7 @@ public class Tools {
     }
 
 
-    // ***********************************
     // Miscellaneous Methods
-    // ***********************************
 
     public static void sortEntityList(ArrayList<Entity> entities) {
 
@@ -146,7 +140,7 @@ public class Tools {
     }
 
     // colors must contain at least one color.
-    // These methods are very unDRY.
+    // TODO: These methods are wet, DRY them off.
     public static String createColoredBar(float numerator, float denominator, int length,
                                           Attribute[] colors) {
 

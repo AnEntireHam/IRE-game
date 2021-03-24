@@ -41,13 +41,13 @@ public class Player extends Entity {
     }
 
 
-    // ***********************************
     // Level Functions
-    // ***********************************
-
-    //  Ditch this for-loop. If they got multiple levels,
-    //  just apply all of the allocations, then give all bonus points at once.
-    //  also YEESH this is unDRY and large.
+    /*
+     * TODO: Ditch this for-loop...
+     * If they got multiple levels,
+     * just apply all of the allocations, then give all bonus points at once.
+     * also YEESH this is unDRY and large.
+     */
     @Override
     protected void levelUp(int targetLevel) {
 
@@ -184,9 +184,7 @@ public class Player extends Entity {
     }
 
 
-    // ***********************************
     // Prompt Functions
-    // ***********************************
 
     @Override
     public void promptAttack(ArrayList<Entity> targets) {
@@ -292,17 +290,5 @@ public class Player extends Entity {
         }
         return false;
     }
-
-
-    // ***********************************
-    // playX Functions
-    // ***********************************
-
-    /*public void playCongratulations() {
-        congratulations.play();
-    }
-    public void playWin() {
-        win.play();
-    }*/
 
 }

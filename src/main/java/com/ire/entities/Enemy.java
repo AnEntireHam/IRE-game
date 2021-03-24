@@ -9,18 +9,16 @@ import java.util.Random;
 
 public abstract class Enemy extends Entity {
 
-    // ***********************************
+
     // Fields
-    // ***********************************
 
     protected int tenHlh, tenAtk, tenDef, tenMag, tenSpd;
     /*protected Item rewardItem;
     protected int rewardChance;*/
     protected boolean fleeable;
 
-    // ***********************************
-    // Constructors
-    // ***********************************
+
+    // Constructor
 
     public Enemy(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                  int tenHlh, int tenAtk, int tenDef, int tenMag, int tenSpd,
@@ -42,9 +40,8 @@ public abstract class Enemy extends Entity {
         levelUp(level);
     }
 
-    // ***********************************
+
     // Level/Reward Methods
-    // ***********************************
 
     // May want to revise into a switch-case statement.
     @Override
@@ -68,13 +65,11 @@ public abstract class Enemy extends Entity {
                 }
             }
         }
-        //  bEffects.fullHeal();  Replace with appropriate method in Entity
+        // TODO: Re-implement fullHeal() in Entity
     }
 
 
-    // ***********************************
     // Prompt Methods
-    // ***********************************
 
     @Override
     public void promptAttack(ArrayList<Entity> targets) {
@@ -176,9 +171,7 @@ public abstract class Enemy extends Entity {
     }
 
 
-    // ***********************************
     // Accessor Methods
-    // ***********************************
 
     //  Revise these methods later, when inventories in general are better understood.
     /*public boolean calculateReward() {

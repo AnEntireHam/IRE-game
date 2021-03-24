@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+// TODO: Remove extraneous comments
 public class SaveData {
 
     public void Read(String name) {

@@ -11,8 +11,7 @@ import java.util.Formatter;
 
 public class Heal extends DebuffSpell {
 
-    //  Only for testing. Don't actually use.
-    @Deprecated
+    // TODO: Replace with method that doesn't damage to apply regen.
     public Heal(int spellLevel) {
         super("Heal", "Deals weak damage, and inflicts regeneration.",
                 new AudioStream("placeholder"), 2000, 1152, 0.60f,

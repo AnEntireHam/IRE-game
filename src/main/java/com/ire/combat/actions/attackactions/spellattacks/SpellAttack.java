@@ -78,6 +78,7 @@ public abstract class SpellAttack extends AttackAction {
         }
     }
 
+    // TODO: Split into separate methods. Perhaps it should inherit Tools' menu().
     public int menu(ArrayList<SpellAttack> spells, int mana, int curMag, boolean input) {
 
         ArrayList<String> options = new ArrayList<>();

@@ -21,4 +21,6 @@ public abstract class Action {
     public String getDescription() {
         return description;
     }
+
+    // TODO: Add toString() method.
 }

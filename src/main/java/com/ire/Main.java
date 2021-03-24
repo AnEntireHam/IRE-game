@@ -27,6 +27,7 @@ import static com.diogonunes.jcolor.Attribute.*;
 
 public class Main {
 
+    // TODO: Clean up Main, add small arena, export this out to test.
     public static void main(String[] args) {
 
         Attribute[] myFormat = new Attribute[]{BLACK_TEXT(), MAGENTA_BACK(), DIM()};

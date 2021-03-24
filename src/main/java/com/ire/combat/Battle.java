@@ -18,11 +18,10 @@ public class Battle {
     private final Surprise surprise = new Surprise();
     private final static AudioStream WIN = new AudioStream("win");
 
-    // ***********************************
-    // Constructor & Pre-battle Methods
-    // ***********************************
 
-    //  Adding teams like this might be dubious.
+    // Constructor & Pre-battle Methods
+
+    // Adding teams like this might be dubious.
     public Battle(Player... team1) {
 
         this.team1.addAll(Arrays.asList(team1));
@@ -58,11 +57,9 @@ public class Battle {
     }
 
 
-    // ***********************************
     // Mid-battle Methods
-    // ***********************************
 
-    // returned boolean indicates winner
+    // returned boolean indicates winner. True for t1, false for t2
     public boolean runBattle(int surprise) {
 
         if (surprise != 0) {
@@ -138,10 +135,6 @@ public class Battle {
         }
     }
 
-    /*private void execute(Entity attacker, Entity defender, int damage) {
-
-    }*/
-
     //  0 = battle continues, 1 = team2 dead, 2 = team1 dead
     //  0, 1, 2 assignment kind of weird, but works in context of favoring team 1.
     private int checkDead() {
@@ -171,17 +164,15 @@ public class Battle {
         return 0;
     }
 
-    // ***********************************
-    // Post-battle Functions
-    // ***********************************
 
+    // Post-battle Functions
 
     private void giveRewards(ArrayList<Entity> winners, ArrayList<Entity> losers) {
 
         // 1. Tally and calculate rewards from losers. All entities should have a "getRewardXp" method.
         // 2. Count number of entities eligible to gain xp, then distribute evenly.
-        // TO DO: 3. Calculate items from losers. Open prompt to distribute items within party and discard.
-        // Add logic to not play fun jingle if PvE loss. EvE is acceptable, probably
+        // TODO: 3. Calculate items from losers. Open prompt to distribute items within party and discard.
+        // TODO: Add logic to not play fun jingle if PvE loss. EvE is acceptable, probably.
         double xpGained = 0;
 
         WIN.play();

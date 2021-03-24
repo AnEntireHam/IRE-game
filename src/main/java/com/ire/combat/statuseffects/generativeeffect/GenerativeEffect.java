@@ -87,7 +87,7 @@ public abstract class GenerativeEffect extends StatusEffect {
     @Override
     public String generateDisplay() {
 
-        //  temporary format. probably include a shorter/longer version, settable by global options.
+        // TODO: temporary format. probably include a shorter/longer version, settable by global options.
         return (name + ": " + Math.abs(strength) + ", " + duration + " t, " + stacks + " s.  ");
     }
 

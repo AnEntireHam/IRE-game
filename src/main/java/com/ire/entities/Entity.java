@@ -22,9 +22,8 @@ import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
 public abstract class Entity {
 
-    // ***********************************
+
     // Fields
-    // ***********************************
 
     protected String name;
     protected int level;
@@ -33,14 +32,13 @@ public abstract class Entity {
     protected int baseDef, curDef;
     protected int baseMag, curMag, man;
     protected int baseSpd, curSpd;
-    //  Xp fields might be weird to have in Entity. This is a bodge for now.
+    // TODO: Xp fields might be weird to have in Entity. This is a bodge for now.
     protected int totalXp;
     protected int nextXp;
     protected int rewardXp;
     protected boolean debug;
     protected boolean alive;
 
-    // May change spelling/phrasing of counterspell (damper/stymie/stifle/smother)
     // and Technique (expertise/mastery/panache/style/ability/skill/craft).
     protected ArrayList<String> attacks = new ArrayList<>(Arrays.asList("Stab", "Lunge"));
     protected ArrayList<String> defenses = new ArrayList<>(Arrays.asList("Shield", "Counter"));
@@ -59,7 +57,6 @@ public abstract class Entity {
     protected Action currentAction;
 
     // These may need to be handled differently. For now assume one true "techniques" list.
-
     // protected ArrayList<String> techs = new ArrayList<>();
     protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
@@ -68,12 +65,10 @@ public abstract class Entity {
     protected static AudioStream strikeSound = new AudioStream("strike1");
     protected static AudioStream healSound = new AudioStream("leech");
 
-    //protected String[] passSkill = {"", "", ""};
+    // protected String[] passSkill = {"", "", ""};
 
 
-    // ***********************************
-    // Constructors
-    // ***********************************
+    // Constructor
 
     public Entity(int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                   String name, String deathSound) {
@@ -93,9 +88,7 @@ public abstract class Entity {
         this.curMag = baseMag;
         this.curSpd = baseSpd;
 
-        //
         //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
-        //
 
         this.deathSound = new AudioStream(deathSound);
 
@@ -107,9 +100,8 @@ public abstract class Entity {
         this.rewardXp = 0;
     }
 
-    // ***********************************
-    // Misc Functions
-    // ***********************************
+
+    // Misc Method
 
     protected abstract void levelUp(int targetLevel);
 
@@ -216,9 +208,7 @@ public abstract class Entity {
     }
 
 
-    // ***********************************
-    // Attack and Defense Functions
-    // ***********************************
+    // Attack and Defense Methods
 
     public abstract void promptAttack(ArrayList<Entity> enemies);
     public abstract void promptDefend();
@@ -296,9 +286,8 @@ public abstract class Entity {
         defenses.remove(index);
     }
 
-    // ***********************************
-    // curStat and Attack Calculations
-    // ***********************************
+
+    // curStat and Attack Calculation Methods
 
     protected float calculateMultiplier(String prefix) {
 
@@ -323,9 +312,8 @@ public abstract class Entity {
         getCurSpd();
     }
 
-    // ***********************************
+
     // Stat Accessors and Mutators
-    // ***********************************
 
     public int getCurStat(int index) {
 
@@ -544,7 +532,7 @@ public abstract class Entity {
             if (surplus) {
                 if (message) {
                     System.out.println(name + " healed beyond the limit for " + regenStrength + " health.");
-                    healSound.play();  //  Beyond-limit sfx
+                    healSound.play();  // Beyond-limit sfx
                 }
 
                 this.hlh += regenStrength;
@@ -559,7 +547,7 @@ public abstract class Entity {
             } else {
                 if (message) {
                     System.out.println(name + " was healed, but was already beyond full health.");
-                    //  heal error
+                    // heal error
                 }
             }
 
@@ -575,7 +563,7 @@ public abstract class Entity {
 
             if (message) {
                 System.out.println(name + " received a useless heal.");
-                //  Heal error
+                // Heal error
             }
         }
 
@@ -626,21 +614,21 @@ public abstract class Entity {
             if (surplus) {
                 if (message) {
                     System.out.println(name + " is being drained of " + bleedStrength);
-                    //  mana loss sound
+                    // mana loss sound
                 }
                 this.man -= bleedStrength;
 
             } else if (man < bleedStrength) {
                 if (message) {
                     System.out.println(name + " lost " + man + " mana.");
-                    //  mana loss sound?
+                    // mana loss sound?
                 }
                 this.man = 0;
 
             } else {
                 if (message) {
                     System.out.println(name + " is being drained of mana, but has none left to lose.");
-                    //  mana loss error?
+                    // mana loss error?
                 }
             }
 
@@ -648,7 +636,7 @@ public abstract class Entity {
 
             if (message) {
                 System.out.println(name + " lost " + bleedStrength + " mana.");
-                //  mana loss sound
+                // mana loss sound
             }
             this.man -= bleedStrength;
 
@@ -678,14 +666,14 @@ public abstract class Entity {
             } else if (man < getCurMag()) {
                 if (message) {
                     System.out.println(name + " regenerated " + (getCurMag() - man) + " mana");
-                    //  mana regen sound
+                    // mana regen sound
                 }
                 man = getCurMag();
 
             } else {
                 if (message) {
                     System.out.println(name + " regenerated mana, but already had maximum mana.");
-                    //  mana regen error
+                    // mana regen error
                 }
             }
 
@@ -693,7 +681,7 @@ public abstract class Entity {
 
             if (message) {
                 System.out.println(name + " regenerated " + regenStrength + " mana.");
-                //  mana regen sound
+                // mana regen sound
             }
             this.man += regenStrength;
 
@@ -701,7 +689,7 @@ public abstract class Entity {
 
             if (message) {
                 System.out.println(name + " tried to regenerate mana, but failed.");
-                //  mana regen error
+                // mana regen error
             }
         }
 
@@ -720,12 +708,11 @@ public abstract class Entity {
             Tools.sleep(1500);
             System.out.println(" ");
         }
-        //  add coffin dance gif for party wipe?
+        // add coffin dance gif for party wipe in defiled mode?
     }
 
-    // ***********************************
+
     // Battle Accessors and Mutators
-    // ***********************************
 
     public int getTargetIndex() {
         return this.targetIndex;
@@ -756,10 +743,8 @@ public abstract class Entity {
         this.currentAction = currentAction;
     }
 
-    // ***********************************
-    // Other Accessors and Mutators
-    // ***********************************
 
+    // Other Accessors and Mutators
 
     public String getName() {
         return this.name;
@@ -799,17 +784,4 @@ public abstract class Entity {
                 "  Attack: " + curAtk + "  Defense: " + curDef + "  Magic: " + curMag + "  Speed: " + curSpd);
     }
 
-    // Unimplemented/legacy accessors
-
-    /*public boolean isPlayable() {
-        return this.playable;
-    }*/
-
-    /*public boolean isChannelDef() {
-        return this.channelDef;
-    }
-
-    public void setChannelDef(boolean channelDef) {
-        this.channelDef = channelDef;
-    }*/
 }

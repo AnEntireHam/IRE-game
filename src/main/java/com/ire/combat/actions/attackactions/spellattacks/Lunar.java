@@ -17,7 +17,7 @@ public class Lunar extends SpellAttack {
                 "%s inflicts %d damage on themselves to charge a spell...");
     }
 
-    //  Damage is taken in here, contrary to in execute(). It shall suffice, I suppose.
+    // Damage is taken in here, contrary to in execute(). It shall suffice, I suppose.
     @Override
     protected void narrateEvents(Entity attacker, Entity defender) {
 

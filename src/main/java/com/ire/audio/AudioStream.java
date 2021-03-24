@@ -22,6 +22,7 @@ public class AudioStream extends Thread {
         this.play = true;
     }
 
+    // TODO: Remove this janky multithreading badness, use AudioClip.
     @SuppressWarnings("InfiniteLoopStatement")
     @Override
     public void run() {

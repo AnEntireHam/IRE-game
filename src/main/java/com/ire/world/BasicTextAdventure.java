@@ -2,8 +2,6 @@ package com.ire.world;
 
 import java.util.Scanner;
 
-// Fix requirement for second word on inventory/help
-
 public class BasicTextAdventure {
 
     private boolean gameOver = false;
@@ -63,7 +61,7 @@ public class BasicTextAdventure {
         String action = parts[0];
         String target = parts[1];
 
-        //. Second word doesn't matter: inventory ************me
+        // TODO: Fix requirement for second word on inventory/help
         switch (action) {
             case "move":
             case "go":
@@ -143,8 +141,8 @@ public class BasicTextAdventure {
         return returnValue;
     }
 
+    // TODO: This implementation seems barbaric. Improve it.
     public String help() {
-
         return "Commands:\nMove\nGet\nDrop\nUse\nInventory";
     }
 }
