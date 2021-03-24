@@ -144,7 +144,7 @@ public class Main {
         p2.setMan(8);
 
         Battle b = new Battle(p2);
-        b.addEnemy(s1, s2);
+        b.addEnemy(s1);
 
         if (b.runBattle(1)) {
             System.out.println(purple + "Players won!!");

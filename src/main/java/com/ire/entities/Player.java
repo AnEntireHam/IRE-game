@@ -13,13 +13,10 @@ public class Player extends Entity {
     // Fields
     // ***********************************
 
-    protected int totalXp;
-    protected int nextXp;
     protected int hlhAllocation, atkAllocation, defAllocation, magAllocation, spdAllocation;
     protected Inventory playerInventory;
 
-    protected static AudioStream win = new AudioStream("win");
-    protected static AudioStream congratulations = new AudioStream("letsGo");
+    protected static AudioStream letsGo = new AudioStream("letsGo");
 
 
     // ***********************************
@@ -34,8 +31,6 @@ public class Player extends Entity {
                 name,deathSound);
 
         this.level = level;
-        this.totalXp = 0;
-        this.nextXp = 8;
         this.hlhAllocation = hlhAllocation;
         this.atkAllocation = atkAllocation;
         this.defAllocation = defAllocation;
@@ -43,7 +38,6 @@ public class Player extends Entity {
         this.spdAllocation = spdAllocation;
         this.playerInventory = new Inventory();
 
-        //this.playable = true;
     }
 
 
@@ -51,6 +45,9 @@ public class Player extends Entity {
     // Level Functions
     // ***********************************
 
+    //  Ditch this for-loop. If they got multiple levels,
+    //  just apply all of the allocations, then give all bonus points at once.
+    //  also YEESH this is unDRY and large.
     @Override
     protected void levelUp(int targetLevel) {
 
@@ -58,12 +55,9 @@ public class Player extends Entity {
 
             int bnsAllocation = 1;
 
-            if (i + 1 < 10) {
-                bnsAllocation = 2;
-            } else if (i + 1 < 20) {
-                bnsAllocation = 3;
-            } else if (i + 1 < 30) {
-                bnsAllocation = 4;
+            for (int j = i; j >= 10;) {
+                bnsAllocation++;
+                j -= 10;
             }
 
             this.baseHlh += hlhAllocation;
@@ -73,7 +67,7 @@ public class Player extends Entity {
             this.baseSpd += spdAllocation;
 
             Tools.clear();
-            congratulations.play();
+            letsGo.play();
             System.out.println(this.name + " leveled up to level " + (i + 1) + "!\n");
 
             if (hlhAllocation != 0 ) {
@@ -187,20 +181,6 @@ public class Player extends Entity {
             // bEffects.fullHeal();  Replace with appropriate method in Entity
         }
         Tools.clear();
-    }
-
-    public void addXp(int xp) {
-
-        this.totalXp += xp;
-
-        while (this.totalXp >= this.nextXp) {
-            this.levelUp(this.level + 1);
-            this.setNextXp();
-        }
-    }
-
-    private void setNextXp() {
-        this.nextXp = (int) Math.pow((this.level + 1), 3);
     }
 
 
@@ -318,11 +298,11 @@ public class Player extends Entity {
     // playX Functions
     // ***********************************
 
-    public void playCongratulations() {
+    /*public void playCongratulations() {
         congratulations.play();
     }
     public void playWin() {
         win.play();
-    }
+    }*/
 
 }

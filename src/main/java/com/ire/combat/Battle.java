@@ -1,5 +1,6 @@
 package com.ire.combat;
 
+import com.ire.audio.AudioStream;
 import com.ire.combat.statuseffects.stateffects.Surprise;
 import com.ire.entities.Enemy;
 import com.ire.entities.Entity;
@@ -15,6 +16,7 @@ public class Battle {
     public ArrayList<Entity> team1 = new ArrayList<>();
     public ArrayList<Entity> team2 = new ArrayList<>();
     private final Surprise surprise = new Surprise();
+    private final static AudioStream WIN = new AudioStream("win");
 
     // ***********************************
     // Constructor & Pre-battle Methods
@@ -94,9 +96,11 @@ public class Battle {
 
         if (checkDead() == 1) {
             Tools.clear();
-            giveRewards(team2, team1);
+            giveRewards(team1, team2);
             return true;
         } else {
+            Tools.clear();
+            giveRewards(team2, team1);
             return false;
         }
     }
@@ -138,7 +142,8 @@ public class Battle {
 
     }*/
 
-    // 0 battle continues 1, enemies dead, 2 players dead
+    //  0 = battle continues, 1 = team2 dead, 2 = team1 dead
+    //  0, 1, 2 assignment kind of weird, but works in context of favoring team 1.
     private int checkDead() {
 
         int deadCount = 0;
@@ -175,15 +180,14 @@ public class Battle {
 
         // 1. Tally and calculate rewards from losers. All entities should have a "getRewardXp" method.
         // 2. Count number of entities eligible to gain xp, then distribute evenly.
-        // 3. Calculate items from losers. Open prompt to distribute items within party and discard.
+        // TO DO: 3. Calculate items from losers. Open prompt to distribute items within party and discard.
+        // Add logic to not play fun jingle if PvE loss. EvE is acceptable, probably
         double xpGained = 0;
-        //boolean rewardGained = false;
 
-        // fix later
-        // players.get(0).playWin();
+        WIN.play();
 
         for (Entity e: losers) {
-            // xpGained += e.getRewardXp();
+            xpGained += e.getRewardXp();
         }
 
         xpGained /= winners.size();
@@ -191,11 +195,9 @@ public class Battle {
 
         System.out.println("Everyone got " + (int) xpGained + " xp.");
         Tools.emptyPrompt();
-        /*for (Entity p: winners) {
+        for (Entity p: winners) {
             p.addXp((int) xpGained);
-        }*/
-
-
+        }
 
         // Possibly include inventory limit
         // Outsource to party inventory
@@ -205,11 +207,6 @@ public class Battle {
                 System.out.println(players.get(0).getName() + " received " + e.getRewardName());
                 rewardGained = true;
             }
-        }
-
-        if (rewardGained) {
-            IRE.IREModule.Tools.emptyPrompt();
         }*/
-
     }
 }

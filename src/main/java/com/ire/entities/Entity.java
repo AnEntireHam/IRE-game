@@ -33,6 +33,10 @@ public abstract class Entity {
     protected int baseDef, curDef;
     protected int baseMag, curMag, man;
     protected int baseSpd, curSpd;
+    //  Xp fields might be weird to have in Entity. This is a bodge for now.
+    protected int totalXp;
+    protected int nextXp;
+    protected int rewardXp;
     protected boolean debug;
     protected boolean alive;
 
@@ -98,6 +102,9 @@ public abstract class Entity {
         this.hlh = this.curHlh;
         this.man = this.curMag;
 
+        this.totalXp = calculateNextXp(this.level);
+        this.nextXp = calculateNextXp(this.level + 1);
+        this.rewardXp = 0;
     }
 
     // ***********************************
@@ -105,6 +112,24 @@ public abstract class Entity {
     // ***********************************
 
     protected abstract void levelUp(int targetLevel);
+
+    public void addXp(int xp) {
+
+        if (xp < 0) {
+            throw new IllegalArgumentException("Xp must be a positive number");
+        }
+
+        this.totalXp += xp;
+
+        while (this.totalXp >= this.nextXp) {
+            this.levelUp(this.level + 1);
+            this.nextXp = calculateNextXp(this.level + 1);
+        }
+    }
+
+    protected int calculateNextXp(int targetLevel) {
+        return (int) Math.pow(targetLevel, 3);
+    }
 
     //  Should be a part of battleHud(), but it doesn't necessarily have to be the entire part of enemy's display.
     public String generateBattleStatus(boolean detailed) {
@@ -744,12 +769,20 @@ public abstract class Entity {
         return this.alive;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
 
     public int getLevel() {
         return this.level;
+    }
+
+    public int getRewardXp() {
+        return this.rewardXp;
     }
 
     public boolean isDebug() {

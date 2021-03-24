@@ -14,14 +14,9 @@ public abstract class Enemy extends Entity {
     // ***********************************
 
     protected int tenHlh, tenAtk, tenDef, tenMag, tenSpd;
-    protected int rewardXp;
-    protected String rewardName;
-    protected String rewardUnequippedDescription;
-    protected String rewardEquippedDescription;
-    protected Item rewardItem;
-    protected int rewardChance;
+    /*protected Item rewardItem;
+    protected int rewardChance;*/
     protected boolean fleeable;
-    protected int allegiance;
 
     // ***********************************
     // Constructors
@@ -29,9 +24,8 @@ public abstract class Enemy extends Entity {
 
     public Enemy(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                  int tenHlh, int tenAtk, int tenDef, int tenMag, int tenSpd,
-                 String name, String deathSound,
-                 int rewardXp, String rewardName, String rewardUnequippedDescription, String rewardEquippedDescription,
-                 int rewardChance, boolean fleeable, int allegiance) {
+                 String name, String deathSound, int rewardXp, Item rewardItem, int rewardChance,
+                 boolean fleeable) {
 
         super(baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound);
 
@@ -41,14 +35,9 @@ public abstract class Enemy extends Entity {
         this.tenMag = tenMag;
         this.tenSpd = tenSpd;
         this.rewardXp = rewardXp;
-        this.rewardName = rewardName;
-        this.rewardEquippedDescription = rewardEquippedDescription;
-        this.rewardUnequippedDescription = rewardUnequippedDescription;
-        this.rewardChance = rewardChance;
+        //  this.rewardItem = rewardItem;
+        //  this.rewardChance = rewardChance;
         this.fleeable = fleeable;
-        this.allegiance = allegiance;
-
-        this.rewardItem = new Item(rewardName, rewardUnequippedDescription, rewardEquippedDescription);
 
         levelUp(level);
     }
@@ -80,18 +69,6 @@ public abstract class Enemy extends Entity {
             }
         }
         //  bEffects.fullHeal();  Replace with appropriate method in Entity
-    }
-
-    public boolean calculateReward() {
-        return Math.random() * 100 < this.rewardChance;
-    }
-
-    public String getRewardName() {
-        return this.rewardName;
-    }
-
-    public Item giveReward() {
-        return this.rewardItem;
     }
 
 
@@ -198,56 +175,18 @@ public abstract class Enemy extends Entity {
         return true;
     }
 
-    // ***********************************
-    // promptX Methods
-    // ***********************************
-
-    /*protected int promptAttackChoice() {
-
-        Random rand = new Random();
-        int choice;
-
-        choice = rand.nextInt(4) + 1;
-
-        return choice;
-    }
-
-    protected int promptDefenseChoice() {
-
-        Random rand = new Random();
-        int choice;
-
-        choice = rand.nextInt(4) + 1;
-
-        return choice;
-    }
-
-    protected int promptSpellChoice() {
-        return 0;
-    }
-
-    protected int promptWardChoice() {
-        return 0;
-    }
-
-    protected int promptOffTechChoice() {
-        return 0;
-    }
-
-    protected int promptDefTechChoice() {
-        return 0;
-    }*/
-
 
     // ***********************************
     // Accessor Methods
     // ***********************************
 
-    public double getRewardXp() {
-        return this.rewardXp;
+    //  Revise these methods later, when inventories in general are better understood.
+    /*public boolean calculateReward() {
+        return Math.random() * 100 < this.rewardChance;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public Item getReward() {
+        return this.rewardItem;
+    }*/
+
 }
