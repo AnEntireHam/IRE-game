@@ -1,5 +1,6 @@
 package com.ire.entities;
 
+import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.tools.Tools;
 import com.ire.world.Item;
@@ -79,31 +80,30 @@ public abstract class Enemy extends Entity {
         boolean confirmed = false;
 
         do {
-            choice = rand.nextInt(attacks.size());
+            choice = rand.nextInt(attacks.size()) + 1;
 
-            switch (attacks.get(choice)) {
+            switch (attacks.get(choice - 1)) {
                 case "Stab":
                     if (promptTargetIndex(targets)) {
-                        this.setCurrentAction(this.stab);
+                        this.setCurAction(this.stab);
                         confirmed = true;
                     }
                     break;
                 case "Lunge":
                     if (promptTargetIndex(targets)) {
-                        this.setCurrentAction(this.lunge);
+                        this.setCurAction(this.lunge);
                         confirmed = true;
                     }
                     break;
                 case "Cast":
                     while (true) {
-
-                        choice = this.spells.get(0).menu(spells, man, this.getCurMag(), false);
+                        choice = SpellAttack.menu(spells, man, this.getCurMag(), false);
 
                         if (choice == 0) {
                             break;
 
                         } else if (promptTargetIndex(targets)) {
-                            this.setCurrentAction(spells.get(choice - 1));
+                            this.setCurAction(spells.get(choice - 1));
                             confirmed = true;
                             break;
                         }
@@ -123,21 +123,21 @@ public abstract class Enemy extends Entity {
         boolean confirmed = false;
 
         do {
-            choice = rand.nextInt(defenses.size());
+            choice = rand.nextInt(defenses.size()) + 1;
 
-            switch (defenses.get(choice)) {
+            switch (defenses.get(choice - 1)) {
                 case "Shield":
-                    this.setCurrentAction(this.shield);
+                    this.setCurAction(this.shield);
                     confirmed = true;
                     break;
                 case "Counter":
-                    this.setCurrentAction(this.counter);
+                    this.setCurAction(this.counter);
                     confirmed = true;
                     break;
                 case "Ward":
                     choice = SpellDefense.menu(this.wards, false);
                     if (choice != 0) {
-                        this.setCurrentAction(wards.get(choice - 1));
+                        this.setCurAction(wards.get(choice - 1));
                         confirmed = true;
                     }
                     break;

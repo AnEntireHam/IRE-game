@@ -47,8 +47,8 @@ public abstract class SpellAttack extends AttackAction {
 
         attacker.incrementMan(-baseManaCost);
 
-        if (defender.getCurrentAction() instanceof Mirror) {
-            ((Mirror) defender.getCurrentAction()).reflect(attacker, defender);
+        if (defender.getCurAction() instanceof Mirror) {
+            ((Mirror) defender.getCurAction()).reflect(attacker, defender);
             attacker.takeDamage(damage, true);
             return;
         }
@@ -60,7 +60,7 @@ public abstract class SpellAttack extends AttackAction {
 
         damage = Math.round(attacker.getCurMag() * coefficient * ((spellLevel - 1) * levelDamage + 1));
         System.out.println("Damage: " + damage);
-        defender.getCurrentAction().execute(attacker, defender);
+        defender.getCurAction().execute(attacker, defender);
         System.out.println("Damage: " + damage);
     }
 
@@ -73,13 +73,13 @@ public abstract class SpellAttack extends AttackAction {
         this.SOUND.play();
 
         if (defender.isAlive()) {
-            System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
+            System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
     }
 
-    // TODO: Split into separate methods. Perhaps it should inherit Tools' menu().
-    public int menu(ArrayList<SpellAttack> spells, int mana, int curMag, boolean input) {
+    // TODO: Split into separate methods. Perhaps it should use Tools' menu().
+    public static int menu(ArrayList<SpellAttack> spells, int mana, int curMag, boolean input) {
 
         ArrayList<String> options = new ArrayList<>();
         ArrayList<Integer> exclusions = new ArrayList<>();

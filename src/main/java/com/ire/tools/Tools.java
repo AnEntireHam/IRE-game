@@ -44,6 +44,7 @@ public class Tools {
                     System.out.println();
                 }
                 System.out.print("\033");
+                Runtime.getRuntime().exec("clear");
             }
         } catch (IOException | InterruptedException ignored) {}
     }
@@ -133,6 +134,7 @@ public class Tools {
 
     // Miscellaneous Methods
 
+    // TODO: Figure out if this should actually be used mid-battle.
     public static void sortEntityList(ArrayList<Entity> entities) {
 
         entities.sort(Comparator.comparing(Entity::isAlive).reversed()

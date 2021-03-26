@@ -26,7 +26,7 @@ public class GenerativeSpell extends DebuffSpell {
 
         attacker.incrementMan(-baseManaCost);
 
-        if (defender.getCurrentAction() instanceof Mirror) {
+        if (defender.getCurAction() instanceof Mirror) {
 
             attacker.takeDamage(damage, true);
 

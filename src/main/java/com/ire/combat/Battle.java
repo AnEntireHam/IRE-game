@@ -8,8 +8,6 @@ import com.ire.entities.Entity;
 import com.ire.tools.Tools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 public class Battle {
 
@@ -30,9 +28,12 @@ public class Battle {
 
     // Pre-battle Methods
 
-    public void addTeam2(Entity... team2) {
+    public void addTeam1(ArrayList<Entity> team1) {
+        this.team1.addAll(team1);
+    }
 
-        this.team2.addAll(Arrays.asList(team2));
+    public void addTeam2(ArrayList<Entity> team2) {
+        this.team2.addAll(team2);
     }
 
     public boolean getAverageSpd() {
@@ -68,12 +69,12 @@ public class Battle {
         if (surprise != 0) {
             if (surprise == 1) {
                 for (Entity p: team1) {
-                    this.SURPRISE.apply(p, p);
+                    SURPRISE.apply(p, p);
                     System.out.println("You got the surprise on the enemy!");
                 }
             } else {
                 for (Entity e: team2) {
-                    this.SURPRISE.apply(e, e);
+                    SURPRISE.apply(e, e);
                     System.out.println("You got surprised!");
                 }
             }
@@ -94,12 +95,19 @@ public class Battle {
             turn = true;
         }
 
-        // TODO: Battle should definitely not have access to this information. This is for testing ONLY.
+        // TODO: Battle should definitely not have access to this information. There needs to be an intermediate method.
+
         for (Entity e : team1) {
             ArrayList<StatusEffect> statusEffects = e.getStatusEffects();
+            for (StatusEffect se : statusEffects) {
+                if (se.checkRemove(RemoveCondition.END_BATTLE)) {
+                    System.out.println(se.getName() + " was removed");
+                }
+            }
             statusEffects.removeIf(se -> se.checkRemove(RemoveCondition.END_BATTLE));
 
         }
+
         for (Entity e : team2) {
             ArrayList<StatusEffect> statusEffects = e.getStatusEffects();
             statusEffects.removeIf(se -> se.checkRemove(RemoveCondition.END_BATTLE));
@@ -144,7 +152,7 @@ public class Battle {
 
         for (Entity a: attackers) {
             if (a.isAlive()) {
-                a.getCurrentAction().execute(a, defenders.get(a.getTargetIndex()));
+                a.getCurAction().execute(a, defenders.get(a.getTargetIndex()));
             }
         }
     }

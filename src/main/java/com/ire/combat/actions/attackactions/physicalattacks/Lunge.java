@@ -35,7 +35,7 @@ public class Lunge extends PhysicalAttack {
 
         this.damage = (int) (attacker.getCurAtk() * coefficient);
         this.counterDamage = -1;
-        defender.getCurrentAction().execute(attacker, defender);
+        defender.getCurAction().execute(attacker, defender);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class Lunge extends PhysicalAttack {
 
         if (defender.isAlive()) {
             Tools.sleep(250);
-            System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
+            System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
             this.SOUND.play();
             Tools.sleep(1000);
 

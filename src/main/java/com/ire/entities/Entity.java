@@ -24,7 +24,7 @@ public abstract class Entity {
 
 
     // Fields
-    // TODO: This class is way too big. There are definitely numerous fields and methods that can be extracted out.
+    // TODO: This class is big. There are probably some fields and methods that can be extracted out.
 
     protected String name;
     protected int level;
@@ -42,7 +42,7 @@ public abstract class Entity {
     protected boolean alive;
 
     // TODO: Consider having separate classes for these lists, offload add/remove methods.
-    // TODO: These almost certainly shouldn't be string objects.
+    // TODO: Maybe attacks/defenses shouldn't be composed of string objects.
     protected ArrayList<String> attacks = new ArrayList<>(Arrays.asList("Stab", "Lunge"));
     protected ArrayList<String> defenses = new ArrayList<>(Arrays.asList("Shield", "Counter"));
     // Eventually equippedSpells/equippedX will be needed. Cross this bridge later.
@@ -60,14 +60,10 @@ public abstract class Entity {
 
 
     protected int targetIndex;
-
-    // Naming convention discrepancy between "curStat" and "currentAction".
-    protected Action currentAction;
+    protected Action curAction;
 
 
     protected AudioStream deathSound;
-    protected static AudioStream hitSound = new AudioStream("hit1");
-    protected static AudioStream strikeSound = new AudioStream("strike1");
     protected static AudioStream healSound = new AudioStream("leech");
 
     // protected String[] passSkill = {"", "", ""};
@@ -237,30 +233,31 @@ public abstract class Entity {
             Tools.sleep(2000);
             System.out.println(" ");
 
-        } else {
+            return;
 
-            if (alive) {
+        }
 
-                this.hlh -= damage;
-                if (message) {
-                    System.out.println(name + " took " + damage + " damage.");
-                    Tools.sleep(2000);
-                    System.out.println(" ");
-                }
+        if (alive) {
 
-                if (hlh < 1) {
-                    this.die(true);
-                }
-
-            } else {
-
-                this.hlh -= damage;
-                if (message) {
-                    System.out.println(name + " is dead, but took " + damage + " more damage.");
-                    Tools.sleep(2000);
-                    System.out.println(" ");
-                }
+            this.hlh -= damage;
+            if (message) {
+                System.out.println(name + " took " + damage + " damage.");
+                Tools.sleep(2000);
+                System.out.println(" ");
             }
+
+            if (hlh < 1) {
+                this.die(true);
+            }
+            return;
+        }
+
+
+        this.hlh -= damage;
+        if (message) {
+            System.out.println(name + " is dead, but took " + damage + " more damage.");
+            Tools.sleep(2000);
+            System.out.println(" ");
         }
     }
 
@@ -310,50 +307,60 @@ public abstract class Entity {
         }
     }
 
-    public void regenerateMana(int regenStrength, boolean message, boolean surplus) {
+    public void regenerateMana(int regenStrength, boolean showMessage, boolean excess) {
 
         if ((man + regenStrength) > getCurMag()) {
+            handleOverRegen(regenStrength, showMessage, excess);
+            return;
+        }
 
-            if (surplus) {
-                if (message) {
-                    System.out.println(name + " over-regenerated, gaining " + regenStrength + " mana.");
-                }
-                this.man += regenStrength;
+        if (regenStrength > 0) {
+            handleNormalRegen(regenStrength, showMessage);
+            return;
+        }
 
-            } else if (man < getCurMag()) {
-                if (message) {
-                    System.out.println(name + " regenerated " + (getCurMag() - man) + " mana");
-                    // mana regen sound
-                }
-                man = getCurMag();
+        if (showMessage) {
+            printRegenMessage(name + " tried to regenerate mana, but failed.");
+        }
+    }
 
-            } else {
-                if (message) {
-                    System.out.println(name + " regenerated mana, but already had maximum mana.");
-                    // mana regen error
-                }
-            }
+    private void handleOverRegen(int regenStrength, boolean showMessage, boolean excess) {
 
-        } else if (regenStrength > 0) {
-
-            if (message) {
-                System.out.println(name + " regenerated " + regenStrength + " mana.");
-                // mana regen sound
+        if (excess) {
+            if (showMessage) {
+                printRegenMessage(name + " over-regenerated, gaining " + regenStrength + " mana.");
             }
             this.man += regenStrength;
+            return;
+        }
 
-        } else {
-
-            if (message) {
-                System.out.println(name + " tried to regenerate mana, but failed.");
-                // mana regen error
+        if (man < getCurMag()) {
+            if (showMessage) {
+                printRegenMessage(name + " regenerated " + (getCurMag() - man) + " mana");
             }
+            man = getCurMag();
+            return;
         }
 
-        if (message) {
-            Tools.sleep(2000);
-            System.out.println();
+        if (showMessage) {
+            printRegenMessage(name + " regenerated mana, but already had maximum mana.");
         }
+    }
+
+    private void handleNormalRegen(int regenStrength, boolean showMessage) {
+
+        if (showMessage) {
+            printRegenMessage(name + " regenerated " + regenStrength + " mana.");
+        }
+        this.man += regenStrength;
+    }
+
+    // TODO: Add sound as a parameter
+    private void printRegenMessage(String message) {
+
+        System.out.println(message);
+        Tools.sleep(2000);
+        System.out.println();
     }
 
     public void die(boolean message) {
@@ -625,89 +632,6 @@ public abstract class Entity {
         return this.man;
     }
 
-    public void setStat(int index, int strength) {
-
-        switch (index) {
-            case 0:
-                setBaseHlh(strength);
-                break;
-            case 1:
-                setBaseAtk(strength);
-                break;
-            case 2:
-                setBaseDef(strength);
-                break;
-            case 3:
-                setBaseMag(strength);
-                break;
-            case 4:
-                setBaseSpd(strength);
-                break;
-            case 5:
-                setCurHlh(strength);
-                break;
-            case 6:
-                setCurAtk(strength);
-                break;
-            case 7:
-                setCurDef(strength);
-                break;
-            case 8:
-                setCurMag(strength);
-                break;
-            case 9:
-                setCurSpd(strength);
-                break;
-            case 10:
-                setHlh(strength);
-                break;
-            case 11:
-                setMan(strength);
-                break;
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + index);
-        }
-    }
-
-    public void setBaseHlh(int baseHlh) {
-        this.baseHlh = baseHlh;
-    }
-
-    public void setBaseAtk(int baseAtk) {
-        this.baseAtk = baseAtk;
-    }
-
-    public void setBaseDef(int baseDef) {
-        this.baseDef = baseDef;
-    }
-
-    public void setBaseMag(int baseMag) {
-        this.baseMag = baseMag;
-    }
-
-    public void setBaseSpd(int baseSpd) {
-        this.baseSpd = baseSpd;
-    }
-
-    public void setCurHlh(int curHlh) {
-        this.curHlh = curHlh;
-    }
-
-    public void setCurAtk(int curAtk) {
-        this.curAtk = curAtk;
-    }
-
-    public void setCurDef(int curDef) {
-        this.curDef = curDef;
-    }
-
-    public void setCurMag(int curMag) {
-        this.curMag = curMag;
-    }
-
-    public void setCurSpd(int curSpd) {
-        this.curSpd = curSpd;
-    }
 
     public void setHlh(int hlh) {
         this.hlh = hlh;
@@ -728,17 +652,12 @@ public abstract class Entity {
         return this.targetIndex;
     }
 
-    public Action getCurrentAction() {
-        return currentAction;
+    public Action getCurAction() {
+        return curAction;
     }
 
     public ArrayList<StatusEffect> getStatusEffects() {
         return this.statusEffects;
-    }
-
-    // Probably move this elsewhere, or attack/strike SFX back here.
-    public AudioStream getHealSound() {
-        return healSound;
     }
 
     public AudioStream getDeathSound() {
@@ -749,8 +668,8 @@ public abstract class Entity {
         return this.statusEffects.get(index);
     }
 
-    public void setCurrentAction(Action currentAction) {
-        this.currentAction = currentAction;
+    public void setCurAction(Action curAction) {
+        this.curAction = curAction;
     }
 
     public int getRewardXp() {
@@ -803,7 +722,7 @@ public abstract class Entity {
                 ", level=" + level +
                 ", hlh=" + hlh +
                 ", debug=" + debug +
-                ", currentAction=" + currentAction +
+                ", currentAction=" + curAction +
                 ", statusEffects=" + statusEffects +
                 '}';
     }

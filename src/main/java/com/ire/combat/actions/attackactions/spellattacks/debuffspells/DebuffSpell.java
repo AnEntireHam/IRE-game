@@ -24,7 +24,7 @@ public abstract class DebuffSpell extends SpellAttack {
 
         super.execute(attacker, defender);
 
-        if (defender.getCurrentAction() instanceof Mirror) {
+        if (defender.getCurAction() instanceof Mirror) {
             this.debuff.apply(defender, attacker);
         }
         this.debuff.apply(attacker, defender);

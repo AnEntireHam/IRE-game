@@ -18,7 +18,7 @@ public class Solar extends SpellAttack {
 
         super.execute(attacker, defender);
 
-        if (defender.getCurrentAction() instanceof Mirror) {
+        if (defender.getCurAction() instanceof Mirror) {
             defender.regenerateHealth(damage, true, true);
             return;
         }

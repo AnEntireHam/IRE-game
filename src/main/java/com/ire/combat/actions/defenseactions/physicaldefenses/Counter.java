@@ -17,7 +17,7 @@ public class Counter extends PhysicalDefense {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        Action attack = attacker.getCurrentAction();
+        Action attack = attacker.getCurAction();
 
         if (attack instanceof Lunge) {
 

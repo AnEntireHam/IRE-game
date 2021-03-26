@@ -1,6 +1,7 @@
 package com.ire.entities;
 
 import com.ire.audio.AudioStream;
+import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.tools.Tools;
 import com.ire.world.Inventory;
@@ -203,30 +204,32 @@ public class Player extends Entity {
             switch (attacks.get(choice - 1)) {
                 case "Stab":
                     if (promptTargetIndex(targets)) {
-                        this.setCurrentAction(this.stab);
+                        this.setCurAction(this.stab);
                         confirmed = true;
                     }
                     break;
                 case "Lunge":
                     if (promptTargetIndex(targets)) {
-                        this.setCurrentAction(this.lunge);
+                        this.setCurAction(this.lunge);
                         confirmed = true;
                     }
                     break;
                 case "Cast":
                     while (true) {
-                        choice = this.spells.get(0).menu(spells, man, this.getCurMag(), true);
+                        choice = SpellAttack.menu(spells, man, this.getCurMag(), true);
 
                         if (choice == 0) {
                             break;
 
                         } else if (promptTargetIndex(targets)) {
-                            this.setCurrentAction(spells.get(choice - 1));
+                            this.setCurAction(spells.get(choice - 1));
                             confirmed = true;
                             break;
                         }
                     }
                     break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
             }
         } while (!confirmed);
     }
@@ -248,17 +251,17 @@ public class Player extends Entity {
 
             switch (defenses.get(choice - 1)) {
                 case "Shield":
-                    this.setCurrentAction(this.shield);
+                    this.setCurAction(this.shield);
                     confirmed = true;
                     break;
                 case "Counter":
-                    this.setCurrentAction(this.counter);
+                    this.setCurAction(this.counter);
                     confirmed = true;
                     break;
                 case "Ward":
                     choice = SpellDefense.menu(this.wards, true);
                     if (choice != 0) {
-                        this.setCurrentAction(wards.get(choice - 1));
+                        this.setCurAction(wards.get(choice - 1));
                         confirmed = true;
                     }
                     break;

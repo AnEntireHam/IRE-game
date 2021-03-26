@@ -30,7 +30,7 @@ public abstract class DefenseAction extends Action {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        Action action = attacker.getCurrentAction();
+        Action action = attacker.getCurAction();
         int curDef = defender.getCurDef();
         int curMag = defender.getCurMag();
 

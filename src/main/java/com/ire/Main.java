@@ -152,7 +152,7 @@ public class Main {
 
         players.add(p2);
         enemies.add(s1);
-        enemies.add(s2);
+        // enemies.add(s2);
 
         Battle b = new Battle(players, enemies);
 

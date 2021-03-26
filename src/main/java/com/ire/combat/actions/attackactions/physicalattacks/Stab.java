@@ -24,7 +24,7 @@ public class Stab extends PhysicalAttack {
     protected void calculateDamage(Entity attacker, Entity defender) {
 
         this.damage = (int) (attacker.getCurAtk() * coefficient);
-        defender.getCurrentAction().execute(attacker, defender);
+        defender.getCurAction().execute(attacker, defender);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Stab extends PhysicalAttack {
         this.SOUND.play();
 
         if (defender.isAlive()) {
-            System.out.println(defender.getName() + " used " + defender.getCurrentAction().getName());
+            System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
             Tools.sleep(DURATION - DELAY);
         }
     }

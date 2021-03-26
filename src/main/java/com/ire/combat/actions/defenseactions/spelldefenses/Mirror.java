@@ -17,7 +17,7 @@ public class Mirror extends SpellDefense {
     @Override
     public void execute(Entity attacker, Entity defender) {
 
-        Action attack = attacker.getCurrentAction();
+        Action attack = attacker.getCurAction();
 
         if (attack instanceof SpellAttack) {
 
@@ -32,7 +32,7 @@ public class Mirror extends SpellDefense {
 
     public void reflect(Entity attacker, Entity defender) {
 
-        SpellAttack attack = (SpellAttack) attacker.getCurrentAction();
+        SpellAttack attack = (SpellAttack) attacker.getCurAction();
 
         defender.takeDamage(Math.round(attack.getDamage() * 0.3333f), true);
         //  Tools.sleep(1000);
