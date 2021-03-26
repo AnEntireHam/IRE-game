@@ -17,11 +17,14 @@ import com.ire.combat.statuseffects.generativeeffect.ManaRegeneration;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.combat.statuseffects.stateffects.AttackDown;
 import com.ire.combat.statuseffects.stateffects.AttackUp;
+import com.ire.entities.Entity;
 import com.ire.entities.Player;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.enemies.TrainingDummy;
 import com.ire.tools.SaveData;
 import com.ire.tools.Tools;
+
+import java.util.ArrayList;
 
 import static com.diogonunes.jcolor.Attribute.*;
 
@@ -144,8 +147,14 @@ public class Main {
         s2.setHlh(s2.getCurHlh() + 5);*/
         p2.setMan(8);
 
-        Battle b = new Battle(p2);
-        b.addEnemy(s1);
+        ArrayList<Entity> players = new ArrayList<>();
+        ArrayList<Entity> enemies = new ArrayList<>();
+
+        players.add(p2);
+        enemies.add(s1);
+        enemies.add(s2);
+
+        Battle b = new Battle(players, enemies);
 
         if (b.runBattle(1)) {
             System.out.println(purple + "Players won!!");

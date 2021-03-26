@@ -2,7 +2,12 @@ package com.ire.combat.statuseffects;
 
 import com.ire.entities.Entity;
 
+import java.util.Arrays;
+
 public abstract class StatusEffect {
+
+
+    // Fields
 
     protected String name;
     protected String abbreviation;
@@ -11,9 +16,16 @@ public abstract class StatusEffect {
     protected boolean percentage;
     protected int stacks;
     protected int duration;
+    protected RemoveCondition[] removeConditions;
+
+    private float takeDamageCoefficient = 4;
+    private float takeDamageBase = -0.6f;
+
+
+    // Constructor
 
     public StatusEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
-                        int stacks, int duration) {
+                        int stacks, int duration, RemoveCondition[] removeConditions) {
 
         this.name = name;
         this.abbreviation = abbreviation;
@@ -22,12 +34,33 @@ public abstract class StatusEffect {
         this.percentage = percentage;
         this.stacks = stacks;
         this.duration = duration;
+        this.removeConditions = removeConditions;
     }
+
+
+    // Methods
 
     public abstract void apply(Entity attacker, Entity defender);
     public abstract boolean incrementEffect(Entity target);
     public abstract void remove(Entity target);
     public abstract String generateDisplay();
+
+    public boolean checkRemove(RemoveCondition condition) {
+
+        for (RemoveCondition r : removeConditions) {
+            if (r.equals(condition)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTakeDamage(int damage, int maxHlh) {
+        return Math.random() <= (((float) damage / maxHlh) * takeDamageCoefficient) + takeDamageBase;
+    }
+
+
+    // Accessors and Mutators
 
     public String getName() {
         return name;
@@ -53,6 +86,14 @@ public abstract class StatusEffect {
         return duration;
     }
 
+    public float getTakeDamageCoefficient() {
+        return takeDamageCoefficient;
+    }
+
+    public float getTakeDamageBase() {
+        return takeDamageBase;
+    }
+
     public void setStacks(int stacks) {
         this.stacks = stacks;
     }
@@ -69,8 +110,23 @@ public abstract class StatusEffect {
         this.duration += increment;
     }
 
+    public void setTakeDamageCoefficient(float takeDamageCoefficient) {
+        this.takeDamageCoefficient = takeDamageCoefficient;
+    }
+
+    public void setTakeDamageBase(float takeDamageBase) {
+        this.takeDamageBase = takeDamageBase;
+    }
+
     @Override
     public String toString() {
-        return ("Name: " + name + "  Stacks: " + stacks + "  Duration: " + duration);
+        return "StatusEffect{" +
+                "name='" + name + '\'' +
+                ", abbreviation='" + abbreviation + '\'' +
+                ", description='" + description + '\'' +
+                ", stacks=" + stacks +
+                ", duration=" + duration +
+                ", removeConditions=" + Arrays.toString(removeConditions) +
+                '}';
     }
 }

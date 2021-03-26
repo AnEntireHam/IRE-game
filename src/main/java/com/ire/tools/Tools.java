@@ -33,7 +33,7 @@ public class Tools {
         }
     }
 
-    // TODO: Check to see if \033 works.
+    // TODO: Ask non-windows users if "\033" works.
     public static void clear() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -140,7 +140,7 @@ public class Tools {
     }
 
     // colors must contain at least one color.
-    // TODO: These methods are wet, DRY them off.
+    // TODO: These methods are WET.
     public static String createColoredBar(float numerator, float denominator, int length,
                                           Attribute[] colors) {
 

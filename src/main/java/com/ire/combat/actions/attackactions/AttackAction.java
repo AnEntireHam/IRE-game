@@ -53,4 +53,12 @@ public abstract class AttackAction extends Action {
     public AudioStream getSOUND() {
         return SOUND;
     }
+
+    @Override
+    public String toString() {
+        return "AttackAction{" +
+                "SOUND=" + SOUND +
+                ", coefficient=" + coefficient +
+                "} " + super.toString();
+    }
 }

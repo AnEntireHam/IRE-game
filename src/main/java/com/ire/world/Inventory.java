@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Inventory {
 
-    private Map<String, Item> inventory = new HashMap<String, Item>();
+    private Map<String, Item> inventory = new HashMap<>();
 
     public Collection<Item> getInventory() {
         return inventory.values();

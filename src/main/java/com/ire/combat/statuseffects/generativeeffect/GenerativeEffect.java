@@ -1,5 +1,6 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
@@ -17,9 +18,10 @@ public abstract class GenerativeEffect extends StatusEffect {
 
     //  It might make more sense to change the strengthCoefficient instead of the levelProbability.
     public GenerativeEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
-                            int stacks, int duration, int effectLevel, float baseProbability, float levelProbability,
-                            String expirationMessage) {
-        super(name, abbreviation, description, display, percentage, stacks, duration);
+                            int stacks, int duration, RemoveCondition[] removeConditions, int effectLevel,
+                            float baseProbability, float levelProbability, String expirationMessage) {
+
+        super(name, abbreviation, description, display, percentage, stacks, duration, removeConditions);
 
         this.effectLevel = effectLevel;
         this.baseProbability = baseProbability;
@@ -110,5 +112,13 @@ public abstract class GenerativeEffect extends StatusEffect {
             remove(target);
             //  Possibly include text indicated that GenerativeEffect has stopped due to < 1 strength.
         }*/
+    }
+
+    @Override
+    public String toString() {
+        return "GenerativeEffect{" +
+                "strength=" + strength +
+                ", effectLevel=" + effectLevel +
+                "} " + super.toString();
     }
 }

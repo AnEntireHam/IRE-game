@@ -24,6 +24,7 @@ public abstract class Entity {
 
 
     // Fields
+    // TODO: This class is way too big. There are definitely numerous fields and methods that can be extracted out.
 
     protected String name;
     protected int level;
@@ -33,26 +34,29 @@ public abstract class Entity {
     protected int baseMag, curMag, man;
     protected int baseSpd, curSpd;
     // TODO: Xp fields might be weird to have in Entity. This is a bodge for now.
+    // TODO: Add a bar for Xp, which displays post-battle or in party menu.
     protected int totalXp;
     protected int nextXp;
     protected int rewardXp;
     protected boolean debug;
     protected boolean alive;
 
+    // TODO: Consider having separate classes for these lists, offload add/remove methods.
+    // TODO: These almost certainly shouldn't be string objects.
     protected ArrayList<String> attacks = new ArrayList<>(Arrays.asList("Stab", "Lunge"));
     protected ArrayList<String> defenses = new ArrayList<>(Arrays.asList("Shield", "Counter"));
-
+    // Eventually equippedSpells/equippedX will be needed. Cross this bridge later.
+    protected ArrayList<SpellAttack> spells = new ArrayList<>();
+    protected ArrayList<SpellDefense> wards = new ArrayList<>();
     // These may need to be handled differently. For now assume one true "techniques" list.
-    // protected ArrayList<String> techs = new ArrayList<>();
+    // protected ArrayList<Technique> techs = new ArrayList<>();
+
+    protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
     protected Stab stab = new Stab();
     protected Lunge lunge = new Lunge();
     protected Shield shield = new Shield();
     protected Counter counter = new Counter();
-
-    // Eventually equippedSpells/equippedX will be needed. Cross this bridge later.
-    protected ArrayList<SpellAttack> spells = new ArrayList<>();
-    protected ArrayList<SpellDefense> wards = new ArrayList<>();
 
 
     protected int targetIndex;
@@ -60,7 +64,6 @@ public abstract class Entity {
     // Naming convention discrepancy between "curStat" and "currentAction".
     protected Action currentAction;
 
-    protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
 
     protected AudioStream deathSound;
     protected static AudioStream hitSound = new AudioStream("hit1");
@@ -758,6 +761,7 @@ public abstract class Entity {
 
     // Other Accessors and Mutators
 
+    // TODO: Add "getPossessiveName" method, add where appropriate.
     public String getName() {
         return this.name;
     }
@@ -786,10 +790,21 @@ public abstract class Entity {
         this.debug = bool;
     }
 
+    /*@Override
+    public String toString() {
+        return ("Entity: " + "Name: " + name + "  Level: " + level + "  Health: " + hlh + "/" + curHlh +
+                "  Attack: " + curAtk + "  Defense: " + curDef + "  Magic: " + curMag + "  Speed: " + curSpd);
+    }*/
+
     @Override
     public String toString() {
-        return ("Name: " + name + "  Level: " + level + "  Health: " + hlh + "/" + curHlh +
-                "  Attack: " + curAtk + "  Defense: " + curDef + "  Magic: " + curMag + "  Speed: " + curSpd);
+        return "Entity{" +
+                "name='" + name + '\'' +
+                ", level=" + level +
+                ", hlh=" + hlh +
+                ", debug=" + debug +
+                ", currentAction=" + currentAction +
+                ", statusEffects=" + statusEffects +
+                '}';
     }
-
 }

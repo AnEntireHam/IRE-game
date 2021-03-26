@@ -146,4 +146,12 @@ public abstract class SpellAttack extends AttackAction {
     public void setBaseManaCost(int baseManaCost) {
         this.baseManaCost = baseManaCost;
     }
+
+    @Override
+    public String toString() {
+        return "SpellAttack{" +
+                "baseManaCost=" + baseManaCost +
+                ", spellLevel=" + spellLevel +
+                "} " + super.toString();
+    }
 }

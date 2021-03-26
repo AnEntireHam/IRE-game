@@ -1,13 +1,15 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.tools.Tools;
 
 public class Regeneration extends HealthGenerative{
 
     public Regeneration(int effectLevel) {
         super("Regenerate", "Target regains health at end of each turn",
-                true, false, 1, 5, effectLevel, 1, 0,
-                " stopped regenerating health.");
+                true, false, 1, 5,
+                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.DEATH},
+                effectLevel, 1, 0, " stopped regenerating health.");
     }
 
     @Override

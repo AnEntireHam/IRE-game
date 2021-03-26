@@ -88,4 +88,14 @@ public abstract class DefenseAction extends Action {
     public void setSpellResist(float spellResist) {
         this.spellResist = spellResist;
     }
+
+    @Override
+    public String toString() {
+        return "DefenseAction{" +
+                "physBoost=" + physBoost +
+                ", physResist=" + physResist +
+                ", spellBoost=" + spellBoost +
+                ", spellResist=" + spellResist +
+                "} " + super.toString();
+    }
 }

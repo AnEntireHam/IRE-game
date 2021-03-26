@@ -1,10 +1,10 @@
 package com.ire.combat;
 
 import com.ire.audio.AudioStream;
+import com.ire.combat.statuseffects.RemoveCondition;
+import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.stateffects.Surprise;
-import com.ire.entities.Enemy;
 import com.ire.entities.Entity;
-import com.ire.entities.Player;
 import com.ire.tools.Tools;
 
 import java.util.ArrayList;
@@ -13,23 +13,26 @@ import java.util.Arrays;
 
 public class Battle {
 
-    public ArrayList<Entity> team1 = new ArrayList<>();
-    public ArrayList<Entity> team2 = new ArrayList<>();
-    private final Surprise surprise = new Surprise();
+    private final static Surprise SURPRISE = new Surprise();
     private final static AudioStream WIN = new AudioStream("win");
 
+    public ArrayList<Entity> team1 = new ArrayList<>();
+    public ArrayList<Entity> team2 = new ArrayList<>();
 
-    // Constructor & Pre-battle Methods
 
-    // Adding teams like this might be dubious.
-    public Battle(Player... team1) {
+    // Constructor
 
-        this.team1.addAll(Arrays.asList(team1));
+    public Battle(ArrayList<Entity> team1, ArrayList<Entity> team2) {
+
+        this.team1.addAll(team1);
+        this.team2.addAll(team2);
     }
 
-    public void addEnemy(Enemy... enemies) {
+    // Pre-battle Methods
 
-        this.team2.addAll(Arrays.asList(enemies));
+    public void addTeam2(Entity... team2) {
+
+        this.team2.addAll(Arrays.asList(team2));
     }
 
     public boolean getAverageSpd() {
@@ -65,12 +68,12 @@ public class Battle {
         if (surprise != 0) {
             if (surprise == 1) {
                 for (Entity p: team1) {
-                    this.surprise.apply(p, p);
+                    this.SURPRISE.apply(p, p);
                     System.out.println("You got the surprise on the enemy!");
                 }
             } else {
                 for (Entity e: team2) {
-                    this.surprise.apply(e, e);
+                    this.SURPRISE.apply(e, e);
                     System.out.println("You got surprised!");
                 }
             }
@@ -89,6 +92,17 @@ public class Battle {
 
             runTurn(team2, team1);
             turn = true;
+        }
+
+        // TODO: Battle should definitely not have access to this information. This is for testing ONLY.
+        for (Entity e : team1) {
+            ArrayList<StatusEffect> statusEffects = e.getStatusEffects();
+            statusEffects.removeIf(se -> se.checkRemove(RemoveCondition.END_BATTLE));
+
+        }
+        for (Entity e : team2) {
+            ArrayList<StatusEffect> statusEffects = e.getStatusEffects();
+            statusEffects.removeIf(se -> se.checkRemove(RemoveCondition.END_BATTLE));
         }
 
         if (checkDead() == 1) {

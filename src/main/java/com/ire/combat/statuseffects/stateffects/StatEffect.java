@@ -1,5 +1,6 @@
 package com.ire.combat.statuseffects.stateffects;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
@@ -19,9 +20,10 @@ public abstract class StatEffect extends StatusEffect {
     protected float levelProbability;
 
     public StatEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
-                      int stacks, int duration, int effectLevel, float baseProbability, float levelProbability,
-                      float baseMultiplier, float levelMultiplier) {
-        super(name, abbreviation, description, display, percentage, stacks, duration);
+                      int stacks, int duration, RemoveCondition[] removeConditions, int effectLevel,
+                      float baseProbability, float levelProbability, float baseMultiplier, float levelMultiplier) {
+
+        super(name, abbreviation, description, display, percentage, stacks, duration, removeConditions);
 
         this.effectLevel = effectLevel;
         this.baseProbability = baseProbability;
@@ -155,7 +157,9 @@ public abstract class StatEffect extends StatusEffect {
 
     @Override
     public String toString() {
-        return ("Name: " + name + "  Multiplier: " + statMultiplier
-                + "  Stacks: " + stacks + "  Duration: " + duration + "  Level: " + effectLevel);
+        return "StatEffect{" +
+                "statMultiplier=" + statMultiplier +
+                ", effectLevel=" + effectLevel +
+                "} " + super.toString();
     }
 }

@@ -33,4 +33,11 @@ public abstract class DebuffSpell extends SpellAttack {
     public StatusEffect getDebuff() {
         return debuff;
     }
+
+    @Override
+    public String toString() {
+        return "DebuffSpell{" +
+                "debuff=" + debuff +
+                "} " + super.toString();
+    }
 }

@@ -1,13 +1,15 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.tools.Tools;
 
 public class Bleed extends HealthGenerative {
 
     public Bleed(int effectLevel) {
         super("Bleed", "Target loses health at end of each turn.",
-                true, false, 1, 5, effectLevel, 0.2f, 0.1f,
-                " stopped bleeding.");
+                true, false, 1, 5,
+                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.END_BATTLE},
+                effectLevel, 0.2f, 0.1f, " stopped bleeding.");
     }
 
     @Override

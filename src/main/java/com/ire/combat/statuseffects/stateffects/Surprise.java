@@ -1,5 +1,6 @@
 package com.ire.combat.statuseffects.stateffects;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
 
 public class Surprise extends StatEffect {
@@ -7,8 +8,9 @@ public class Surprise extends StatEffect {
     // TODO: Fix "x had this Surprise! increased text". Probably add Formatter or @Override or boolean doDisplay.
     public Surprise() {
         super("Surprise!", "SPD", "Increases the maximum health of the afflicted target.",
-                true, true, 1, 1, 1, 1, 0,
-                2.0f, 0.00f);
+                true, true, 1, 1,
+                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.DEATH},
+                1, 1, 0, 2.0f, 0.00f);
     }
 
     @Override

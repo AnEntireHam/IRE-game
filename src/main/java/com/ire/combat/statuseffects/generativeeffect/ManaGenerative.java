@@ -1,5 +1,6 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
 
@@ -8,10 +9,11 @@ public abstract class ManaGenerative extends GenerativeEffect {
     float statCoefficient = 0.003333f;
 
     public ManaGenerative(String name, String abbreviation, String description, boolean display, boolean percentage,
-                          int stacks, int duration, int effectLevel, float baseProbability, float levelProbability,
-                          String expirationMessage) {
-        super(name, abbreviation, description, display, percentage,
-                stacks, duration, effectLevel, baseProbability, levelProbability, expirationMessage);
+                          int stacks, int duration, RemoveCondition[] removeConditions, int effectLevel,
+                          float baseProbability, float levelProbability, String expirationMessage) {
+
+        super(name, abbreviation, description, display, percentage, stacks, duration, removeConditions,
+                effectLevel, baseProbability, levelProbability, expirationMessage);
     }
 
     @Override

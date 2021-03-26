@@ -22,5 +22,11 @@ public abstract class Action {
         return description;
     }
 
-    // TODO: Add toString() method.
+    @Override
+    public String toString() {
+        return "Action{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

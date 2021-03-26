@@ -1,15 +1,17 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
 
 public abstract class HealthGenerative extends GenerativeEffect {
 
     public HealthGenerative(String name, String description, boolean display, boolean percentage,
-                            int stacks, int duration, int effectLevel, float baseProbability, float levelProbability,
-                            String expirationMessage) {
-        super(name, "REG", description, display, percentage,
-                stacks, duration, effectLevel, baseProbability, levelProbability, expirationMessage);
+                            int stacks, int duration, RemoveCondition[] removeConditions,
+                            int effectLevel, float baseProbability, float levelProbability, String expirationMessage) {
+
+        super(name, "REG", description, display, percentage, stacks, duration,
+                removeConditions, effectLevel, baseProbability, levelProbability, expirationMessage);
     }
 
     @Override
@@ -42,10 +44,5 @@ public abstract class HealthGenerative extends GenerativeEffect {
 
             System.out.println(target.getName() + " regenerated as much health as they bled for.");
         }
-    }
-
-    @Override
-    public String toString() {
-        return (super.toString() +  " Strength: " + strength);
     }
 }
