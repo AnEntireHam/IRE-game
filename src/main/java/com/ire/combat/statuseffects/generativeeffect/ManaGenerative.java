@@ -24,7 +24,7 @@ public abstract class ManaGenerative extends GenerativeEffect {
     }
 
     @Override
-    public void combineEffects(Entity target, int total) {
+    public void executeGenerative(Entity target, int total) {
 
         if (total < 0) {
 

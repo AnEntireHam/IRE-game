@@ -129,13 +129,13 @@ public class Main {
         AttackUp au = new AttackUp(1);
         AttackDown ad = new AttackDown(1);
 
-        /*regen.setStrength(4);
+        regen.setStrength(4);
         regen.apply(p1, s1);
 
         bleed.setStrength(-5);
         bleed.apply(p1, s1);
 
-        mRegen.setStrength(1);
+        /*mRegen.setStrength(1);
         mRegen.apply(p1, s1);
 
         mBleed.setStrength(-6);

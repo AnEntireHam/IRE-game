@@ -133,8 +133,10 @@ public abstract class Entity {
         StringBuilder output = new StringBuilder();
 
         //  I'm unhappy with this consistent spacing, but it might be preferable in the future.
-        output.append(name);
-        output.append("  Lv. ").append(level).append("  ");
+        output.append(name)
+                .append("  Lv. ").append(level)
+                .append("  ");
+
         for (int j = output.length(); j < 16; j++) {
             output.append(" ");
         }
@@ -145,7 +147,8 @@ public abstract class Entity {
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
         Attribute[] colors = new Attribute[] {TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
-        output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors));
+        output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors))
+                .append("  ");
 
         for (StatusEffect se: statusEffects) {
             output.append(se.generateDisplay());
@@ -440,7 +443,6 @@ public abstract class Entity {
     public void incrementStatusDurations() {
 
         ArrayList<GenerativeEffect> generativeEffects = new ArrayList<>();
-        HashMap<String, Integer> sums = new HashMap<>();
 
         int manaRegen = (int) Math.round((this.curMag / 4.0));
         this.regenerateMana(manaRegen, false, false);
@@ -449,40 +451,14 @@ public abstract class Entity {
 
             if (statusEffects.get(i).incrementEffect(this)) {
                 i--;
-            } else if (statusEffects.get(i) instanceof GenerativeEffect) {
+                continue;
+            }
+            if (statusEffects.get(i) instanceof GenerativeEffect) {
                 generativeEffects.add((GenerativeEffect) statusEffects.get(i));
             }
         }
 
-        if (debug) {
-            System.out.println("GEs: " + generativeEffects);
-        }
-
-        for (GenerativeEffect ge: generativeEffects) {
-            String abbrev = ge.getAbbreviation().toLowerCase();
-
-            if (!sums.containsKey(abbrev)) {
-                sums.put(abbrev, ge.getStrength());
-
-            } else {
-                int temp = sums.get(abbrev) + ge.getStrength();
-                sums.put(abbrev, temp);
-            }
-        }
-
-        if (debug) {
-            System.out.println("Sums: " + sums);
-        }
-
-        ArrayList<String> processedAbbrev = new ArrayList<>();
-
-        for (GenerativeEffect ge: generativeEffects) {
-
-            if (!processedAbbrev.contains(ge.getAbbreviation())) {
-                ge.combineEffects(this, sums.get(ge.getAbbreviation().toLowerCase()));
-                processedAbbrev.add(ge.getAbbreviation());
-            }
-        }
+        GenerativeEffect.calculateCombinedTotal(this, generativeEffects);
     }
 
     protected float calculateMultiplier(String prefix) {

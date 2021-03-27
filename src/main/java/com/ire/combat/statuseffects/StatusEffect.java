@@ -42,7 +42,7 @@ public abstract class StatusEffect {
 
     public abstract void apply(Entity attacker, Entity defender);
     public abstract boolean incrementEffect(Entity target);
-    public abstract void remove(Entity target);
+    protected abstract void remove(Entity target);
     public abstract String generateDisplay();
 
     public boolean checkRemove(RemoveCondition condition) {
@@ -68,14 +68,6 @@ public abstract class StatusEffect {
 
     public String getAbbreviation() {
         return abbreviation;
-    }
-
-    public boolean isDisplay() {
-        return display;
-    }
-
-    public boolean isPercentage() {
-        return percentage;
     }
 
     public int getStacks() {

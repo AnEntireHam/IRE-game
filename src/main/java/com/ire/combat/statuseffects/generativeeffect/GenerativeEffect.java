@@ -5,6 +5,9 @@ import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public abstract class GenerativeEffect extends StatusEffect {
 
     protected int strength;
@@ -72,14 +75,16 @@ public abstract class GenerativeEffect extends StatusEffect {
 
         this.incrementDuration(-1);
         if (this.duration <= 0) {
-            remove(target);
-            return true;
+            if (checkRemove(RemoveCondition.EXPIRATION)) {
+                remove(target);
+                return true;
+            }
         }
         return false;
     }
 
     @Override
-    public void remove(Entity target) {
+    protected void remove(Entity target) {
 
         target.removeStatusEffect(this);
         System.out.println(target.getName() + expirationMessage);
@@ -93,7 +98,44 @@ public abstract class GenerativeEffect extends StatusEffect {
         return (name + ": " + Math.abs(strength) + ", " + duration + " t, " + stacks + " s.  ");
     }
 
-    public abstract void combineEffects(Entity target, int total);
+    public static void calculateCombinedTotal(Entity target, ArrayList<GenerativeEffect> generativeEffects) {
+        
+        ArrayList<String> finishedAbbreviations = new ArrayList<>();
+        HashMap<String, Integer> sums;
+        
+        sums = calculateSums(generativeEffects);
+
+        for (GenerativeEffect ge: generativeEffects) {
+
+            if (!finishedAbbreviations.contains(ge.getAbbreviation())) {
+                finishedAbbreviations.add(
+                        ge.getAbbreviation());
+                ge.executeGenerative(
+                        target, sums.get(ge.getAbbreviation()));
+            }
+        }
+    }
+    
+    private static HashMap<String, Integer> calculateSums(ArrayList<GenerativeEffect> generativeEffects) {
+        
+        HashMap<String, Integer> sums = new HashMap<>();
+        
+        for (GenerativeEffect ge: generativeEffects) {
+
+            String abbreviation = ge.getAbbreviation();
+
+            if (!sums.containsKey(abbreviation)) {
+                sums.put(abbreviation, ge.getStrength());
+                continue;
+            }
+            
+            int temp = sums.get(abbreviation) + ge.getStrength();
+            sums.put(abbreviation, temp);
+        }
+        return sums;
+    }
+
+    public abstract void executeGenerative(Entity target, int total);
 
     protected abstract void displayResult(String defender, boolean success, boolean original);
 
