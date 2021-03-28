@@ -21,6 +21,7 @@ public class Tools {
 
     // Display Methods
 
+    // TODO: Extract the magic numbers that are ~~everywhere~~
     // TODO: Include a text speed/manual skip option, and or always emptyPrompt() / always sleep
     public static void sleep(int time) {
 

@@ -19,6 +19,7 @@ public abstract class GenerativeEffect extends StatusEffect {
     protected float strengthCoefficient = 3;
     protected float statProbability = 0;
     protected String expirationMessage;
+    protected boolean original = true;
 
     //  It might make more sense to change the strengthCoefficient instead of the levelProbability.
     public GenerativeEffect(String name, String abbreviation, String description,
@@ -33,42 +34,47 @@ public abstract class GenerativeEffect extends StatusEffect {
         this.expirationMessage = expirationMessage;
     }
 
-    // TODO: Split this method into smaller parts.
     @Override
     public void apply(Entity attacker, Entity defender) {
 
-        double rand = Math.random();
-        float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
         boolean success = false;
-        boolean original = true;
 
-        float totalProbability = effectProbability + statProbability;
+        if (calculateProbability()) {
 
-        if (rand <= (totalProbability)) {
+            handleRepeatApplication(defender);
 
-            success = true;
-
-            for (StatusEffect se: defender.getStatusEffects()) {
-                if (se.getName().equals(this.name)) {
-
-                    original = false;
-
-                    se.incrementStacks(1);
-                    se.incrementDuration(this.duration);
-                    ((GenerativeEffect) se).incrementStrength(strength);
-
-                    break;
-                }
-            }
-
-            if (original) {
+            if (stacks == 1) {
                 defender.addStatusEffect(this);
             }
+            success = true;
         }
 
         displayResult(defender.getName(), success, original);
         if (attacker.isDebug()) {
             System.out.println("Strength " + strength);
+        }
+    }
+
+    protected boolean calculateProbability() {
+
+        double rand = Math.random();
+        float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
+        float statProbability = 0.0f;
+
+        return rand <= (effectProbability + statProbability);
+    }
+
+    protected void handleRepeatApplication(Entity defender) {
+
+        for (StatusEffect se: defender.getStatusEffects()) {
+            if (se.getName().equals(this.name)) {
+
+                se.incrementStacks(1);
+                se.incrementDuration(this.duration);
+                ((GenerativeEffect) se).incrementStrength(strength);
+                original = false;
+                return;
+            }
         }
     }
 

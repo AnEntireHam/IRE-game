@@ -37,32 +37,26 @@ public abstract class StatEffect extends StatusEffect {
 
         String statName = name.split(" ")[0].toLowerCase();
 
-        boolean success = handleApplication(attacker, defender);
+        boolean success = false;
+
+        if (calculateProbability(attacker, defender)) {
+
+            success = true;
+            float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
+
+            handleRepeatApplication(defender, statMultiplier);
+
+            if (stacks == 1) {
+                this.statMultiplier = statMultiplier;
+                defender.addStatusEffect(this);
+            }
+            defender.recalculateCurStats();
+        }
 
         displayResult(defender.getName(), statName, baseMultiplier < 0.0, success);
         if (attacker.isDebug()) {
             System.out.println("Stat Multiplier: " + this.statMultiplier);
         }
-
-        defender.recalculateCurStats();
-    }
-
-    protected boolean handleApplication(Entity attacker, Entity defender) {
-
-        if (calculateProbability(attacker, defender)) {
-
-            float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
-
-            handleRepeatApplication(defender, statMultiplier);
-
-            //  This might become faulty if the starting stacks of a debuff ever exceed 1.
-            if (stacks == 1) {
-                this.statMultiplier = statMultiplier;
-                defender.addStatusEffect(this);
-            }
-            return true;
-        }
-        return false;
     }
 
     protected void handleRepeatApplication(Entity defender, float statMultiplier) {
@@ -76,7 +70,7 @@ public abstract class StatEffect extends StatusEffect {
                 ((StatEffect) se).incrementStatMultiplier(
                         (statMultiplier * STACK_COEFFICIENT)
                                 / ((se.getStacks() - 1) + ((this.effectLevel - 1) * DECAY_COEFFICIENT)));
-                break;
+                return;
             }
         }
     }

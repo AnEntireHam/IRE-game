@@ -109,13 +109,11 @@ public abstract class SpellAttack extends AttackAction {
             System.out.println("Select a spell");
             System.out.println("Mana  " + Tools.createColoredBar(mana, curMag, 20, colors)
                     + " " + mana + "/" + curMag);
-            choice = Tools.cancelableMenu(options, exclusions);
-        } else {
-            Random rand = new Random();
-            choice = rand.nextInt(options.size() + 1);
+            return Tools.cancelableMenu(options, exclusions);
         }
 
-        return choice;
+        Random rand = new Random();
+        return choice = rand.nextInt(options.size() + 1);
     }
 
     protected void updateName() {
