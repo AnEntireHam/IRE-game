@@ -109,8 +109,8 @@ public class Battle {
         if (surprise == 1) {
             for (Entity p: team1) {
                 SURPRISE.apply(p, p);
-                System.out.println("You got the surprise on the enemy!");
             }
+            System.out.println("You got the surprise on the enemy!");
             Tools.sleep(1000);
             return;
         }

@@ -38,9 +38,18 @@ public abstract class StatusEffect implements RemoveMethods {
     // Methods
 
     public abstract void apply(Entity attacker, Entity defender);
-    public abstract boolean incrementEffect(Entity target);
     protected abstract void printRemoveMessage(RemoveCondition condition, Entity target);
     public abstract String generateDisplay();
+
+    public boolean incrementEffect(Entity target) {
+
+        this.incrementDuration(-1);
+        if (this.duration <= 0 && checkRemove(RemoveCondition.EXPIRATION, target)) {
+            target.removeStatusEffect(this);
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public boolean checkRemove(RemoveCondition condition, Entity target) {

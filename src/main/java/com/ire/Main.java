@@ -132,8 +132,8 @@ public class Main {
         regen.setStrength(4);
         regen.apply(p1, s1);
 
-        bleed.setStrength(-5);
-        bleed.apply(p1, s1);
+        bleed.setStrength(-1);
+        bleed.apply(s1, p1);
 
         /*mRegen.setStrength(1);
         mRegen.apply(p1, s1);
@@ -150,9 +150,10 @@ public class Main {
         ArrayList<Entity> players = new ArrayList<>();
         ArrayList<Entity> enemies = new ArrayList<>();
 
+        players.add(p1);
         players.add(p2);
         enemies.add(s1);
-        // enemies.add(s2);
+        enemies.add(s2);
 
         Battle b = new Battle(players, enemies);
 

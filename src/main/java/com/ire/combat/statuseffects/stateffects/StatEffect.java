@@ -121,18 +121,6 @@ public abstract class StatEffect extends StatusEffect {
         return (name + ": " + (Math.round(statMultiplier * 100f)) + "%, " + duration + " t, " + stacks + " s.  ");
     }
 
-    //  Reduces duration by 1 and executes effects if either are applicable.
-    @Override
-    public boolean incrementEffect(Entity target) {
-
-        this.incrementDuration(-1);
-
-        if (this.duration <= 0) {
-            return checkRemove(RemoveCondition.EXPIRATION, target);
-        }
-        return false;
-    }
-
     @Override
     protected void printRemoveMessage(RemoveCondition condition, Entity target) {
 
@@ -144,12 +132,16 @@ public abstract class StatEffect extends StatusEffect {
                 break;
 
             case DEATH:
-                System.out.println(target.getName() + "'s status effect  \"" + name + "\" faded.");
-                Tools.sleep(1250);
+                if (target.isAlive()) {
+                    System.out.println(target.getName() + " removed \"" + name + "\" from themself.");
+                    Tools.sleep(1250);
+                }
+                break;
 
             case END_BATTLE:
                 System.out.println(target.getName() + " removed \"" + name + "\" from themselves.");
                 Tools.sleep(1250);
+                break;
 
             case LEVEL_UP:
             case TAKE_DAMAGE:

@@ -73,17 +73,6 @@ public abstract class GenerativeEffect extends StatusEffect {
     }
 
     @Override
-    public boolean incrementEffect(Entity target) {
-
-        this.incrementDuration(-1);
-        if (this.duration <= 0) {
-            // TODO: Currently, checkRemove() is always surrounded by this structure, which is WET.
-            checkRemove(RemoveCondition.EXPIRATION, target);
-        }
-        return false;
-    }
-
-    @Override
     protected void printRemoveMessage(RemoveCondition condition, Entity target) {
 
         switch (condition) {
@@ -97,10 +86,14 @@ public abstract class GenerativeEffect extends StatusEffect {
             case DEATH:
                 System.out.println(target.getName() + "'s " + name + " faded.");
                 Tools.sleep(1250);
+                break;
 
             case END_BATTLE:
-                System.out.println(target.getName() + " removed \"" + name + "\" from themself.");
-                Tools.sleep(1250);
+                if (target.isAlive()) {
+                    System.out.println(target.getName() + " removed \"" + name + "\" from themself.");
+                    Tools.sleep(1250);
+                }
+                break;
 
             case LEVEL_UP:
             case TAKE_DAMAGE:

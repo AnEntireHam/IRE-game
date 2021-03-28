@@ -374,12 +374,15 @@ public abstract class Entity {
     public void die(boolean message) {
 
         this.alive = false;
+
         if (message) {
             this.deathSound.play();
             System.out.println(name + " has died.");
             Tools.sleep(1500);
-            System.out.println(" ");
+            System.out.println();
         }
+
+        this.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.DEATH, this));
         // add coffin dance gif for party wipe in defiled mode?
     }
 
