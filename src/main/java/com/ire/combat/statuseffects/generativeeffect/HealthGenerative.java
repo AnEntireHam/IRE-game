@@ -6,11 +6,11 @@ import com.ire.tools.Tools;
 
 public abstract class HealthGenerative extends GenerativeEffect {
 
-    public HealthGenerative(String name, String description, boolean display, boolean percentage,
+    public HealthGenerative(String name, String description,
                             int stacks, int duration, RemoveCondition[] removeConditions,
                             int effectLevel, float baseProbability, float levelProbability, String expirationMessage) {
 
-        super(name, "REG", description, display, percentage, stacks, duration,
+        super(name, "REG", description, stacks, duration,
                 removeConditions, effectLevel, baseProbability, levelProbability, expirationMessage);
     }
 
@@ -34,15 +34,17 @@ public abstract class HealthGenerative extends GenerativeEffect {
                 Tools.sleep(1000);
             }
             target.takeDamage(-total, false);
+            return;
 
-        } else if (total > 0) {
+        }
+
+        if (total > 0) {
 
             target.regenerateHealth(total, true, false);
-            Tools.sleep(1000);
-
-        } else {
-
-            System.out.println(target.getName() + " regenerated as much health as they bled for.");
+            return;
         }
+
+        System.out.println(target.getName() + " regenerated as much health as they bled for.");
+        Tools.sleep(1000);
     }
 }

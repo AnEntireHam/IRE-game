@@ -4,7 +4,7 @@ import com.ire.entities.Entity;
 
 import java.util.Arrays;
 
-public abstract class StatusEffect {
+public abstract class StatusEffect implements RemoveMethods {
 
 
     // Fields
@@ -12,11 +12,10 @@ public abstract class StatusEffect {
     protected String name;
     protected String abbreviation;
     protected String description;
-    protected boolean display;
-    protected boolean percentage;
     protected int stacks;
     protected int duration;
     protected RemoveCondition[] removeConditions;
+    protected String[] removeText;
 
     private float takeDamageCoefficient = 4;
     private float takeDamageBase = -0.6f;
@@ -24,14 +23,12 @@ public abstract class StatusEffect {
 
     // Constructor
 
-    public StatusEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
+    public StatusEffect(String name, String abbreviation, String description,
                         int stacks, int duration, RemoveCondition[] removeConditions) {
 
         this.name = name;
         this.abbreviation = abbreviation;
         this.description = description;
-        this.display = display;
-        this.percentage = percentage;
         this.stacks = stacks;
         this.duration = duration;
         this.removeConditions = removeConditions;
@@ -42,21 +39,28 @@ public abstract class StatusEffect {
 
     public abstract void apply(Entity attacker, Entity defender);
     public abstract boolean incrementEffect(Entity target);
-    protected abstract void remove(Entity target);
+    protected abstract void printRemoveMessage(RemoveCondition condition, Entity target);
     public abstract String generateDisplay();
 
-    public boolean checkRemove(RemoveCondition condition) {
+    @Override
+    public boolean checkRemove(RemoveCondition condition, Entity target) {
 
         for (RemoveCondition r : removeConditions) {
             if (r.equals(condition)) {
+                printRemoveMessage(condition, target);
                 return true;
             }
         }
         return false;
     }
 
-    public boolean checkTakeDamage(int damage, int maxHlh) {
-        return Math.random() <= (((float) damage / maxHlh) * takeDamageCoefficient) + takeDamageBase;
+    @Override
+    public boolean checkTakeDamage(RemoveCondition condition, Entity target, int damage, int maxHlh) {
+
+        if (checkRemove(condition, target)) {
+            return Math.random() <= (((float) damage / maxHlh) * takeDamageCoefficient) + takeDamageBase;
+        }
+        return false;
     }
 
 

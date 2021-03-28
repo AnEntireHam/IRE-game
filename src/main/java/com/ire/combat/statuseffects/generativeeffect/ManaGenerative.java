@@ -8,11 +8,11 @@ public abstract class ManaGenerative extends GenerativeEffect {
 
     float statCoefficient = 0.003333f;
 
-    public ManaGenerative(String name, String abbreviation, String description, boolean display, boolean percentage,
+    public ManaGenerative(String name, String abbreviation, String description,
                           int stacks, int duration, RemoveCondition[] removeConditions, int effectLevel,
                           float baseProbability, float levelProbability, String expirationMessage) {
 
-        super(name, abbreviation, description, display, percentage, stacks, duration, removeConditions,
+        super(name, abbreviation, description, stacks, duration, removeConditions,
                 effectLevel, baseProbability, levelProbability, expirationMessage);
     }
 
@@ -33,16 +33,16 @@ public abstract class ManaGenerative extends GenerativeEffect {
                 Tools.sleep(1000);
             }
             target.bleedMana(-total, false, false);
+            return;
+        }
 
-        } else if (total > 0) {
+        if (total > 0) {
 
             target.regenerateMana(total, true, false);
-            Tools.sleep(1000);
-
-        } else {
-
-            System.out.println(target.getName() + " regenerated a normal amount of mana.");
+            return;
         }
-    }
 
+        System.out.println(target.getName() + " regenerated a normal amount of mana.");
+        Tools.sleep(1000);
+    }
 }

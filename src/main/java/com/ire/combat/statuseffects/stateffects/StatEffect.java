@@ -19,11 +19,11 @@ public abstract class StatEffect extends StatusEffect {
     protected int effectLevel;
     protected float levelProbability;
 
-    public StatEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
+    public StatEffect(String name, String abbreviation, String description,
                       int stacks, int duration, RemoveCondition[] removeConditions, int effectLevel,
                       float baseProbability, float levelProbability, float baseMultiplier, float levelMultiplier) {
 
-        super(name, abbreviation, description, display, percentage, stacks, duration, removeConditions);
+        super(name, abbreviation, description, stacks, duration, removeConditions);
 
         this.effectLevel = effectLevel;
         this.baseProbability = baseProbability;
@@ -35,43 +35,9 @@ public abstract class StatEffect extends StatusEffect {
     @Override
     public void apply(Entity attacker, Entity defender) {
 
-        double rand = Math.random();
-        float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
-        float statProbability = 0.0f;
-        boolean success = false;
+        String statName = name.split(" ")[0].toLowerCase();
 
-        if (baseMultiplier < 0) {
-            statProbability = (STAT_COEFFICIENT * (attacker.getBaseMag() - defender.getBaseStat(abbreviation)));
-        }
-
-        float totalProbability = effectProbability + statProbability;
-        String[] parts = name.split(" ");
-        String statName = parts[0].toLowerCase();
-
-        if (rand <= (totalProbability)) {
-
-            float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
-            success = true;
-
-            for (StatusEffect se: defender.getStatusEffects()) {
-                if (se.getName().equals(this.name)) {
-
-                    se.incrementStacks(1);
-                    se.incrementDuration(this.duration);
-
-                    ((StatEffect) se).incrementStatMultiplier(
-                            (statMultiplier * STACK_COEFFICIENT)
-                                    / ((se.getStacks() - 1) + ((this.effectLevel - 1) * DECAY_COEFFICIENT)));
-                    break;
-                }
-            }
-
-            //  This might become faulty if the starting stacks of a debuff ever exceed 1.
-            if (stacks == 1) {
-                this.statMultiplier = statMultiplier;
-                defender.addStatusEffect(this);
-            }
-        }
+        boolean success = handleApplication(attacker, defender);
 
         displayResult(defender.getName(), statName, baseMultiplier < 0.0, success);
         if (attacker.isDebug()) {
@@ -79,6 +45,53 @@ public abstract class StatEffect extends StatusEffect {
         }
 
         defender.recalculateCurStats();
+    }
+
+    protected boolean handleApplication(Entity attacker, Entity defender) {
+
+        if (calculateProbability(attacker, defender)) {
+
+            float statMultiplier = (baseMultiplier + ((effectLevel - 1) * levelMultiplier));
+
+            handleRepeatApplication(defender, statMultiplier);
+
+            //  This might become faulty if the starting stacks of a debuff ever exceed 1.
+            if (stacks == 1) {
+                this.statMultiplier = statMultiplier;
+                defender.addStatusEffect(this);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected void handleRepeatApplication(Entity defender, float statMultiplier) {
+
+        for (StatusEffect se: defender.getStatusEffects()) {
+            if (se.getName().equals(this.name)) {
+
+                se.incrementStacks(1);
+                se.incrementDuration(this.duration);
+
+                ((StatEffect) se).incrementStatMultiplier(
+                        (statMultiplier * STACK_COEFFICIENT)
+                                / ((se.getStacks() - 1) + ((this.effectLevel - 1) * DECAY_COEFFICIENT)));
+                break;
+            }
+        }
+    }
+
+    protected boolean calculateProbability(Entity attacker, Entity defender) {
+
+        double rand = Math.random();
+        float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
+        float statProbability = 0.0f;
+
+        if (baseMultiplier < 0) {
+            statProbability = (STAT_COEFFICIENT * (attacker.getBaseMag() - defender.getBaseStat(abbreviation)));
+        }
+
+        return rand <= (effectProbability + statProbability);
     }
 
     //  This feels jank but works.
@@ -113,19 +126,35 @@ public abstract class StatEffect extends StatusEffect {
     public boolean incrementEffect(Entity target) {
 
         this.incrementDuration(-1);
+
         if (this.duration <= 0) {
-            remove(target);
-            return true;
+            return checkRemove(RemoveCondition.EXPIRATION, target);
         }
         return false;
     }
 
     @Override
-    public void remove(Entity target) {
+    protected void printRemoveMessage(RemoveCondition condition, Entity target) {
 
-        target.removeStatusEffect(this);
-        System.out.println(target.getName() + "'s status effect \"" + name + "\" expired.");
-        Tools.sleep(1250);
+        switch (condition) {
+
+            case EXPIRATION:
+                System.out.println(target.getName() + "'s status effect \"" + name + "\" expired.");
+                Tools.sleep(1250);
+                break;
+
+            case DEATH:
+                System.out.println(target.getName() + "'s status effect  \"" + name + "\" faded.");
+                Tools.sleep(1250);
+
+            case END_BATTLE:
+                System.out.println(target.getName() + " removed \"" + name + "\" from themselves.");
+                Tools.sleep(1250);
+
+            case LEVEL_UP:
+            case TAKE_DAMAGE:
+                break;
+        }
     }
 
     public int getEffectLevel() {
@@ -147,11 +176,7 @@ public abstract class StatEffect extends StatusEffect {
         }
     }
 
-    public void setStatMultiplier(float statMultiplier) {
-        this.statMultiplier = statMultiplier;
-    }
-
-    public void incrementStatMultiplier(float increment) {
+    protected void incrementStatMultiplier(float increment) {
         this.statMultiplier += increment;
     }
 

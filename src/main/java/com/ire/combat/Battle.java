@@ -2,7 +2,6 @@ package com.ire.combat;
 
 import com.ire.audio.AudioStream;
 import com.ire.combat.statuseffects.RemoveCondition;
-import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.stateffects.Surprise;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
@@ -66,20 +65,7 @@ public class Battle {
     // returned boolean indicates winner. True for t1, false for t2
     public boolean runBattle(int surprise) {
 
-        if (surprise != 0) {
-            if (surprise == 1) {
-                for (Entity p: team1) {
-                    SURPRISE.apply(p, p);
-                    System.out.println("You got the surprise on the enemy!");
-                }
-            } else {
-                for (Entity e: team2) {
-                    SURPRISE.apply(e, e);
-                    System.out.println("You got surprised!");
-                }
-            }
-            Tools.sleep(1000);
-        }
+        determineSurprise(surprise);
 
         boolean turn = getAverageSpd();
 
@@ -95,22 +81,16 @@ public class Battle {
             turn = true;
         }
 
-        // TODO: Battle should definitely not have access to this information. There needs to be an intermediate method.
+        return endBattle();
+    }
 
+    private boolean endBattle() {
         for (Entity e : team1) {
-            ArrayList<StatusEffect> statusEffects = e.getStatusEffects();
-            for (StatusEffect se : statusEffects) {
-                if (se.checkRemove(RemoveCondition.END_BATTLE)) {
-                    System.out.println(se.getName() + " was removed");
-                }
-            }
-            statusEffects.removeIf(se -> se.checkRemove(RemoveCondition.END_BATTLE));
-
+            e.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.END_BATTLE, e));
         }
 
         for (Entity e : team2) {
-            ArrayList<StatusEffect> statusEffects = e.getStatusEffects();
-            statusEffects.removeIf(se -> se.checkRemove(RemoveCondition.END_BATTLE));
+            e.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.END_BATTLE, e));
         }
 
         if (checkDead() == 1) {
@@ -121,6 +101,26 @@ public class Battle {
             Tools.clear();
             giveRewards(team2, team1);
             return false;
+        }
+    }
+
+    private void determineSurprise(int surprise) {
+
+        if (surprise == 1) {
+            for (Entity p: team1) {
+                SURPRISE.apply(p, p);
+                System.out.println("You got the surprise on the enemy!");
+            }
+            Tools.sleep(1000);
+            return;
+        }
+
+        if (surprise == 2) {
+            for (Entity e : team2) {
+                SURPRISE.apply(e, e);
+                System.out.println("You got surprised!");
+            }
+            Tools.sleep(1000);
         }
     }
 
@@ -157,7 +157,7 @@ public class Battle {
         }
     }
 
-    //  0 = battle continues, 1 = team2 dead, 2 = team1 dead
+    //  0 = battle continues, 1 = team1 wins, 2 = team2 wins
     //  0, 1, 2 assignment kind of weird, but works in context of favoring team 1.
     private int checkDead() {
 

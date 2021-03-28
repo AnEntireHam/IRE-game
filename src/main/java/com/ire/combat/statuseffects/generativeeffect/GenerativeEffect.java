@@ -6,6 +6,7 @@ import com.ire.entities.Entity;
 import com.ire.tools.Tools;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashMap;
 
 public abstract class GenerativeEffect extends StatusEffect {
@@ -20,11 +21,11 @@ public abstract class GenerativeEffect extends StatusEffect {
     protected String expirationMessage;
 
     //  It might make more sense to change the strengthCoefficient instead of the levelProbability.
-    public GenerativeEffect(String name, String abbreviation, String description, boolean display, boolean percentage,
+    public GenerativeEffect(String name, String abbreviation, String description,
                             int stacks, int duration, RemoveCondition[] removeConditions, int effectLevel,
                             float baseProbability, float levelProbability, String expirationMessage) {
 
-        super(name, abbreviation, description, display, percentage, stacks, duration, removeConditions);
+        super(name, abbreviation, description, stacks, duration, removeConditions);
 
         this.effectLevel = effectLevel;
         this.baseProbability = baseProbability;
@@ -32,6 +33,7 @@ public abstract class GenerativeEffect extends StatusEffect {
         this.expirationMessage = expirationMessage;
     }
 
+    // TODO: Split this method into smaller parts.
     @Override
     public void apply(Entity attacker, Entity defender) {
 
@@ -75,20 +77,35 @@ public abstract class GenerativeEffect extends StatusEffect {
 
         this.incrementDuration(-1);
         if (this.duration <= 0) {
-            if (checkRemove(RemoveCondition.EXPIRATION)) {
-                remove(target);
-                return true;
-            }
+            // TODO: Currently, checkRemove() is always surrounded by this structure, which is WET.
+            checkRemove(RemoveCondition.EXPIRATION, target);
         }
         return false;
     }
 
     @Override
-    protected void remove(Entity target) {
+    protected void printRemoveMessage(RemoveCondition condition, Entity target) {
 
-        target.removeStatusEffect(this);
-        System.out.println(target.getName() + expirationMessage);
-        Tools.sleep(1250);
+        switch (condition) {
+
+            case EXPIRATION:
+                Formatter parser = new Formatter();
+                System.out.println(parser.format(expirationMessage, target.getName()));
+                Tools.sleep(1250);
+                break;
+
+            case DEATH:
+                System.out.println(target.getName() + "'s " + name + " faded.");
+                Tools.sleep(1250);
+
+            case END_BATTLE:
+                System.out.println(target.getName() + " removed \"" + name + "\" from themself.");
+                Tools.sleep(1250);
+
+            case LEVEL_UP:
+            case TAKE_DAMAGE:
+                break;
+        }
     }
 
     @Override

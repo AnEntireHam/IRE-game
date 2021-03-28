@@ -7,7 +7,7 @@ public class ManaBleed extends ManaGenerative {
 
     public ManaBleed(int effectLevel) {
         super("Mana Drain", "MREG", "Target loses mana at end of each turn.",
-                true, false, 1, 5,
+                1, 5,
                 new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.END_BATTLE},
                 effectLevel, 0.6f, 0.075f, " stopped losing mana.");
     }

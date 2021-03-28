@@ -7,7 +7,7 @@ public class Regeneration extends HealthGenerative{
 
     public Regeneration(int effectLevel) {
         super("Regenerate", "Target regains health at end of each turn",
-                true, false, 1, 5,
+                1, 5,
                 new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.DEATH},
                 effectLevel, 1, 0, " stopped regenerating health.");
     }

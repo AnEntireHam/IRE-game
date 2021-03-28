@@ -6,7 +6,7 @@ public class DefenseUp extends StatEffect {
 
     public DefenseUp(int effectLevel) {
         super("Defense Up", "DEF", "Increases the defense of the afflicted target.",
-                true, true, 1, 5,
+                1, 5,
                 new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.DEATH},
                 effectLevel, 1, 0, 0.20f, 0.05f);
     }

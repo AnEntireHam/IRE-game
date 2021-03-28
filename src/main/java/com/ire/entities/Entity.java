@@ -9,6 +9,8 @@ import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
+import com.ire.combat.statuseffects.RemoveCondition;
+import com.ire.combat.statuseffects.RemoveMethods;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
@@ -17,6 +19,11 @@ import com.ire.tools.Tools;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
@@ -229,39 +236,37 @@ public abstract class Entity {
         }
     }
 
-    public void takeDamage(int damage, boolean message) {
+    public void takeDamage(int damage, boolean showMessage) {
 
-        if (damage <= 0 && message) {
-            System.out.println(name + " was struck, but took no damage.");
-            Tools.sleep(2000);
-            System.out.println(" ");
+        if (damage <= 0 && showMessage) {
 
+            printDamageMessage(name + " was struck, but took no damage.");
             return;
-
         }
 
         if (alive) {
 
             this.hlh -= damage;
-            if (message) {
-                System.out.println(name + " took " + damage + " damage.");
-                Tools.sleep(2000);
-                System.out.println(" ");
+            if (showMessage) {
+                printDamageMessage(name + " took " + damage + " damage.");
             }
-
-            if (hlh < 1) {
+            if (hlh < 1 && alive) {
                 this.die(true);
             }
             return;
         }
 
-
         this.hlh -= damage;
-        if (message) {
-            System.out.println(name + " is dead, but took " + damage + " more damage.");
-            Tools.sleep(2000);
-            System.out.println(" ");
+        if (showMessage) {
+            printDamageMessage(name + " is dead, but took " + damage + " more damage.");
         }
+    }
+
+    private void printDamageMessage(String message) {
+
+        System.out.println(message);
+        Tools.sleep(2000);
+        System.out.println();
     }
 
     public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
@@ -459,6 +464,10 @@ public abstract class Entity {
         }
 
         GenerativeEffect.calculateCombinedTotal(this, generativeEffects);
+    }
+
+    public void checkRemoveStatusEffects(Predicate<RemoveMethods> method) {
+        statusEffects.removeIf(method);
     }
 
     protected float calculateMultiplier(String prefix) {

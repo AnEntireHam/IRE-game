@@ -8,7 +8,7 @@ public class Surprise extends StatEffect {
     // TODO: Fix "x had this Surprise! increased text". Probably add Formatter or @Override or boolean doDisplay.
     public Surprise() {
         super("Surprise!", "SPD", "Increases the maximum health of the afflicted target.",
-                true, true, 1, 1,
+                1, 1,
                 new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.DEATH},
                 1, 1, 0, 2.0f, 0.00f);
     }
@@ -25,9 +25,8 @@ public class Surprise extends StatEffect {
     }
 
     @Override
-    public void remove(Entity target) {
+    protected void printRemoveMessage(RemoveCondition condition, Entity target) {
 
-        target.removeStatusEffect(this);
         /*System.out.println(target.getName() + "'s status effect " + name.toLowerCase() + " expired.");
         Tools.sleep(1250);*/    // It may be worthwhile adding some logic to only print this once per party.
     }
