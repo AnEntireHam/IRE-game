@@ -59,9 +59,7 @@ public abstract class SpellAttack extends AttackAction {
     protected void calculateDamage(Entity attacker, Entity defender) {
 
         damage = Math.round(attacker.getCurMag() * coefficient * ((spellLevel - 1) * levelDamage + 1));
-        System.out.println("Damage: " + damage);
         defender.getCurAction().execute(attacker, defender);
-        System.out.println("Damage: " + damage);
     }
 
     protected void narrateEvents(Entity attacker, Entity defender) {
