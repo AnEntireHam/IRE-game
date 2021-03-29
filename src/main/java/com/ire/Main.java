@@ -156,8 +156,6 @@ public class Main {
         enemies.add(s1);
         enemies.add(s2);
 
-        p1.addXp(8);
-
         Battle b = new Battle(players, enemies);
 
         if (b.runBattle(1)) {

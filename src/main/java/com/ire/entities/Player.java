@@ -43,37 +43,57 @@ public class Player extends Entity {
 
 
     // Level Functions
-    /*
-     * TODO: Ditch this for-loop...
-     * If they got multiple levels,
-     * just apply all of the allocations, then give all bonus points at once.
-     * also YEESH this is unDRY and large.
-     */
+
     // This makes the presumption that weapons/armor won't change baseStats, or that seeing modified values is okay.
     @Override
     protected void levelUp(int targetLevel) {
-
-        if (this.level == targetLevel) {
-            return;
-        }
 
         Tools.clear();
 
         int[] previousBaseStats = {this.baseHlh, this.baseAtk, this.baseDef, this.baseMag, this.baseSpd};
 
-        // Replace while loop with x += (y * z) later
-        int differenceLevels = targetLevel - this.level;
-        while (differenceLevels > 0) {
+        addAllocations(targetLevel);
+        int bonusPoints = calculateBonusPoints(targetLevel);
 
-            this.baseHlh += hlhAllocation;
-            this.baseAtk += atkAllocation;
-            this.baseDef += defAllocation;
-            this.baseMag += magAllocation;
-            this.baseSpd += spdAllocation;
-            differenceLevels--;
+        String[] statPrefixes = {"[1] Hlh ", "[2] Atk ", "[3] Def ", "[4] Mag ", "[5] Spd "};
+        String message = (this.name + "'s stats have increased!");
+        letsGo.play();
+
+        // Weird version of Tools' menu. May be able to consolidate later.
+        while (bonusPoints > 0) {
+
+            printStatChanges(previousBaseStats, statPrefixes, targetLevel, message);
+
+            if (bonusPoints > 1) {
+                System.out.println(this.name + " has " + bonusPoints +
+                        " bonus points remaining. Input 1-5 to invest in a stat.");
+            } else {
+                System.out.println(this.name + " has " + bonusPoints +
+                        " bonus point remaining. Input 1-5 to invest in a stat.");
+            }
+
+            bonusPoints--;
+            message = handleAllocationChoice();
         }
 
-        // Levelling up is done mid method, slightly suspicious.
+        printStatChanges(previousBaseStats, statPrefixes, targetLevel, message);
+
+        Tools.emptyPrompt();
+        Tools.clear();
+    }
+
+    private void addAllocations(int targetLevel) {
+
+        int differenceLevels = targetLevel - this.level;
+
+        this.baseHlh += hlhAllocation * differenceLevels;
+        this.baseAtk += atkAllocation * differenceLevels;
+        this.baseDef += defAllocation * differenceLevels;
+        this.baseMag += magAllocation * differenceLevels;
+        this.baseSpd += spdAllocation * differenceLevels;
+    }
+
+    private int calculateBonusPoints(int targetLevel) {
         int bonusPoints = 0;
         while (this.level < targetLevel) {
 
@@ -81,65 +101,176 @@ public class Player extends Entity {
             bonusPoints += level / 10;
             this.level++;
         }
+        return bonusPoints;
+    }
 
-        String[] statDisplay;
-        String[] statPrefixes = {"[1] Hlh ", "[2] Atk ", "[3] Def ", "[4] Mag ", "[5] Spd "};
-        String message = (this.name + "'s stats have increased!");
+    private void printStatChanges(int[] previousBaseStats, String[] statPrefixes, int targetLevel, String message) {
 
-        // Weird version of Tools' menu. May be able to consolidate later.
-        letsGo.play();
-        while (true) {
+        String[] statDisplay = new String[5];
 
-            System.out.println(name + " leveled up to level " + targetLevel + "!\n");
+        for (int i = 0; i < 5; i++) {
 
-            statDisplay = generateStatChanges(previousBaseStats, statPrefixes);
-            for (String s : statDisplay) {
-                System.out.println(s);
+            statDisplay[i] = statPrefixes[i];
+            statDisplay[i] += previousBaseStats[i];
+
+            if (this.getStat(i) != previousBaseStats[i]) {
+
+                previousBaseStats[i] = this.getStat(i);
+                statDisplay[i] += (" -> " + this.getStat(i));
             }
-            System.out.println();
+        }
 
-            System.out.println(message);
-            if (bonusPoints > 1) {
-                System.out.println(this.name + " has " + bonusPoints +
-                        " bonus points remaining. Input 1-5 to invest in a stat.");
-            } else if (bonusPoints == 1) {
-                System.out.println(this.name + " has " + bonusPoints +
-                        " bonus point remaining. Input 1-5 to invest in a stat.");
-            } else {
-                System.out.println();
-                Tools.emptyPrompt();
+        System.out.println(name + " leveled up to level " + targetLevel + "!\n");
+
+        for (String s : statDisplay) {
+            System.out.println(s);
+        }
+        System.out.println();
+
+        System.out.println(message);
+    }
+
+    private String handleAllocationChoice() {
+        String message;
+        int choice = Tools.getUserInt(1, 5);
+        String statName = "";
+
+        switch (choice) {
+            case 1:
+                this.baseHlh++;
+                statName = "health";
                 break;
+            case 2:
+                this.baseAtk++;
+                statName = "attack";
+                break;
+            case 3:
+                this.baseDef++;
+                statName = "defense";
+                break;
+            case 4:
+                this.baseMag++;
+                statName = "magic";
+                break;
+            case 5:
+                this.baseSpd++;
+                statName = "speed";
+                break;
+        }
+        message = this.name + " added 1 point to " + statName + ".";
+        return message;
+    }
+
+    // Prompt Functions
+
+    @Override
+    public void promptAttack(ArrayList<Entity> targets) {
+
+        ArrayList<String> options = new ArrayList<>();
+        int choice;
+        boolean confirmed = false;
+
+        do {
+            Tools.clear();
+            options.clear();
+            options.addAll(attacks);
+            System.out.println("Enemies are defending. Select an action.");
+            choice = Tools.menu(options);
+
+            switch (attacks.get(choice - 1)) {
+                case "Stab":
+                    if (promptTargetIndex(targets)) {
+                        this.setCurAction(this.stab);
+                        confirmed = true;
+                    }
+                    break;
+                case "Lunge":
+                    if (promptTargetIndex(targets)) {
+                        this.setCurAction(this.lunge);
+                        confirmed = true;
+                    }
+                    break;
+                case "Cast":
+                    while (true) {
+                        choice = SpellAttack.menu(spells, man, this.getCurMag(), true);
+
+                        if (choice == 0) {
+                            break;
+
+                        } else if (promptTargetIndex(targets)) {
+                            this.setCurAction(spells.get(choice - 1));
+                            confirmed = true;
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
             }
+        } while (!confirmed);
+    }
 
-            int choice = Tools.getUserInt(1, 5);
-            String statName = "";
-            bonusPoints--;
 
-            switch (choice) {
-                case 1:
-                    this.baseHlh++;
-                    statName = "health";
+    @Override
+    public void promptDefend() {
+
+        ArrayList<String> options = new ArrayList<>();
+        int choice;
+        boolean confirmed = false;
+
+        do {
+            Tools.clear();
+            options.clear();
+            options.addAll(defenses);
+            System.out.println("Enemies are attacking. Select an action.");
+            choice = Tools.menu(options);
+
+            switch (defenses.get(choice - 1)) {
+                case "Shield":
+                    this.setCurAction(this.shield);
+                    confirmed = true;
                     break;
-                case 2:
-                    this.baseAtk++;
-                    statName = "attack";
+                case "Counter":
+                    this.setCurAction(this.counter);
+                    confirmed = true;
                     break;
-                case 3:
-                    this.baseDef++;
-                    statName = "defense";
-                    break;
-                case 4:
-                    this.baseMag++;
-                    statName = "magic";
-                    break;
-                case 5:
-                    this.baseSpd++;
-                    statName = "speed";
+                case "Ward":
+                    choice = SpellDefense.menu(this.wards, true);
+                    if (choice != 0) {
+                        this.setCurAction(wards.get(choice - 1));
+                        confirmed = true;
+                    }
                     break;
             }
-            message = this.name + " added 1 point to " + statName + ".";
+        } while (!confirmed);
+    }
 
-        /*for (int i = this.level; i < targetLevel; i++) {
+    @Override
+    protected boolean promptTargetIndex(ArrayList<Entity> targets) {
+
+        ArrayList<String> options = new ArrayList<>();
+        ArrayList<Integer> exclusions = new ArrayList<>();
+        int choice;
+
+        Tools.sortEntityList(targets);
+
+        for (Entity t : targets) {
+            if (t.isAlive()) {
+                options.add(t.generateBattleStatus(true));
+            }
+        }
+
+        System.out.println("Select a target.");
+        choice = Tools.cancelableMenu((options), exclusions) - 1;
+
+        if (choice != -1) {
+            this.targetIndex = choice;
+            return true;
+        }
+        return false;
+    }
+
+    /*for (int i = this.level; i < targetLevel; i++) {
 
             bonusPoints = 2;
 
@@ -269,135 +400,4 @@ public class Player extends Entity {
             // bEffects.fullHeal();  Replace with appropriate method in Entity
         }
         Tools.clear();*/
-        }
-    }
-
-    private String[] generateStatChanges(int[] previousBaseStats, String[] statPrefixes) {
-
-        String[] statDisplay = new String[5];
-
-        for (int i = 0; i < 5; i++) {
-
-            statDisplay[i] = statPrefixes[i];
-            statDisplay[i] += previousBaseStats[i];
-
-            if (this.getStat(i) != previousBaseStats[i]) {
-
-                previousBaseStats[i] = this.getStat(i);
-                statDisplay[i] += (" -> " + this.getStat(i));
-            }
-        }
-
-        return statDisplay;
-    }
-
-
-    // Prompt Functions
-
-    @Override
-    public void promptAttack(ArrayList<Entity> targets) {
-
-        ArrayList<String> options = new ArrayList<>();
-        int choice;
-        boolean confirmed = false;
-
-        do {
-            Tools.clear();
-            options.clear();
-            options.addAll(attacks);
-            System.out.println("Enemies are defending. Select an action.");
-            choice = Tools.menu(options);
-
-            switch (attacks.get(choice - 1)) {
-                case "Stab":
-                    if (promptTargetIndex(targets)) {
-                        this.setCurAction(this.stab);
-                        confirmed = true;
-                    }
-                    break;
-                case "Lunge":
-                    if (promptTargetIndex(targets)) {
-                        this.setCurAction(this.lunge);
-                        confirmed = true;
-                    }
-                    break;
-                case "Cast":
-                    while (true) {
-                        choice = SpellAttack.menu(spells, man, this.getCurMag(), true);
-
-                        if (choice == 0) {
-                            break;
-
-                        } else if (promptTargetIndex(targets)) {
-                            this.setCurAction(spells.get(choice - 1));
-                            confirmed = true;
-                            break;
-                        }
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
-            }
-        } while (!confirmed);
-    }
-
-
-    @Override
-    public void promptDefend() {
-
-        ArrayList<String> options = new ArrayList<>();
-        int choice;
-        boolean confirmed = false;
-
-        do {
-            Tools.clear();
-            options.clear();
-            options.addAll(defenses);
-            System.out.println("Enemies are attacking. Select an action.");
-            choice = Tools.menu(options);
-
-            switch (defenses.get(choice - 1)) {
-                case "Shield":
-                    this.setCurAction(this.shield);
-                    confirmed = true;
-                    break;
-                case "Counter":
-                    this.setCurAction(this.counter);
-                    confirmed = true;
-                    break;
-                case "Ward":
-                    choice = SpellDefense.menu(this.wards, true);
-                    if (choice != 0) {
-                        this.setCurAction(wards.get(choice - 1));
-                        confirmed = true;
-                    }
-                    break;
-            }
-        } while (!confirmed);
-    }
-
-    @Override
-    protected boolean promptTargetIndex(ArrayList<Entity> targets) {
-
-        ArrayList<String> options = new ArrayList<>();
-        ArrayList<Integer> exclusions = new ArrayList<>();
-        int choice;
-
-        Tools.sortEntityList(targets);
-
-        for (Entity t : targets) {
-            if (t.isAlive()) {
-                options.add(t.generateBattleStatus(true));
-            }
-        }
-
-        System.out.println("Select a target.");
-        choice = Tools.cancelableMenu((options), exclusions) - 1;
-
-        if (choice != -1) {
-            this.targetIndex = choice;
-            return true;
-        }
-        return false;
-    }
 }
