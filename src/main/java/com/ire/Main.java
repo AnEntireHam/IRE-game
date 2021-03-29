@@ -52,13 +52,9 @@ public class Main {
         /*s.Create();
         s.Write("Placeholder save data text!");*/
 
-        /*System.out.print(red);
         s.Read("startArt.txt");
-        System.out.println("^^ ANSI color code ^^" + reset);
 
-        System.out.println();
-
-        System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
+        /*System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
         System.out.println(colorize("Bright green text, black bg, bold", BRIGHT_GREEN_TEXT(), BLACK_BACK(), BOLD()));
         System.out.println(colorize("Bright green text, black bg, italic", BRIGHT_GREEN_TEXT(), BLACK_BACK(), ITALIC()));
         System.out.println(colorize("Bright green text, black bg, underline", BRIGHT_GREEN_TEXT(), BLACK_BACK(), UNDERLINE()));
