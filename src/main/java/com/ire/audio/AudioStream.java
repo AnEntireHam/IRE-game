@@ -6,28 +6,34 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
-public class AudioStream extends Thread {
+public class AudioStream implements Runnable {
 
     private static final int BUFFER_SIZE = 256;
     private final String path;
     private boolean play;
+    private boolean end;
 
     public AudioStream(String path) {
 
         this.path = "sounds/" + path + ".wav";
-        this.start();
+        this.end = false;
+        Thread thread = new Thread(this);
+        thread.start();
     }
 
     public void play() {
         this.play = true;
     }
 
-    // TODO: Remove this janky multithreading badness, use AudioClip.
-    @SuppressWarnings("InfiniteLoopStatement")
+    public void end() {
+        this.end = true;
+    }
+
+    // TODO: figure out if running separate threads for each AudioStream is a poor idea.
     @Override
     public void run() {
 
-        while (true) {
+        while (!end) {
             if (this.play) {
                 try {
                     File audioFile = new File(path);
@@ -74,7 +80,12 @@ public class AudioStream extends Thread {
                     this.play = false;
                 }
             } else {
-                Tools.sleep(5);
+
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

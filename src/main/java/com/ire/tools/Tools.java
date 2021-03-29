@@ -23,15 +23,19 @@ public class Tools {
 
     // TODO: Extract the magic numbers that are ~~everywhere~~
     // TODO: Include a text speed/manual skip option, and or always emptyPrompt() / always sleep
-    public static void sleep(int time) {
+
+    public static void sleep(int time, float multiplier) {
 
         try {
-
-            Thread.sleep(time);
-
+            Thread.sleep((long) (time * multiplier));
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    public static void sleep(int time) {
+
+        sleep(time, 1);
     }
 
     // TODO: Ask non-windows users if "\033" works.
