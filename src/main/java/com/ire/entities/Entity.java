@@ -12,17 +12,12 @@ import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.RemoveMethods;
 import com.ire.combat.statuseffects.StatusEffect;
-import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
+import com.ire.combat.statuseffects.generativeeffect.*;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
 import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
@@ -59,6 +54,7 @@ public abstract class Entity {
     // protected ArrayList<Technique> techs = new ArrayList<>();
 
     protected ArrayList<StatusEffect> statusEffects = new ArrayList<>();
+    protected ArrayList<GenerativeManager> generatives = new ArrayList<>();
 
     protected Stab stab = new Stab();
     protected Lunge lunge = new Lunge();
@@ -106,6 +102,12 @@ public abstract class Entity {
         this.totalXp = calculateNextXp(this.level);
         this.nextXp = calculateNextXp(this.level + 1);
         this.rewardXp = 0;
+
+        HealthGenerativeManager healthManager = new HealthGenerativeManager();
+        ManaGenerativeManager manaManager = new ManaGenerativeManager();
+
+        this.generatives.add(healthManager);
+        this.generatives.add(manaManager);
     }
 
 
@@ -159,6 +161,10 @@ public abstract class Entity {
 
         for (StatusEffect se: statusEffects) {
             output.append(se.generateDisplay());
+        }
+
+        for (GenerativeManager gm: generatives) {
+            output.append(gm.generateDisplay());
         }
 
         if (detailed) {
@@ -500,13 +506,26 @@ public abstract class Entity {
         this.statusEffects.add(effect);
     }
 
+    public void addGenerative(GenerativeEffect effect) {
+
+        if (effect instanceof HealthGenerative) {
+            generatives.get(0).add(effect);
+        } else if (effect instanceof ManaGenerative) {
+            generatives.get(1).add(effect);
+        }
+    }
+
     public void removeStatusEffect(StatusEffect effect) {
         this.statusEffects.remove(effect);
     }
 
+    public void removeGenerative(GenerativeEffect effect) {
+
+    }
+
     // Stat Accessors and Mutators
 
-    public int getCurStat(int index) {
+    protected int getStat(int index) {
 
         switch (index) {
             case 0:

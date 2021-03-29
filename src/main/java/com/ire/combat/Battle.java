@@ -85,6 +85,7 @@ public class Battle {
     }
 
     private boolean endBattle() {
+
         for (Entity e : team1) {
             e.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.END_BATTLE, e));
         }
@@ -131,6 +132,7 @@ public class Battle {
         for (Entity a: attackers) {
             a.incrementStatusDurations();
         }
+        System.out.println();
     }
 
     private void defend(ArrayList<Entity> defenders) {

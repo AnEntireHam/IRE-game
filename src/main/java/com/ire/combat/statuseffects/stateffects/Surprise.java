@@ -1,7 +1,6 @@
 package com.ire.combat.statuseffects.stateffects;
 
 import com.ire.combat.statuseffects.RemoveCondition;
-import com.ire.entities.Entity;
 
 public class Surprise extends StatEffect {
 

@@ -19,6 +19,7 @@ public abstract class GenerativeEffect extends StatusEffect {
     protected float strengthCoefficient = 3;
     protected float statProbability = 0;
     protected String expirationMessage;
+    // TODO: Handle this with manager later.
     protected boolean original = true;
 
     //  It might make more sense to change the strengthCoefficient instead of the levelProbability.
@@ -41,11 +42,7 @@ public abstract class GenerativeEffect extends StatusEffect {
 
         if (calculateProbability()) {
 
-            handleRepeatApplication(defender);
-
-            if (stacks == 1) {
-                defender.addStatusEffect(this);
-            }
+            defender.addGenerative(this);
             success = true;
         }
 
@@ -59,23 +56,8 @@ public abstract class GenerativeEffect extends StatusEffect {
 
         double rand = Math.random();
         float effectProbability = (baseProbability + levelProbability * (effectLevel - 1));
-        float statProbability = 0.0f;
 
         return rand <= (effectProbability + statProbability);
-    }
-
-    protected void handleRepeatApplication(Entity defender) {
-
-        for (StatusEffect se: defender.getStatusEffects()) {
-            if (se.getName().equals(this.name)) {
-
-                se.incrementStacks(1);
-                se.incrementDuration(this.duration);
-                ((GenerativeEffect) se).incrementStrength(strength);
-                original = false;
-                return;
-            }
-        }
     }
 
     @Override
@@ -126,7 +108,7 @@ public abstract class GenerativeEffect extends StatusEffect {
             if (!finishedAbbreviations.contains(ge.getAbbreviation())) {
                 finishedAbbreviations.add(
                         ge.getAbbreviation());
-                ge.executeGenerative(
+                ge.execute(
                         target, sums.get(ge.getAbbreviation()));
             }
         }
@@ -151,7 +133,7 @@ public abstract class GenerativeEffect extends StatusEffect {
         return sums;
     }
 
-    public abstract void executeGenerative(Entity target, int total);
+    public abstract void execute(Entity target, int total);
 
     protected abstract void displayResult(String defender, boolean success, boolean original);
 

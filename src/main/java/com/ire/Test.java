@@ -1,5 +1,6 @@
 package com.ire;
 
+import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
 import com.ire.combat.actions.attackactions.physicalattacks.Stab;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
@@ -8,9 +9,14 @@ import com.ire.combat.actions.attackactions.spellattacks.Solar;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import com.ire.combat.actions.defenseactions.spelldefenses.Screen;
+import com.ire.combat.statuseffects.generativeeffect.Bleed;
+import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.combat.statuseffects.stateffects.*;
+import com.ire.entities.Entity;
 import com.ire.entities.Player;
 import com.ire.entities.enemies.Skeleton;
+
+import java.util.ArrayList;
 
 public class Test {
 
@@ -38,10 +44,37 @@ public class Test {
         AttackUp au = new AttackUp(1);
         MagicDown md = new MagicDown(1);
 
+        Bleed bleed1 = new Bleed(1);
+        bleed1.setStrength(-5);
+
+        Bleed bleed2 = new Bleed(1);
+        bleed2.setStrength(-2);
+
+        Regeneration regen1 = new Regeneration(1);
+        regen1.setStrength(8);
+
+        Regeneration regen2 = new Regeneration(1);
+        regen2.setStrength(4);
+
         // HP 70, ATK 3, DEF 3, MAG 8, SPD 6
         // HP 10, ATK 7, DEF 1, MAG 2, SPD 1
-        p2.setDebug(true);
+        //p2.setDebug(true);
 
+        bleed1.apply(p2, e1);
+        bleed2.apply(p2, e1);
+        regen1.apply(e1, e1);
+        regen2.apply(e1, e1);
+
+
+        ArrayList<Entity> team1 = new ArrayList<>();
+        ArrayList<Entity> team2 = new ArrayList<>();
+
+        team1.add(p2);
+        team2.add(e1);
+
+        Battle battle = new Battle(team1, team2);
+
+        battle.runBattle(1);
 
         /*for (StatusEffect se: e1.getStatusEffects()) {
             System.out.println(se);

@@ -25,7 +25,7 @@ public abstract class HealthGenerative extends GenerativeEffect {
     }
 
     @Override
-    public void executeGenerative(Entity target, int total) {
+    public void execute(Entity target, int total) {
 
         if (total < 0) {
 

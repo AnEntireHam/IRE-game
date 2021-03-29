@@ -45,6 +45,7 @@ public class Main {
         String purple = "\u001B[35m";
         String red = "\u001B[31m";
 
+        System.out.println("test");
         Tools.clear();
 
         SaveData s = new SaveData();
@@ -129,11 +130,11 @@ public class Main {
         AttackUp au = new AttackUp(1);
         AttackDown ad = new AttackDown(1);
 
-        regen.setStrength(4);
+        /*regen.setStrength(4);
         regen.apply(p1, s1);
 
         bleed.setStrength(-1);
-        bleed.apply(s1, p1);
+        bleed.apply(s1, p1);*/
 
         /*mRegen.setStrength(1);
         mRegen.apply(p1, s1);
@@ -154,6 +155,8 @@ public class Main {
         players.add(p2);
         enemies.add(s1);
         enemies.add(s2);
+
+        p1.addXp(8);
 
         Battle b = new Battle(players, enemies);
 

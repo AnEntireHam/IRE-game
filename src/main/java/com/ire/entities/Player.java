@@ -49,15 +49,102 @@ public class Player extends Entity {
      * just apply all of the allocations, then give all bonus points at once.
      * also YEESH this is unDRY and large.
      */
+    // This makes the presumption that weapons/armor won't change baseStats, or that seeing modified values is okay.
     @Override
     protected void levelUp(int targetLevel) {
 
-        for (int i = this.level; i < targetLevel; i++) {
+        if (this.level == targetLevel) {
+            return;
+        }
 
-            int bnsAllocation = 1;
+        Tools.clear();
+
+        int[] previousBaseStats = {this.baseHlh, this.baseAtk, this.baseDef, this.baseMag, this.baseSpd};
+
+        // Replace while loop with x += (y * z) later
+        int differenceLevels = targetLevel - this.level;
+        while (differenceLevels > 0) {
+
+            this.baseHlh += hlhAllocation;
+            this.baseAtk += atkAllocation;
+            this.baseDef += defAllocation;
+            this.baseMag += magAllocation;
+            this.baseSpd += spdAllocation;
+            differenceLevels--;
+        }
+
+        // Levelling up is done mid method, slightly suspicious.
+        int bonusPoints = 0;
+        while (this.level < targetLevel) {
+
+            bonusPoints += 2;
+            bonusPoints += level / 10;
+            this.level++;
+        }
+
+        String[] statDisplay;
+        String[] statPrefixes = {"[1] Hlh ", "[2] Atk ", "[3] Def ", "[4] Mag ", "[5] Spd "};
+        String message = (this.name + "'s stats have increased!");
+
+        // Weird version of Tools' menu. May be able to consolidate later.
+        letsGo.play();
+        while (true) {
+
+            System.out.println(name + " leveled up to level " + targetLevel + "!\n");
+
+            statDisplay = generateStatChanges(previousBaseStats, statPrefixes);
+            for (String s : statDisplay) {
+                System.out.println(s);
+            }
+            System.out.println();
+
+            System.out.println(message);
+            if (bonusPoints > 1) {
+                System.out.println(this.name + " has " + bonusPoints +
+                        " bonus points remaining. Input 1-5 to invest in a stat.");
+            } else if (bonusPoints == 1) {
+                System.out.println(this.name + " has " + bonusPoints +
+                        " bonus point remaining. Input 1-5 to invest in a stat.");
+            } else {
+                System.out.println();
+                Tools.emptyPrompt();
+                break;
+            }
+
+            int choice = Tools.getUserInt(1, 5);
+            String statName = "";
+            bonusPoints--;
+
+            switch (choice) {
+                case 1:
+                    this.baseHlh++;
+                    statName = "health";
+                    break;
+                case 2:
+                    this.baseAtk++;
+                    statName = "attack";
+                    break;
+                case 3:
+                    this.baseDef++;
+                    statName = "defense";
+                    break;
+                case 4:
+                    this.baseMag++;
+                    statName = "magic";
+                    break;
+                case 5:
+                    this.baseSpd++;
+                    statName = "speed";
+                    break;
+            }
+            message = this.name + " added 1 point to " + statName + ".";
+
+        /*for (int i = this.level; i < targetLevel; i++) {
+
+            bonusPoints = 2;
 
             for (int j = i; j >= 10;) {
-                bnsAllocation++;
+                bonusPoints++;
                 j -= 10;
             }
 
@@ -93,7 +180,7 @@ public class Player extends Entity {
 
             System.out.println(this.name + "'s stats have increased!");
 
-            for (int j = bnsAllocation; j > 0; j--) {
+            for (int j = bonusPoints; j > 0; j--) {
 
                 System.out.println(this.name + " has " + j + " bonus point(s) remaining. Input 1-5 to invest in a stat.");
                 int k = Tools.getUserInt(1, 5);
@@ -181,7 +268,27 @@ public class Player extends Entity {
             Tools.clear();
             // bEffects.fullHeal();  Replace with appropriate method in Entity
         }
-        Tools.clear();
+        Tools.clear();*/
+        }
+    }
+
+    private String[] generateStatChanges(int[] previousBaseStats, String[] statPrefixes) {
+
+        String[] statDisplay = new String[5];
+
+        for (int i = 0; i < 5; i++) {
+
+            statDisplay[i] = statPrefixes[i];
+            statDisplay[i] += previousBaseStats[i];
+
+            if (this.getStat(i) != previousBaseStats[i]) {
+
+                previousBaseStats[i] = this.getStat(i);
+                statDisplay[i] += (" -> " + this.getStat(i));
+            }
+        }
+
+        return statDisplay;
     }
 
 
