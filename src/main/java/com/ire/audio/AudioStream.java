@@ -1,7 +1,5 @@
 package com.ire.audio;
 
-import com.ire.tools.Tools;
-
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -71,12 +69,12 @@ public class AudioStream implements Runnable {
                     //ex.printStackTrace();
                     this.play = false;
                 } catch (LineUnavailableException ex) {
-                    System.out.println("IRE.IREModule.IRE.Audio line for playing back is unavailable.");
+                    System.out.println("The line for playing back is unavailable.");
                     //ex.printStackTrace();
                     this.play = false;
                 } catch (IOException ex) {
-                    System.out.println("Error playing the audio file.");
-                    //ex.printStackTrace();
+                    System.out.println("Error playing the audio file. (Probably a FileNotFound Exception)");
+                    ex.printStackTrace();
                     this.play = false;
                 }
             } else {
