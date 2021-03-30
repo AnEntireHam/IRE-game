@@ -11,7 +11,7 @@ public class Mirror extends SpellDefense {
 
     public Mirror() {
         super("Mirror", "Reflects magical attacks, but reduces physical defense",
-                1, 1, 1, 0.75f);
+                1, 1.3333f, 1, 0.75f);
     }
 
     @Override

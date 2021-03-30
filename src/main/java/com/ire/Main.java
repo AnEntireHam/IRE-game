@@ -107,6 +107,7 @@ public class Main {
         Screen screen = new Screen();
         Mirror mirror = new Mirror();
 
+        c1.removeAttack(0);
         c1.removeDefense(0);
         c1.addWard(mirror);
         c1.addWard(screen);

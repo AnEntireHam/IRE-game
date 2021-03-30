@@ -18,6 +18,7 @@ public class Lunar extends SpellAttack {
     }
 
     // Damage is taken in here, contrary to in execute(). It shall suffice, I suppose.
+    // TODO: SFX overlap when caster dies is somewhat jarring. Probably fix.
     @Override
     protected void narrateEvents(Entity attacker, Entity defender) {
 
