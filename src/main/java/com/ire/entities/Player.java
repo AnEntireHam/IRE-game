@@ -28,7 +28,7 @@ public class Player extends Entity {
                   String name, String deathSound,
                   int hlhAllocation, int atkAllocation, int defAllocation, int magAllocation, int spdAllocation) {
 
-        super(baseHlh, baseAtk, baseDef, baseMag, baseSpd,
+        super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd,
                 name,deathSound);
 
         this.level = level;
@@ -47,6 +47,10 @@ public class Player extends Entity {
     // This makes the presumption that weapons/armor won't change baseStats, or that seeing modified values is okay.
     @Override
     protected void levelUp(int targetLevel) {
+
+        if (this.level == targetLevel) {
+            return;
+        }
 
         Tools.clear();
 

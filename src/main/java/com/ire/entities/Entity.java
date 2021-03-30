@@ -74,7 +74,7 @@ public abstract class Entity {
 
     // Constructor
 
-    public Entity(int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
+    public Entity(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                   String name, String deathSound) {
 
         this.level = 1;
@@ -103,6 +103,8 @@ public abstract class Entity {
         this.nextXp = calculateNextXp(this.level + 1);
         this.rewardXp = 0;
 
+        this.levelUp(level);
+
         HealthGenerativeManager healthManager = new HealthGenerativeManager();
         ManaGenerativeManager manaManager = new ManaGenerativeManager();
 
@@ -118,15 +120,17 @@ public abstract class Entity {
     public void addXp(int xp) {
 
         if (xp < 0) {
-            throw new IllegalArgumentException("Xp must be a positive number");
+            throw new IllegalArgumentException("Xp must be a positive integer");
         }
 
         this.totalXp += xp;
+        int levelsGained = 0;
 
         while (this.totalXp >= this.nextXp) {
-            this.levelUp(this.level + 1);
-            this.nextXp = calculateNextXp(this.level + 1);
+            levelsGained++;
+            this.nextXp = calculateNextXp(this.level + levelsGained + 1);
         }
+        this.levelUp(this.level + levelsGained);
     }
 
     protected int calculateNextXp(int targetLevel) {

@@ -26,7 +26,7 @@ public abstract class Enemy extends Entity {
                  String name, String deathSound, int rewardXp, Item rewardItem, int rewardChance,
                  boolean fleeable) {
 
-        super(baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound);
+        super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound);
 
         this.tenHlh = tenHlh;
         this.tenAtk = tenAtk;
@@ -37,8 +37,6 @@ public abstract class Enemy extends Entity {
         //  this.rewardItem = rewardItem;
         //  this.rewardChance = rewardChance;
         this.fleeable = fleeable;
-
-        levelUp(level);
     }
 
 

@@ -2,6 +2,7 @@ package com.ire;
 
 import com.diogonunes.jcolor.AnsiFormat;
 import com.diogonunes.jcolor.Attribute;
+import com.ire.audio.AudioStream;
 import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
 import com.ire.combat.actions.attackactions.spellattacks.Lunar;
@@ -46,13 +47,14 @@ public class Main {
         String purple = "\u001B[35m";
         String red = "\u001B[31m";
 
-        System.out.println("test");
         Tools.clear();
 
         SaveData s = new SaveData();
         /*s.Create();
         s.Write("Placeholder save data text!");*/
 
+        Tools.sleep(50);
+        AudioStream start = new AudioStream("woosh");
         s.Read("startArt.txt");
 
         /*System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
@@ -68,9 +70,12 @@ public class Main {
 
         Tools.sleep(300);*/
 
-        //System.out.println("Press ENTER to begin...");
+        System.out.println("Press ENTER to begin...");
 
-        //Tools.emptyPrompt();
+        start.play();
+
+        Tools.emptyPrompt();
+        start.end();
         Tools.clear();
 
         //Uncanny mockery, shattering grip, impotent prayer, bolster
@@ -82,6 +87,8 @@ public class Main {
         Player p2 = new Player(1, 8, 3, 3, 8, 5,
                 "Mage", "humanDeath",
                 1, 0, 0, 2, 1);
+
+        p2.addXp(2);
 
         Skeleton s1 = new Skeleton(1);
         Skeleton s2 = new Skeleton(2);

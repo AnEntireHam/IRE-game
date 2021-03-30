@@ -46,51 +46,51 @@ public class AudioStream implements Runnable {
 
                     AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
 
-                    audioInputStream = new AudioInputStream(inputStream, audioInputStream.getFormat(), audioInputStream.getFrameLength());
+                    //audioInputStream = new AudioInputStream(inputStream, audioInputStream.getFormat(), audioInputStream.getFrameLength());
 
-                    Clip clip = AudioSystem.getClip();
+                    /*Clip clip = AudioSystem.getClip();
                     clip.open(audioInputStream);
-                    clip.start();
+                    clip.start();*/
 
+                    //AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+                    AudioFormat format = audioInputStream.getFormat();
 
-                    //AudioFormat format = audioIn.getFormat();
+                    DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                    SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
 
-                    //DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-                    //DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                    audioLine.open(format);
 
-                    //SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
-
-                    //audioLine.open(format);
-
-                    //audioLine.start();
+                    audioLine.start();
 
                     //System.out.println("Playback started.");
 
-                    /*byte[] bytesBuffer = new byte[BUFFER_SIZE];
+                    byte[] bytesBuffer = new byte[BUFFER_SIZE];
                     int bytesRead;
 
-                    while ((bytesRead = audioIn.read(bytesBuffer)) != -1) {
+                    while ((bytesRead = audioInputStream.read(bytesBuffer)) != -1) {
                         audioLine.write(bytesBuffer, 0, bytesRead);
                     }
 
                     audioLine.drain();
                     audioLine.close();
-                    audioIn.close();*/
+                    audioInputStream.close();
 
                     this.play = false;
 
                     //System.out.println("Playback completed.");
 
+                } catch (UnsupportedAudioFileException e) {
+                    System.out.println("This audio format is not supported.");
+                    //e.printStackTrace();
+                    this.play = false;
                 } catch (LineUnavailableException ex) {
                     System.out.println("The line for playing back is unavailable.");
-                    //ex.printStackTrace();
+                    ex.printStackTrace();
                     this.play = false;
                 } catch (IOException ex) {
                     System.out.println("Error playing the audio file. (Probably a FileNotFound Exception)");
                     ex.printStackTrace();
                     this.play = false;
-                } catch (UnsupportedAudioFileException e) {
-                    e.printStackTrace();
                 }
             } else {
 

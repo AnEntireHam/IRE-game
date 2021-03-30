@@ -9,7 +9,7 @@ public class Caster extends Enemy {
     public Caster(int level) {
         super(level, 8, 2, 3, 6, 3,
                 5, 3, 2, 1, 2,
-                "Caster", "roar",
+                "Caster", "casterDeath",
                 10, new Item("Sparkly Dust", "It's incredibly smooth.",
                         "There's a pile of shimmering dust."), 40, true);
     }
