@@ -2,6 +2,7 @@ package com.ire;
 
 import com.diogonunes.jcolor.AnsiFormat;
 import com.diogonunes.jcolor.Attribute;
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
@@ -53,7 +54,7 @@ public class Main {
         s.Create();
         s.Write("Placeholder save data text.");
 
-        AudioStream start = new AudioStream("woosh");
+        AudioClip start = new AudioClip("woosh");
         start.play();
         Tools.sleep(500);
         s.Read("startArt");

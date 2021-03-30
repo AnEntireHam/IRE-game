@@ -1,6 +1,7 @@
 package com.ire.tools;
 
 import com.diogonunes.jcolor.Attribute;
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.entities.Entity;
 
@@ -15,8 +16,8 @@ import static com.diogonunes.jcolor.Attribute.WHITE_TEXT;
 
 public class Tools {
 
-    private static final AudioStream MENU_BOOP = new AudioStream("menuBoop");
-    private static final AudioStream MENU_ERROR = new AudioStream("menuError");
+    private static final AudioClip MENU_BOOP = new AudioClip("menuBoop");
+    private static final AudioClip MENU_ERROR = new AudioClip("menuError");
 
 
     // Display Methods
