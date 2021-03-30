@@ -142,13 +142,19 @@ public abstract class Entity {
         StringBuilder output = new StringBuilder();
 
         //  I'm unhappy with this consistent spacing, but it might be preferable in the future.
-        output.append(name)
-                .append("  Lv. ").append(level)
-                .append("  ");
+        // Perhaps the spacing should be based off of the LONGEST name in the target list.
+        output.append(name);
 
-        for (int j = output.length(); j < 16; j++) {
+        for (int j = output.length(); j < 10; j++) {
             output.append(" ");
         }
+
+        output.append("  Lv. ").append(level).append("  ");
+
+        for (int j = output.length(); j < 8; j++) {
+            output.append(" ");
+        }
+
 
         /*
          * Consider adding a "shields/armor" color rather than just "yellow".

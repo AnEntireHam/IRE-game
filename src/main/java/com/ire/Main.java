@@ -19,6 +19,7 @@ import com.ire.combat.statuseffects.stateffects.AttackDown;
 import com.ire.combat.statuseffects.stateffects.AttackUp;
 import com.ire.entities.Entity;
 import com.ire.entities.Player;
+import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.enemies.TrainingDummy;
 import com.ire.tools.SaveData;
@@ -78,7 +79,7 @@ public class Main {
                 "Warrior", "humanDeath",
                 1, 2, 1, 0, 0);
 
-        Player p2 = new Player(1, 8, 3, 3, 6, 6,
+        Player p2 = new Player(1, 8, 3, 3, 8, 5,
                 "Mage", "humanDeath",
                 1, 0, 0, 2, 1);
 
@@ -87,6 +88,9 @@ public class Main {
         Skeleton s3 = new Skeleton(2);
         Skeleton s4 = new Skeleton(2);
         Skeleton s5 = new Skeleton(2);
+
+        Caster c1 = new Caster(1);
+        Caster c2 = new Caster(2);
 
         TrainingDummy t1 = new TrainingDummy(1);
 
@@ -103,6 +107,22 @@ public class Main {
         Screen screen = new Screen();
         Mirror mirror = new Mirror();
 
+        c1.removeDefense(0);
+        c1.addWard(mirror);
+        c1.addWard(screen);
+        c1.removeDefense(0);
+        c1.addSpell(celestial);
+        c1.addSpell(lunar);
+        c1.addSpell(life);
+
+        c2.removeDefense(0);
+        c2.addWard(mirror);
+        c2.addWard(screen);
+        c2.removeDefense(0);
+        c2.addSpell(celestial);
+        c2.addSpell(lunar);
+        c2.addSpell(life);
+
         //p2.addSpell(celestial);
         p2.addSpell(lunar);
         p2.addSpell(solar);
@@ -115,6 +135,7 @@ public class Main {
         p2.addSpell(mind);
 
         p2.addWard(screen);
+        p2.addWard(mirror);
 
         s1.addWard(mirror);
         s2.addWard(mirror);
@@ -147,10 +168,12 @@ public class Main {
         ArrayList<Entity> players = new ArrayList<>();
         ArrayList<Entity> enemies = new ArrayList<>();
 
-        players.add(p1);
+        //players.add(p1);
         players.add(p2);
-        enemies.add(s1);
-        enemies.add(s2);
+        //enemies.add(s1);
+        //enemies.add(s2);
+        enemies.add(c1);
+        //enemies.add(c2);
 
         Battle b = new Battle(players, enemies);
 

@@ -17,6 +17,7 @@ public class GenerativeSpell extends DebuffSpell {
                 flavorText, debuff);
     }
 
+    // TODO: Make sure that attacks which deal 0 damage NEVER apply successfully.
     @Override
     public void execute(Entity attacker, Entity defender) {
 
@@ -28,6 +29,7 @@ public class GenerativeSpell extends DebuffSpell {
 
         if (defender.getCurAction() instanceof Mirror) {
 
+            ((Mirror) defender.getCurAction()).reflect(attacker, defender);
             attacker.takeDamage(damage, true);
 
             ((GenerativeEffect) debuff).setStrength(-damage);

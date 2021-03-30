@@ -11,6 +11,7 @@ public class ManaGenerativeManager extends GenerativeManager {
 
     }
 
+    // TODO: There's still an IllegalArgumentException being constantly thrown for some reason.
     @Override
     public void add(GenerativeEffect ge) {
 

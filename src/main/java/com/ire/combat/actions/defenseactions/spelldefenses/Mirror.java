@@ -11,7 +11,7 @@ public class Mirror extends SpellDefense {
 
     public Mirror() {
         super("Mirror", "Reflects magical attacks, but reduces physical defense",
-                1, 1, 1, -0.25f);
+                1, 1, 1, 0.75f);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Mirror extends SpellDefense {
         if (attack instanceof SpellAttack) {
 
             ((SpellAttack) attack).incrementDamage(
-                    Math.round(((SpellAttack) attack).getDamage() * spellResist));
+                    -Math.round(((SpellAttack) attack).getDamage() * (1 - spellResist)));
 
         } else {
 

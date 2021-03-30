@@ -1,0 +1,15 @@
+package com.ire.entities.enemies;
+
+import com.ire.entities.Enemy;
+import com.ire.world.Item;
+
+public class Caster extends Enemy {
+
+    public Caster(int level) {
+        super(level, 8, 2, 3, 6, 3,
+                5, 3, 2, 1, 2,
+                "Caster", "roar",
+                10, new Item("Sparkly Dust", "It's incredibly smooth.",
+                        "There's a pile of shimmering dust."), 40, true);
+    }
+}

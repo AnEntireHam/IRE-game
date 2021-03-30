@@ -37,7 +37,7 @@ public abstract class DefenseAction extends Action {
         if (action instanceof PhysicalAttack) {
 
             ((PhysicalAttack) action).incrementDamage(
-                    Math.round(((PhysicalAttack) action).getDamage() * (1 - physResist)));
+                    -Math.round(((PhysicalAttack) action).getDamage() * (1 - physResist)));
 
             ((PhysicalAttack) action).incrementDamage(
                     -Math.round((curDef * physCoefficientDef * physBoost) +
@@ -49,7 +49,7 @@ public abstract class DefenseAction extends Action {
         if (action instanceof SpellAttack) {
 
             ((SpellAttack) action).incrementDamage(
-                    Math.round(((SpellAttack) action).getDamage() * (1 - spellResist)));
+                    -Math.round(((SpellAttack) action).getDamage() * (1 - spellResist)));
 
             ((SpellAttack) action).incrementDamage(
                     -Math.round((curDef * spellCoefficientDef * physBoost) +
