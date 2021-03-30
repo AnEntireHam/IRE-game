@@ -126,10 +126,8 @@ public abstract class StatEffect extends StatusEffect {
                 break;
 
             case DEATH:
-                if (target.isAlive()) {
-                    System.out.println(target.getName() + " removed \"" + name + "\" from themself.");
-                    Tools.sleep(1250);
-                }
+                System.out.println(target.getName() + "'s " + name + " faded.");
+                Tools.sleep(1250);
                 break;
 
             case END_BATTLE:
