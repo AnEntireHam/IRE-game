@@ -53,13 +53,18 @@ public class Player extends Entity {
         int[] previousBaseStats = {this.baseHlh, this.baseAtk, this.baseDef, this.baseMag, this.baseSpd};
 
         addAllocations(targetLevel);
-        int bonusPoints = calculateBonusPoints(targetLevel);
 
         String[] statPrefixes = {"[1] Hlh ", "[2] Atk ", "[3] Def ", "[4] Mag ", "[5] Spd "};
         String message = (this.name + "'s stats have increased!");
         letsGo.play();
 
-        // Weird version of Tools' menu. May be able to consolidate later.
+        allocateBonusPoints(targetLevel, previousBaseStats, statPrefixes, message);
+    }
+
+    // Weird version of Tools' menu. May be able to consolidate later.
+    private void allocateBonusPoints(int targetLevel, int[] previousBaseStats, String[] statPrefixes, String message) {
+
+        int bonusPoints = calculateBonusPoints(targetLevel);
         while (bonusPoints > 0) {
 
             printStatChanges(previousBaseStats, statPrefixes, targetLevel, message);
