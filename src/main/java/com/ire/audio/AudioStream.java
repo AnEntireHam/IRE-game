@@ -28,6 +28,7 @@ public class AudioStream implements Runnable {
     }
 
     // TODO: figure out if running separate threads for each AudioStream is a poor idea.
+    // TODO: Fix audio distortion, switch this back to a stream.
     @Override
     public void run() {
 
@@ -64,10 +65,6 @@ public class AudioStream implements Runnable {
 
                     //System.out.println("Playback completed.");
 
-                } catch (UnsupportedAudioFileException ex) {
-                    System.out.println("The specified audio file is not supported.");
-                    //ex.printStackTrace();
-                    this.play = false;
                 } catch (LineUnavailableException ex) {
                     System.out.println("The line for playing back is unavailable.");
                     //ex.printStackTrace();
@@ -76,6 +73,8 @@ public class AudioStream implements Runnable {
                     System.out.println("Error playing the audio file. (Probably a FileNotFound Exception)");
                     ex.printStackTrace();
                     this.play = false;
+                } catch (UnsupportedAudioFileException e) {
+                    e.printStackTrace();
                 }
             } else {
 
