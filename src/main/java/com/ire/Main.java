@@ -50,12 +50,13 @@ public class Main {
         Tools.clear();
 
         SaveData s = new SaveData();
-        /*s.Create();
-        s.Write("Placeholder save data text!");*/
+        s.Create();
+        s.Write("Placeholder save data text.");
 
-        Tools.sleep(50);
         AudioStream start = new AudioStream("woosh");
-        s.Read("startArt.txt");
+        start.play();
+        Tools.sleep(500);
+        s.Read("startArt");
 
         /*System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
         System.out.println(colorize("Bright green text, black bg, bold", BRIGHT_GREEN_TEXT(), BLACK_BACK(), BOLD()));
@@ -72,11 +73,9 @@ public class Main {
 
         System.out.println("Press ENTER to begin...");
 
-        start.play();
-
         Tools.emptyPrompt();
-        start.end();
         Tools.clear();
+        start.end();
 
         //Uncanny mockery, shattering grip, impotent prayer, bolster
 

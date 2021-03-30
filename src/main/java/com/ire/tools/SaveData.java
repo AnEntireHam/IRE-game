@@ -1,21 +1,20 @@
 package com.ire.tools;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 import java.util.Scanner;
 
-// TODO: Remove extraneous comments
 public class SaveData {
 
-    public void Read(String name) {
+    public void Read(String path) {
+
+        path = path + ".txt";
 
         try {
-            //String path = name;
 
-            File f = new File(name);
-            Scanner myReader = new Scanner(f);
+            ClassLoader loader = this.getClass().getClassLoader();
+            InputStream stream = loader.getResourceAsStream(path);
+            Scanner myReader = new Scanner(Objects.requireNonNull(stream));
 
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
@@ -23,11 +22,10 @@ public class SaveData {
             }
             myReader.close();
 
-        } catch (FileNotFoundException e) {
-            //e.printStackTrace();
-            //System.out.println("No save data found. Creating file...");
-            //Create();
-            System.out.println("File not found.");
+        } catch (NullPointerException e) {
+
+            System.out.println("An error occurred. Could not read file.");
+            e.printStackTrace();
             Tools.sleep(1000);
         }
     }
@@ -35,18 +33,18 @@ public class SaveData {
     public void Create() {
 
         try {
-            //String path = "SaveFile.txt";
+
             File f = new File("SaveFile.txt");
 
             if (f.createNewFile()) {
                 System.out.println("File created: " + f.getName());
                 Tools.sleep(1000);
-            } /*else {
-                System.out.println("File already exists.");
-            }*/
+                return;
+            }
+            System.out.println("File already exists.");
 
         } catch (IOException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             System.out.println("An error occurred. Could not create file.");
             Tools.sleep(1000);
         }
@@ -55,7 +53,7 @@ public class SaveData {
     public void Write(String d) {
 
         try {
-            //String path = "SaveFile.txt";
+
             FileWriter myWriter = new FileWriter("SaveFile.txt");
             myWriter.write(d);
             myWriter.close();
@@ -64,11 +62,8 @@ public class SaveData {
 
         } catch (IOException e) {
             System.out.println("An error occurred. Could not write to file.");
-            //e.printStackTrace();
+            e.printStackTrace();
             Tools.sleep(1000);
         }
     }
 }
-
-//String desktopPath = System.getProperty("user.home") + "/Desktop\\" + "SaveFile.txt";
-//String path = (desktopPath.replace("\\", "/"));
