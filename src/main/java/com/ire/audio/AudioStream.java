@@ -1,8 +1,8 @@
 package com.ire.audio;
 
 import javax.sound.sampled.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 public class AudioStream implements Runnable {
 
@@ -35,31 +35,47 @@ public class AudioStream implements Runnable {
         while (!end) {
             if (this.play) {
                 try {
-                    File audioFile = new File(path);
-                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
 
-                    AudioFormat format = audioStream.getFormat();
+                    //File audioFile = new File(path);
 
-                    DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                    ClassLoader loader = this.getClass().getClassLoader();
+                    InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(loader.getResourceAsStream(path)));
 
-                    SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
+                    //AudioInputStream audioInputStream = new AudioInputStream(inputStream);
+                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 
-                    audioLine.open(format);
+                    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
 
-                    audioLine.start();
+                    audioInputStream = new AudioInputStream(inputStream, audioInputStream.getFormat(), audioInputStream.getFrameLength());
+
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioInputStream);
+                    clip.start();
+
+
+                    //AudioFormat format = audioIn.getFormat();
+
+                    //DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+                    //DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+
+                    //SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info);
+
+                    //audioLine.open(format);
+
+                    //audioLine.start();
 
                     //System.out.println("Playback started.");
 
-                    byte[] bytesBuffer = new byte[BUFFER_SIZE];
+                    /*byte[] bytesBuffer = new byte[BUFFER_SIZE];
                     int bytesRead;
 
-                    while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
+                    while ((bytesRead = audioIn.read(bytesBuffer)) != -1) {
                         audioLine.write(bytesBuffer, 0, bytesRead);
                     }
 
                     audioLine.drain();
                     audioLine.close();
-                    audioStream.close();
+                    audioIn.close();*/
 
                     this.play = false;
 
