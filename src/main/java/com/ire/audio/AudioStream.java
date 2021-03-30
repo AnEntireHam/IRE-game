@@ -83,13 +83,13 @@ public class AudioStream implements Runnable {
                     System.out.println("This audio format is not supported.");
                     //e.printStackTrace();
                     this.play = false;
-                } catch (LineUnavailableException ex) {
+                } catch (LineUnavailableException e) {
                     System.out.println("The line for playing back is unavailable.");
-                    ex.printStackTrace();
+                    e.printStackTrace();
                     this.play = false;
-                } catch (IOException ex) {
+                } catch (IOException e) {
                     System.out.println("Error playing the audio file. (Probably a FileNotFound Exception)");
-                    ex.printStackTrace();
+                    e.printStackTrace();
                     this.play = false;
                 }
             } else {
