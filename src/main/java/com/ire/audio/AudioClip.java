@@ -8,70 +8,45 @@ import java.util.Objects;
 
 public class AudioClip implements Runnable, LineListener{
 
-    private static final int BUFFER_SIZE = 256;
-
-    private int startTime;
-    private int endTime;
-
     private final String path;
-    private boolean play = false;
-    private boolean playCompleted = false;
-    private boolean end = false;
+    private AudioInputStream audioInput;
+    private Clip clip;
+
+    private boolean play;
+    private boolean completed;
+    private boolean end;
 
     public AudioClip(String path) {
 
         this.path = "sounds/" + path + ".wav";
+        this.play = false;
+        this.completed = false;
         this.end = false;
+
         Thread thread = new Thread(this);
         thread.start();
     }
 
+    public void play() {
+        this.play = true;
+        this.completed = false;
+    }
 
+    public void end() {
+        this.end = true;
+    }
+
+    // TODO: Figure out if the supposed latency decrease for sfx is worth the memory/CPU usage.
     @Override
     public void run() {
 
+        initializeInputs();
+
         while (!end) {
             if (play) {
-                try {
 
-                    ClassLoader loader = this.getClass().getClassLoader();
-                    InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(loader.getResourceAsStream(path)));
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
+                playClip();
 
-
-                    Clip clip = AudioSystem.getClip();
-                    clip.addLineListener(this);
-                    clip.open(audioInputStream);
-                    clip.start();
-
-                    while (!playCompleted) {
-                        Thread.sleep(5);
-                    }
-
-                    clip.close();
-                    this.play = false;
-
-                } catch (UnsupportedAudioFileException e) {
-                    System.out.println("This audio format is not supported.");
-                    //e.printStackTrace();
-                    this.play = false;
-
-                } catch (LineUnavailableException e) {
-                    System.out.println("The line for playing back is unavailable.");
-                    e.printStackTrace();
-                    this.play = false;
-
-                } catch (IOException e) {
-                    System.out.println("Error playing the audio file. (Probably a FileNotFound Exception)");
-                    e.printStackTrace();
-                    this.play = false;
-
-                } catch (InterruptedException e) {
-                    System.out.println("Error playing the audio file.");
-                    e.printStackTrace();
-                    this.play = false;
-                }
             } else {
 
                 try {
@@ -83,13 +58,42 @@ public class AudioClip implements Runnable, LineListener{
         }
     }
 
-    public void play() {
-        this.play = true;
-        this.playCompleted = false;
+    private void playClip() {
+
+        try {
+            clip.addLineListener(this);
+            clip.open(audioInput);
+            clip.start();
+
+
+            while (!completed) {
+                Thread.sleep(5);
+            }
+
+            clip.close();
+            this.play = false;
+
+        } catch (LineUnavailableException | IOException | InterruptedException e) {
+            System.out.println("Error playing audio file.");
+            e.printStackTrace();
+        }
     }
 
-    public void end() {
-        this.end = true;
+    private void initializeInputs() {
+
+        try {
+
+            ClassLoader loader = this.getClass().getClassLoader();
+            InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(loader.getResourceAsStream(path)));
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+
+            this.audioInput = AudioSystem.getAudioInputStream(bufferedInputStream);
+            this.clip = AudioSystem.getClip();
+
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.out.println("Error creating audio file.");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -97,7 +101,7 @@ public class AudioClip implements Runnable, LineListener{
 
         LineEvent.Type type = event.getType();
         if (type == LineEvent.Type.STOP) {
-            playCompleted = true;
+            completed = true;
         }
     }
 }
