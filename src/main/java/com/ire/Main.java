@@ -3,7 +3,6 @@ package com.ire;
 import com.diogonunes.jcolor.AnsiFormat;
 import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioClip;
-import com.ire.audio.AudioStream;
 import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
 import com.ire.combat.actions.attackactions.spellattacks.Lunar;
@@ -172,6 +171,8 @@ public class Main {
 /*        s1.setHlh(-s1.getCurHlh() + 5);
         s2.setHlh(s2.getCurHlh() + 5);*/
         p2.setMan(8);
+        ad.apply(p2, p2);
+        p2.addXp(7);
 
         ArrayList<Entity> players = new ArrayList<>();
         ArrayList<Entity> enemies = new ArrayList<>();

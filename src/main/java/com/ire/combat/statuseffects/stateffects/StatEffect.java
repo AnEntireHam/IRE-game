@@ -137,10 +137,6 @@ public abstract class StatEffect extends StatusEffect {
                 break;
 
             case LEVEL_UP:
-                System.out.println(target.getName() + " fully healed!");
-                Tools.sleep(1250);
-                break;
-
             case TAKE_DAMAGE:
                 break;
         }

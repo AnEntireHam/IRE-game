@@ -10,7 +10,6 @@ import com.ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.combat.statuseffects.RemoveCondition;
-import com.ire.combat.statuseffects.RemoveMethod;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.generativeeffect.*;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
@@ -18,7 +17,6 @@ import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.function.Predicate;
 
 import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
@@ -207,6 +205,9 @@ public abstract class Entity {
 
     public void fullHeal(RemoveCondition condition) {
 
+        if (condition != RemoveCondition.LEVEL_UP) {
+            System.out.println(name + " fully healed!");
+        }
         this.checkRemoveStatusEffects(condition);
         recalculateCurStats();
         resetPointStats();

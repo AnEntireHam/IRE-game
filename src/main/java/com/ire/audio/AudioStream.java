@@ -1,7 +1,9 @@
 package com.ire.audio;
 
 import javax.sound.sampled.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class AudioStream implements Runnable {
