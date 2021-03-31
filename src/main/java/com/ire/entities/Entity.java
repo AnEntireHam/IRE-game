@@ -204,6 +204,29 @@ public abstract class Entity {
 
     // Healing and Damage Methods
 
+
+    public void fullHeal(RemoveCondition condition) {
+
+        this.checkRemoveStatusEffects(condition);
+        recalculateCurStats();
+        resetPointStats();
+    }
+
+    public void recalculateCurStats() {
+
+        getCurHlh();
+        getCurAtk();
+        getCurDef();
+        getCurMag();
+        getCurSpd();
+    }
+
+    public void resetPointStats() {
+
+        regenerateHealth(this.getCurHlh(), false, false);
+        regenerateMana(this.getCurMag(), false, false);
+    }
+
     public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
 
         if ((this.hlh + regenStrength) > this.getCurHlh()) {
@@ -502,15 +525,6 @@ public abstract class Entity {
         }
 
         return multiplier;
-    }
-
-    public void recalculateCurStats() {
-
-        getCurHlh();
-        getCurAtk();
-        getCurDef();
-        getCurMag();
-        getCurSpd();
     }
 
     public void addStatusEffect(StatusEffect effect) {

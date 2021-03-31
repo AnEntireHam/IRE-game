@@ -2,6 +2,7 @@ package com.ire.entities;
 
 import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.tools.Tools;
 import com.ire.world.Item;
 
@@ -46,6 +47,10 @@ public abstract class Enemy extends Entity {
     @Override
     protected void levelUp(int targetLevel) {
 
+        if (this.level == targetLevel) {
+            return;
+        }
+
         float tenTotal = tenHlh + tenAtk + tenDef + tenMag + tenSpd;
 
         for (; this.level < targetLevel; this.level++) {
@@ -64,7 +69,7 @@ public abstract class Enemy extends Entity {
                 }
             }
         }
-        // TODO: Re-implement fullHeal() in Entity
+        this.fullHeal(RemoveCondition.LEVEL_UP);
     }
 
 

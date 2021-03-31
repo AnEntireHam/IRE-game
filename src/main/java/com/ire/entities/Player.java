@@ -3,6 +3,7 @@ package com.ire.entities;
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
+import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.tools.Tools;
 import com.ire.world.Inventory;
 
@@ -63,6 +64,8 @@ public class Player extends Entity {
         letsGo.play();
 
         allocateBonusPoints(targetLevel, previousBaseStats, statPrefixes, message);
+
+        this.fullHeal(RemoveCondition.LEVEL_UP);
     }
 
     // Weird version of Tools' menu. May be able to consolidate later.

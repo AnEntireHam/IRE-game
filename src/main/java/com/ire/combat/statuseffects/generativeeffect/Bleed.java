@@ -8,7 +8,7 @@ public class Bleed extends HealthGenerative {
     public Bleed(int effectLevel) {
         super("Bleed", "Target loses health at end of each turn.",
                 1, 5,
-                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.END_BATTLE},
+                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.END_BATTLE, RemoveCondition.LEVEL_UP},
                 effectLevel, 0.2f, 0.1f, " stopped bleeding.");
     }
 
