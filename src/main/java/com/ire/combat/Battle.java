@@ -87,11 +87,11 @@ public class Battle {
     private boolean endBattle() {
 
         for (Entity e : team1) {
-            e.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.END_BATTLE, e));
+            e.checkRemoveStatusEffects(RemoveCondition.END_BATTLE);
         }
 
         for (Entity e : team2) {
-            e.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.END_BATTLE, e));
+            e.checkRemoveStatusEffects(RemoveCondition.END_BATTLE);
         }
 
         if (checkDead() == 1) {

@@ -10,7 +10,7 @@ import com.ire.combat.actions.defenseactions.physicaldefenses.Counter;
 import com.ire.combat.actions.defenseactions.physicaldefenses.Shield;
 import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.combat.statuseffects.RemoveCondition;
-import com.ire.combat.statuseffects.RemoveMethods;
+import com.ire.combat.statuseffects.RemoveMethod;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.generativeeffect.*;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
@@ -398,7 +398,7 @@ public abstract class Entity {
             System.out.println();
         }
 
-        this.checkRemoveStatusEffects(se -> se.checkRemove(RemoveCondition.DEATH, this));
+        this.checkRemoveStatusEffects(RemoveCondition.DEATH);
         // add coffin dance gif for party wipe in defiled mode?
     }
 
@@ -485,8 +485,9 @@ public abstract class Entity {
         GenerativeEffect.calculateCombinedTotal(this, generativeEffects);
     }
 
-    public void checkRemoveStatusEffects(Predicate<RemoveMethods> method) {
-        statusEffects.removeIf(method);
+    public void checkRemoveStatusEffects(RemoveCondition condition) {
+
+        statusEffects.removeIf(se -> se.checkRemove(condition, this));
     }
 
     protected float calculateMultiplier(String prefix) {

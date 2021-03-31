@@ -4,7 +4,7 @@ import com.ire.entities.Entity;
 
 import java.util.Arrays;
 
-public abstract class StatusEffect implements RemoveMethods {
+public abstract class StatusEffect implements RemoveMethod {
 
 
     // Fields
