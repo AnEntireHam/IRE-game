@@ -1,14 +1,11 @@
 package com.ire.combat.statuseffects.stateffects;
 
-import com.ire.combat.statuseffects.RemoveCondition;
-
 public class Surprise extends StatEffect {
 
     // TODO: Fix "x had this Surprise! increased text". Probably add Formatter or @Override or boolean doDisplay.
     public Surprise() {
         super("Surprise!", "SPD", "Increases the maximum speed of the afflicted target.",
-                1, 1,
-                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.DEATH},
+                1, 1, STANDARD_BUFF_CONDITIONS,
                 1, 1, 0, 2.0f, 0.00f);
     }
 

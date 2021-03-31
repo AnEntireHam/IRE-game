@@ -8,7 +8,7 @@ public abstract class StatusEffect implements RemoveMethod {
 
 
     // Fields
-
+    //
     protected String name;
     protected String abbreviation;
     protected String description;
@@ -16,6 +16,11 @@ public abstract class StatusEffect implements RemoveMethod {
     protected int duration;
     protected RemoveCondition[] removeConditions;
     protected String[] removeText;
+
+    protected final static RemoveCondition[] STANDARD_BUFF_CONDITIONS = new RemoveCondition[]{
+            RemoveCondition.EXPIRATION, RemoveCondition.DEATH};
+    protected final static RemoveCondition[] STANDARD_DEBUFF_CONDITIONS = new RemoveCondition[]{
+            RemoveCondition.EXPIRATION, RemoveCondition.END_BATTLE, RemoveCondition.LEVEL_UP};
 
     private float takeDamageCoefficient = 4;
     private float takeDamageBase = -0.6f;

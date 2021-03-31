@@ -1,14 +1,12 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
-import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.tools.Tools;
 
 public class ManaBleed extends ManaGenerative {
 
     public ManaBleed(int effectLevel) {
         super("Mana Drain", "MREG", "Target loses mana at end of each turn.",
-                1, 5,
-                new RemoveCondition[]{RemoveCondition.EXPIRATION, RemoveCondition.END_BATTLE, RemoveCondition.LEVEL_UP},
+                1, 5, STANDARD_DEBUFF_CONDITIONS,
                 effectLevel, 0.6f, 0.075f, " stopped losing mana.");
     }
 
