@@ -4,6 +4,7 @@ import com.ire.audio.AudioStream;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.stateffects.Surprise;
 import com.ire.entities.Entity;
+import com.ire.entities.Player;
 import com.ire.tools.Tools;
 
 import java.util.ArrayList;
@@ -192,14 +193,19 @@ public class Battle {
     // Post-battle Functions
 
     private void giveRewards(ArrayList<Entity> winners, ArrayList<Entity> losers) {
-
         // 1. Tally and calculate rewards from losers. All entities should have a "getRewardXp" method.
         // 2. Count number of entities eligible to gain xp, then distribute evenly.
         // TODO: 3. Calculate items from losers. Open prompt to distribute items within party and discard.
-        // TODO: Add logic to not play fun jingle if PvE loss. EvE is acceptable, probably.
-        double xpGained = 0;
 
-        WIN.play();
+        double xpGained = 0;
+        boolean playersWon = false;
+
+        for (Entity e : winners) {
+            if (e instanceof Player) {
+                playersWon = true;
+                break;
+            }
+        }
 
         for (Entity e: losers) {
             xpGained += e.getRewardXp();
@@ -208,14 +214,18 @@ public class Battle {
         xpGained /= winners.size();
         xpGained = Math.round(xpGained);
 
-        System.out.println("Everyone got " + (int) xpGained + " xp.");
-        Tools.emptyPrompt();
-        for (Entity p: winners) {
+        if (playersWon) {
+            WIN.play();
+            System.out.println("Everyone got " + (int) xpGained + " xp.");
+            // Method to show XP bars
+            Tools.emptyPrompt();
+        }
+
+        for (Entity p : winners) {
             p.addXp((int) xpGained);
         }
 
-        // Possibly include inventory limit
-        // Outsource to party inventory
+        // For now, assume
         /*for (Enemy e: losers) {
             if (e.calculateReward())  {
                 winners.get(0).playerInventory.addItem(e.giveReward());
