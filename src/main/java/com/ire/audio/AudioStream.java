@@ -54,13 +54,11 @@ public class AudioStream implements Runnable {
     protected void playAudioLine() {
 
         try {
-
             ClassLoader loader = this.getClass().getClassLoader();
             InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(
                     loader.getResourceAsStream(path)));
 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(inputStream);
-
             AudioFormat format = audioInputStream.getFormat();
 
             DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
@@ -68,7 +66,6 @@ public class AudioStream implements Runnable {
 
             audioLine.open(format);
             audioLine.start();
-
 
             byte[] bytesBuffer = new byte[BUFFER_SIZE];
             int bytesRead;

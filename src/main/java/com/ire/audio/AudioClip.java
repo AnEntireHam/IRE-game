@@ -56,12 +56,12 @@ public class AudioClip implements Runnable, LineListener{
     private void playClip() {
 
         try {
-
             ClassLoader loader = this.getClass().getClassLoader();
-            InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(loader.getResourceAsStream(path)));
+            InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(
+                    loader.getResourceAsStream(path)));
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
 
             Clip clip = AudioSystem.getClip();
             clip.addLineListener(this);
