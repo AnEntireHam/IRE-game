@@ -160,7 +160,6 @@ public abstract class Entity {
 
         /*
          * Consider adding a "shields/armor" color rather than just "yellow".
-         * Should a secondary bar be added for mana or other relevant info?
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
         Attribute[] colors = new Attribute[] {TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
@@ -176,7 +175,7 @@ public abstract class Entity {
         }
 
         if (detailed) {
-            output.append("  ").append(generateStats());
+            output.append(generateStats());
         }
 
         return output.toString();
@@ -188,13 +187,15 @@ public abstract class Entity {
 
         output.append("Hlh: ").append(getHlh()).append("/").append(getCurHlh())
                 .append("  Atk: ").append(getCurAtk())
-                .append("  Def: ").append(getCurDef())
-                .append("  Mag: ").append(getMan()).append("/").append(getCurMag())
-                .append("  Spd: ").append(getCurSpd());
+                .append("  Def: ").append(getCurDef());
 
         if (!spells.isEmpty()) {
-            output.append(" Man: ").append(getMan());
+            output.append("  Mag: ").append(getMan()).append("/").append(getCurMag());
+        } else {
+            output.append(" Mag: ").append(getCurMag());
         }
+
+        output.append("  Spd: ").append(getCurSpd());
 
         return output.toString();
     }

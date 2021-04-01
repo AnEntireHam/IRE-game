@@ -186,6 +186,7 @@ public class Player extends Entity {
             Tools.clear();
             options.clear();
             options.addAll(attacks);
+            System.out.println("\n" + this.generateBattleStatus(true) + "\n");
             System.out.println("Enemies are defending. Select an action.");
             choice = Tools.menu(options);
 
@@ -234,6 +235,7 @@ public class Player extends Entity {
             Tools.clear();
             options.clear();
             options.addAll(defenses);
+            System.out.println("\n" + this.generateBattleStatus(true) + "\n");
             System.out.println("Enemies are attacking. Select an action.");
             choice = Tools.menu(options);
 
