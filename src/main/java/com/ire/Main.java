@@ -28,6 +28,7 @@ import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 
+import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.*;
 
 public class Main {
@@ -56,9 +57,13 @@ public class Main {
         AudioClip start = new AudioClip("woosh");
         start.play();
         Tools.sleep(500);
+        System.out.println(red);
         s.Read("startArt");
+        System.out.println(reset);
 
-        /*System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
+        Tools.sleep(300);
+
+        System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
         System.out.println(colorize("Bright green text, black bg, bold", BRIGHT_GREEN_TEXT(), BLACK_BACK(), BOLD()));
         System.out.println(colorize("Bright green text, black bg, italic", BRIGHT_GREEN_TEXT(), BLACK_BACK(), ITALIC()));
         System.out.println(colorize("Bright green text, black bg, underline", BRIGHT_GREEN_TEXT(), BLACK_BACK(), UNDERLINE()));
@@ -68,8 +73,6 @@ public class Main {
         System.out.println(colorize("Brownish text", BLACK_BACK(), TEXT_COLOR(100)));
         System.out.println(colorize("Purplish text", TEXT_COLOR(125, 16, 204)));
         System.out.println();
-
-        Tools.sleep(300);*/
 
         System.out.println("Press ENTER to begin...");
 
@@ -130,16 +133,16 @@ public class Main {
         c2.addSpell(lunar);
         c2.addSpell(life);
 
-        //p2.addSpell(celestial);
+        p2.addSpell(celestial);
         p2.addSpell(lunar);
         p2.addSpell(solar);
         p2.addSpell(fire);
         /*p2.addSpell(ice);
         p2.addSpell(lightning);
-        p2.addSpell(rock);
-        p2.addSpell(soul);*/
-        p2.addSpell(life);
-        p2.addSpell(mind);
+        p2.addSpell(rock);*/
+        p2.addSpell(soul);
+        /*p2.addSpell(life);
+        p2.addSpell(mind);*/
 
         p2.addWard(screen);
         p2.addWard(mirror);
@@ -170,16 +173,16 @@ public class Main {
         ad.apply(p2, s1);*/
 /*        s1.setHlh(-s1.getCurHlh() + 5);
         s2.setHlh(s2.getCurHlh() + 5);*/
-        p2.setMan(8);
-        ad.apply(p2, p2);
-        p2.addXp(7);
+        //p2.setMan(8);
+        //ad.apply(p2, p2);
+        //p2.addXp(7);
 
         ArrayList<Entity> players = new ArrayList<>();
         ArrayList<Entity> enemies = new ArrayList<>();
 
-        //players.add(p1);
+        players.add(p1);
         players.add(p2);
-        //enemies.add(s1);
+        enemies.add(s1);
         //enemies.add(s2);
         enemies.add(c1);
         //enemies.add(c2);

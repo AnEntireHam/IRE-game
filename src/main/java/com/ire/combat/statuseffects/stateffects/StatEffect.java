@@ -75,6 +75,7 @@ public abstract class StatEffect extends StatusEffect {
         }
     }
 
+    // why is this using base stats?
     protected boolean calculateProbability(Entity attacker, Entity defender) {
 
         double rand = Math.random();
