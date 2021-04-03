@@ -49,6 +49,7 @@ public class Tools {
                     System.out.println();
                 }
                 System.out.print("\\033[H\\033[2J");
+                System.out.flush();
                 //Runtime.getRuntime().exec("clear");
             }
         } catch (IOException | InterruptedException ignored) {}
