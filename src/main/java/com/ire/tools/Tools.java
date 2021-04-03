@@ -48,9 +48,8 @@ public class Tools {
                 for (int i = 0; i < 75; i++) {
                     System.out.println();
                 }
-                System.out.print("\\033[H\\033[2J");
-                System.out.flush();
-                //Runtime.getRuntime().exec("clear");
+                //System.out.print("\\033[H\\033[2J");
+                Runtime.getRuntime().exec("clear");
             }
         } catch (IOException | InterruptedException ignored) {}
     }
