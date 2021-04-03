@@ -45,10 +45,10 @@ public class Tools {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             }
             else {
-                for (int i = 0; i < 75; i++) {
+                /*for (int i = 0; i < 75; i++) {
                     System.out.println();
-                }
-                System.out.print("\033");
+                }*/
+                //System.out.print("\033");
                 Runtime.getRuntime().exec("clear");
             }
         } catch (IOException | InterruptedException ignored) {}

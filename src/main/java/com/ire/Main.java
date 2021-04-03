@@ -57,9 +57,7 @@ public class Main {
         AudioClip start = new AudioClip("woosh");
         start.play();
         Tools.sleep(500);
-        System.out.println(red);
         s.Read("startArt");
-        System.out.println(reset);
 
         Tools.sleep(300);
 
