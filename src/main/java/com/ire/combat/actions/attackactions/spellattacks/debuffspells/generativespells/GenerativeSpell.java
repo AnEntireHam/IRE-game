@@ -1,5 +1,6 @@
 package com.ire.combat.actions.attackactions.spellattacks.debuffspells.generativespells;
 
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpell;
 import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
@@ -9,7 +10,7 @@ import com.ire.entities.Entity;
 
 public class GenerativeSpell extends DebuffSpell {
 
-    public GenerativeSpell(String name, String description, AudioStream SOUND, int DURATION, int DELAY,
+    public GenerativeSpell(String name, String description, AudioClip SOUND, int DURATION, int DELAY,
                            float coefficient, String[] postfixNames, int baseManaCost, int spellLevel,
                            String flavorText, StatusEffect debuff) {
 

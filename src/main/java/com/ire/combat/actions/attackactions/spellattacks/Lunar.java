@@ -1,5 +1,6 @@
 package com.ire.combat.actions.attackactions.spellattacks;
 
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
@@ -12,7 +13,7 @@ public class Lunar extends SpellAttack {
 
     public Lunar(int spellLevel) {
         super("Lunar", "Deals substantial damage, but also hurts the caster",
-                new AudioStream("lunar"), 2000, 500, 2.5f,
+                new AudioClip("lunar"), 2000, 500, 2.5f,
                 new String[]{"Beam", "Blast", "Burst"}, 5, spellLevel,
                 "%s inflicts %d damage on themselves to charge a spell...");
     }

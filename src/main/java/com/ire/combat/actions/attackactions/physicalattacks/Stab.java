@@ -1,5 +1,6 @@
 package com.ire.combat.actions.attackactions.physicalattacks;
 
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
@@ -8,7 +9,7 @@ public class Stab extends PhysicalAttack {
 
     public Stab() {
         super("Stab", "Stab the enemy, dealing modest damage.",
-                new AudioStream("hit1"), 2000, 1000, 1);
+                new AudioClip("hit1"), 2000, 1000, 1);
     }
 
     @Override

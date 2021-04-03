@@ -1,12 +1,13 @@
 package com.ire.combat.actions.attackactions;
 
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.Action;
 import com.ire.entities.Entity;
 
 public abstract class AttackAction extends Action {
 
-    protected final AudioStream SOUND;
+    protected final AudioClip SOUND;
     protected final int DURATION;
     protected final int DELAY;
 
@@ -14,7 +15,7 @@ public abstract class AttackAction extends Action {
     protected int damage;
     protected float coefficient;
 
-    public AttackAction(String name, String description, AudioStream SOUND, int DURATION,
+    public AttackAction(String name, String description, AudioClip SOUND, int DURATION,
                         int DELAY, float coefficient) {
         super(name, description);
 
@@ -50,7 +51,7 @@ public abstract class AttackAction extends Action {
         this.coefficient = coefficient;
     }
 
-    public AudioStream getSOUND() {
+    public AudioClip getSOUND() {
         return SOUND;
     }
 

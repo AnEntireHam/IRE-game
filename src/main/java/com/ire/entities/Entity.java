@@ -1,6 +1,7 @@
 package com.ire.entities;
 
 import com.diogonunes.jcolor.Attribute;
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.Action;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
@@ -64,8 +65,8 @@ public abstract class Entity {
     protected Action curAction;
 
 
-    protected AudioStream deathSound;
-    protected static AudioStream healSound = new AudioStream("leech");
+    protected AudioClip deathSound;
+    protected static AudioClip healSound = new AudioClip("leech");
 
     // protected String[] passSkill = {"", "", ""};
 
@@ -92,7 +93,7 @@ public abstract class Entity {
 
         //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
 
-        this.deathSound = new AudioStream(deathSound);
+        this.deathSound = new AudioClip(deathSound);
 
         this.hlh = this.curHlh;
         this.man = this.curMag;
@@ -694,7 +695,7 @@ public abstract class Entity {
         return this.statusEffects;
     }
 
-    public AudioStream getDeathSound() {
+    public AudioClip getDeathSound() {
         return deathSound;
     }
 

@@ -1,5 +1,6 @@
 package com.ire.combat.actions.attackactions.spellattacks.debuffspells;
 
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
 import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
@@ -10,7 +11,7 @@ public abstract class DebuffSpell extends SpellAttack {
 
     protected StatusEffect debuff;
 
-    public DebuffSpell(String name, String description, AudioStream SOUND, int DURATION, int DELAY,
+    public DebuffSpell(String name, String description, AudioClip SOUND, int DURATION, int DELAY,
                        float coefficient, String[] postfixNames, int baseManaCost, int spellLevel, String flavorText,
                        StatusEffect debuff) {
         super(name, description, SOUND, DURATION, DELAY, coefficient, postfixNames, baseManaCost, spellLevel,

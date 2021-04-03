@@ -1,7 +1,7 @@
 package com.ire.combat.actions.attackactions.spellattacks;
 
 import com.diogonunes.jcolor.Attribute;
-import com.ire.audio.AudioStream;
+import com.ire.audio.AudioClip;
 import com.ire.combat.actions.attackactions.AttackAction;
 import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.entities.Entity;
@@ -26,7 +26,7 @@ public abstract class SpellAttack extends AttackAction {
     protected int spellLevel;
     protected String flavorText;
 
-    public SpellAttack(String name, String description, AudioStream SOUND, int DURATION, int DELAY, float coefficient,
+    public SpellAttack(String name, String description, AudioClip SOUND, int DURATION, int DELAY, float coefficient,
                        String[] postfixNames, int baseManaCost, int spellLevel, String flavorText) {
         super(name, description, SOUND, DURATION, DELAY, coefficient);
 

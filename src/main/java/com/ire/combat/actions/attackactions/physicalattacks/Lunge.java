@@ -1,5 +1,6 @@
 package com.ire.combat.actions.attackactions.physicalattacks;
 
+import com.ire.audio.AudioClip;
 import com.ire.audio.AudioStream;
 import com.ire.entities.Entity;
 import com.ire.tools.Tools;
@@ -11,7 +12,7 @@ public class Lunge extends PhysicalAttack {
 
     public Lunge() {
         super("Lunge", "Lunge the enemy for a risky attack",
-                new AudioStream("lunge1"), 2000, 1000, 2);
+                new AudioClip("lunge1"), 2000, 1000, 2);
     }
 
     public void execute(Entity attacker, Entity defender) {
