@@ -33,7 +33,6 @@ public class AudioClip implements Runnable, LineListener{
         this.end = true;
     }
 
-    // TODO: Figure out if the supposed latency reduction is worth memory/CPU use.
     @Override
     public void run() {
 

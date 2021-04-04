@@ -105,10 +105,19 @@ public abstract class SpellAttack extends AttackAction {
         }
 
         if (input) {
-            Attribute[] colors = new Attribute[] {TEXT_COLOR(0, 100, 255), TEXT_COLOR(150, 50, 255)};
             System.out.println("Select a spell");
-            System.out.println("Mana  " + Tools.createColoredBar(mana, curMag, 20, colors)
-                    + " " + mana + "/" + curMag);
+            String bar = "";
+
+            // TODO: Entity.getUseColor() is a bodge. Replace this.
+            if (Entity.getUseColor()) {
+                Attribute[] colors = new Attribute[]{TEXT_COLOR(0, 100, 255), TEXT_COLOR(150, 50, 255)};
+                bar = Tools.createColoredBar(mana, curMag, 20, colors);
+
+            } else {
+                bar = Tools.createBar(mana, curMag, 20);
+            }
+
+            System.out.println("Mana  " + bar + " " + mana + "/" + curMag);
             return Tools.cancelableMenu(options, exclusions);
         }
 

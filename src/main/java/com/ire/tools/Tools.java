@@ -41,10 +41,10 @@ public class Tools {
     // TODO: Ask non-windows users if "\033" works.
     public static void clear() {
         try {
-            if (System.getProperty("os.name").contains("Windows")) {
+            if (Entity.getUseColor() && System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             }
-            else {
+            else if (!Entity.getUseColor()) {
                 for (int i = 0; i < 75; i++) {
                     System.out.println();
                 }
@@ -57,6 +57,7 @@ public class Tools {
     public static void emptyPrompt() {
         Scanner s = new Scanner(System.in);
         s.nextLine();
+        return;
     }
 
 
@@ -72,7 +73,9 @@ public class Tools {
             valid = true;
 
             try {
-                System.out.print("> ");
+                if (Entity.getUseColor()) {
+                    System.out.print("> ");
+                }
                 input = s.nextInt();
             } catch(InputMismatchException n) {
                 s.next();
@@ -156,7 +159,7 @@ public class Tools {
         }
 
         if (numerator < 0) {
-            return createNegativeBar(numerator, denominator, length, colors);
+            return createColoredNegativeBar(numerator, denominator, length, colors);
         }
 
         StringBuilder output = new StringBuilder();
@@ -190,15 +193,14 @@ public class Tools {
 
     }
 
-    public static String createBar(float numerator, float denominator, int length,
-                                   Attribute[] colors) {
+    public static String createBar(float numerator, float denominator, int length) {
 
         if (denominator <= 0 || length <= 0) {
             throw new IllegalArgumentException("The denominator or length is less than or equal to 0.");
         }
 
         if (numerator < 0) {
-            return createNegativeBar(numerator, denominator, length, colors);
+            return createNegativeBar(numerator, denominator, length);
         }
 
         StringBuilder output = new StringBuilder();
@@ -219,10 +221,10 @@ public class Tools {
 
 
         for (int i = 0; i < quotient && i < length; i++) {
-            output.append(colorize(primaryShading, colors[(Math.min((stacks), colors.length - 1))]));
+            output.append(primaryShading);
         }
         for (int i = 0; i < length - quotient; i++) {
-            output.append(colorize(secondaryShading, colors[(Math.min((stacks), colors.length - 1))]));
+            output.append(secondaryShading);
         }
 
         if (stacks > 0) {
@@ -231,12 +233,41 @@ public class Tools {
         }
 
         return output.toString();
-
     }
 
-    private static String createNegativeBar(float numerator, float denominator, int length,
-                                            Attribute[] colors) {
+    private static String createNegativeBar(float numerator, float denominator, int length) {
 
+        StringBuilder output = new StringBuilder();
+        String primaryShading = "▒";
+        String secondaryShading = " ";
+        float quotient;
+        int stacks = 1;
+        numerator = Math.abs(numerator);
+
+        while (numerator > denominator) {
+
+            numerator -= denominator;
+            stacks++;
+            primaryShading = " ";
+        }
+
+        quotient = Math.round((numerator / denominator) * length);
+
+
+        for (int i = 0; i < quotient && i < length; i++) {
+            output.append(primaryShading);
+        }
+        for (int i = 0; i < length - quotient; i++) {
+            output.append(secondaryShading);
+        }
+
+        output.append(" -").append(stacks);
+
+        return output.toString();
+    }
+
+    private static String createColoredNegativeBar(float numerator, float denominator, int length,
+                                                   Attribute[] colors) {
         StringBuilder output = new StringBuilder();
         String primaryShading = "▒";
         String secondaryShading = " ";
@@ -266,11 +297,11 @@ public class Tools {
         return output.toString();
     }
 
-    public static String createBar(float numerator, float denominator, int length) {
+    /*public static String createBar(float numerator, float denominator, int length) {
 
         Attribute[] colors = new Attribute[] {WHITE_TEXT()};
 
         return createBar(numerator, denominator, length, colors);
-    }
+    }*/
 
 }

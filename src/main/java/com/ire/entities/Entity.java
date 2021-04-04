@@ -2,7 +2,6 @@ package com.ire.entities;
 
 import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioClip;
-import com.ire.audio.AudioStream;
 import com.ire.combat.actions.Action;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
 import com.ire.combat.actions.attackactions.physicalattacks.Stab;
@@ -41,6 +40,9 @@ public abstract class Entity {
     protected int rewardXp;
     protected boolean debug;
     protected boolean alive;
+
+    // Temporary implementation to bypass discord not handling colors.
+    protected static boolean useColor = true;
 
     // TODO: Consider having separate classes for these lists, offload add/remove methods.
     // TODO: Maybe attacks/defenses shouldn't be composed of string objects.
@@ -163,9 +165,13 @@ public abstract class Entity {
          * Consider adding a "shields/armor" color rather than just "yellow".
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
-        Attribute[] colors = new Attribute[] {TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
-        output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors))
-                .append("  ");
+        if (useColor) {
+            Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
+            output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors))
+                    .append("  ");
+        } else {
+            output.append(Tools.createBar(this.getHlh(), this.getCurHlh(), 20)).append("  ");
+        }
 
         for (StatusEffect se: statusEffects) {
             output.append(se.generateDisplay());
@@ -742,6 +748,14 @@ public abstract class Entity {
 
     public void setDebug(boolean bool) {
         this.debug = bool;
+    }
+
+    public static void setUseColor(boolean color) {
+        useColor = color;
+    }
+
+    public static boolean getUseColor() {
+        return useColor;
     }
 
     /*@Override

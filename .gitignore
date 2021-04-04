@@ -2,6 +2,7 @@
 /.idea/
 /out/
 /target/
+output.txt
 SaveFile.txt
 IdeaProjects.iml
 IRE.iml
@@ -15,3 +16,4 @@ startArt.txt
 /distributable/mac/
 /distributable/run&buildShortcut.ahk
 /distributable/ire.zip
+/distributable/bot-build&run.bat

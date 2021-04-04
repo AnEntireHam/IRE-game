@@ -3,6 +3,7 @@ package com.ire;
 import com.diogonunes.jcolor.AnsiFormat;
 import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioClip;
+import com.ire.bot.ClientConnection;
 import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
 import com.ire.combat.actions.attackactions.spellattacks.Lunar;
@@ -28,13 +29,24 @@ import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 
-import static com.diogonunes.jcolor.Ansi.colorize;
 import static com.diogonunes.jcolor.Attribute.*;
 
 public class Main {
 
     // TODO: Clean up Main, add small arena, export this out to test.
     public static void main(String[] args) {
+
+        ClientConnection connect = null;
+        if ((args.length > 2) && args[0].equals("useBot")) {
+            connect = new ClientConnection(args[1], Integer.parseInt(args[2]));
+            Entity.setUseColor(false);
+
+        } else if (args.length > 0) {
+            System.err.println("Passed arguments are insufficient to create client.");
+            System.out.println("arg 0: " + args[0]);
+            System.out.println("arg 1: " + args[1]);
+            System.out.println("arg 2: " + args[2]);
+        }
 
         Attribute[] myFormat = new Attribute[]{BLACK_TEXT(), MAGENTA_BACK(), DIM()};
         AnsiFormat bigDamage = new AnsiFormat(RED_TEXT(), CYAN_BACK());
@@ -44,6 +56,17 @@ public class Main {
         game.setup();
         game.run();*/
 
+        /*OutputStream output = null;
+        try {
+            output = new FileOutputStream("output.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert output != null;
+        PrintStream printOut = new PrintStream(output);
+
+        System.setOut(printOut);*/
+
         String reset = "\u001B[0m";
         String purple = "\u001B[35m";
         String red = "\u001B[31m";
@@ -52,25 +75,24 @@ public class Main {
 
         SaveData s = new SaveData();
         s.Create();
-        s.Write("Placeholder save data text.");
+        //s.Write("Placeholder save data text.");
 
         AudioClip start = new AudioClip("woosh");
         start.play();
         Tools.sleep(500);
-        s.Read("startArt");
+        //s.Read("startArt");
 
         Tools.sleep(300);
 
-        System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
+        /*System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
         System.out.println(colorize("Bright green text, black bg, bold", BRIGHT_GREEN_TEXT(), BLACK_BACK(), BOLD()));
         System.out.println(colorize("Bright green text, black bg, italic", BRIGHT_GREEN_TEXT(), BLACK_BACK(), ITALIC()));
         System.out.println(colorize("Bright green text, black bg, underline", BRIGHT_GREEN_TEXT(), BLACK_BACK(), UNDERLINE()));
-        System.out.println(colorize("Bright green text, black bg, strike through", BRIGHT_GREEN_TEXT(), BLACK_BACK(), STRIKETHROUGH()));
         System.out.println(colorize("Black text, bright green bg", BRIGHT_GREEN_TEXT(), BLACK_BACK(), REVERSE()));
 
         System.out.println(colorize("Brownish text", BLACK_BACK(), TEXT_COLOR(100)));
         System.out.println(colorize("Purplish text", TEXT_COLOR(125, 16, 204)));
-        System.out.println();
+        System.out.println();*/
 
         System.out.println("Press ENTER to begin...");
 
@@ -121,7 +143,7 @@ public class Main {
         c1.removeDefense(0);
         c1.addSpell(celestial);
         c1.addSpell(lunar);
-        c1.addSpell(life);
+        //c1.addSpell(life);
 
         c2.removeDefense(0);
         c2.addWard(mirror);
@@ -129,7 +151,7 @@ public class Main {
         c2.removeDefense(0);
         c2.addSpell(celestial);
         c2.addSpell(lunar);
-        c2.addSpell(life);
+        //c2.addSpell(life);
 
         p2.addSpell(celestial);
         p2.addSpell(lunar);
@@ -194,6 +216,10 @@ public class Main {
         }
 
         System.out.println(reset + "\nTiny demo finished. Thanks for playing.");
+
+        if ((args.length > 2) && args[0].equals("useBot")) {
+            connect.end();
+        }
     }
 
 }
