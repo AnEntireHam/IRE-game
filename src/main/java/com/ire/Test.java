@@ -13,7 +13,7 @@ import com.ire.combat.statuseffects.generativeeffect.Bleed;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.combat.statuseffects.stateffects.*;
 import com.ire.entities.Entity;
-import com.ire.entities.Player;
+import com.ire.entities.players.Player;
 import com.ire.entities.enemies.Skeleton;
 
 import java.util.ArrayList;

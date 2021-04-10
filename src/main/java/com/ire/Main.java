@@ -1,7 +1,5 @@
 package com.ire;
 
-import com.diogonunes.jcolor.AnsiFormat;
-import com.diogonunes.jcolor.Attribute;
 import com.ire.audio.AudioClip;
 import com.ire.bot.ClientConnection;
 import com.ire.combat.Battle;
@@ -20,16 +18,17 @@ import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.combat.statuseffects.stateffects.AttackDown;
 import com.ire.combat.statuseffects.stateffects.AttackUp;
 import com.ire.entities.Entity;
-import com.ire.entities.Player;
+import com.ire.entities.players.Mage;
+import com.ire.entities.players.Player;
 import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.enemies.TrainingDummy;
+import com.ire.entities.players.Warrior;
 import com.ire.tools.SaveData;
 import com.ire.tools.Tools;
+import com.ire.world.Arena;
 
 import java.util.ArrayList;
-
-import static com.diogonunes.jcolor.Attribute.*;
 
 public class Main {
 
@@ -39,78 +38,38 @@ public class Main {
         ClientConnection connect = null;
         if ((args.length > 2) && args[0].equals("useBot")) {
             connect = new ClientConnection(args[1], Integer.parseInt(args[2]));
-            Entity.setUseColor(false);
+            Tools.setBotClient(true);
 
         } else if (args.length > 0) {
             System.err.println("Passed arguments are insufficient to create client.");
-            System.out.println("arg 0: " + args[0]);
-            System.out.println("arg 1: " + args[1]);
-            System.out.println("arg 2: " + args[2]);
+            for (int i = 0; i < args.length; i++) {
+                System.out.println("Arg " + i + ": " + args[i]);
+            }
+            Tools.sleep(3000);
         }
-
-        Attribute[] myFormat = new Attribute[]{BLACK_TEXT(), MAGENTA_BACK(), DIM()};
-        AnsiFormat bigDamage = new AnsiFormat(RED_TEXT(), CYAN_BACK());
-        AnsiFormat smallDamage = new AnsiFormat(BRIGHT_RED_TEXT());
-
-        /*BasicTextAdventure game = new BasicTextAdventure();
-        game.setup();
-        game.run();*/
-
-        /*OutputStream output = null;
-        try {
-            output = new FileOutputStream("output.txt");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        assert output != null;
-        PrintStream printOut = new PrintStream(output);
-
-        System.setOut(printOut);*/
-
-        String reset = "\u001B[0m";
-        String purple = "\u001B[35m";
-        String red = "\u001B[31m";
 
         Tools.clear();
-
-        SaveData s = new SaveData();
-        s.Create();
-        //s.Write("Placeholder save data text.");
 
         AudioClip start = new AudioClip("woosh");
         start.play();
         Tools.sleep(500);
-        //s.Read("startArt");
-
+        SaveData s = new SaveData();
+        s.Read("startArt");
         Tools.sleep(300);
 
-        /*System.out.println(colorize("Bright green text, black bg", BRIGHT_GREEN_TEXT(), BLACK_BACK()));
-        System.out.println(colorize("Bright green text, black bg, bold", BRIGHT_GREEN_TEXT(), BLACK_BACK(), BOLD()));
-        System.out.println(colorize("Bright green text, black bg, italic", BRIGHT_GREEN_TEXT(), BLACK_BACK(), ITALIC()));
-        System.out.println(colorize("Bright green text, black bg, underline", BRIGHT_GREEN_TEXT(), BLACK_BACK(), UNDERLINE()));
-        System.out.println(colorize("Black text, bright green bg", BRIGHT_GREEN_TEXT(), BLACK_BACK(), REVERSE()));
-
-        System.out.println(colorize("Brownish text", BLACK_BACK(), TEXT_COLOR(100)));
-        System.out.println(colorize("Purplish text", TEXT_COLOR(125, 16, 204)));
-        System.out.println();*/
-
         System.out.println("Press ENTER to begin...");
-
         Tools.emptyPrompt();
         Tools.clear();
         start.end();
 
-        //Uncanny mockery, shattering grip, impotent prayer, bolster
+        Arena a = new Arena();
+        a.startArenaLoop();
 
-        Player p1 = new Player(1, 14, 8, 4, 2, 5,
-                "Warrior", "humanDeath",
-                1, 2, 1, 0, 0);
+        Player p1 = new Mage();
+        p1.addXp(27);
 
-        Player p2 = new Player(1, 8, 3, 3, 8, 5,
-                "Mage", "humanDeath",
-                1, 0, 0, 2, 1);
-
-        p2.addXp(2);
+        Player p2 = new Warrior();
+        p2.addXp(27);
 
         Skeleton s1 = new Skeleton(1);
         Skeleton s2 = new Skeleton(2);
@@ -203,21 +162,22 @@ public class Main {
         players.add(p1);
         players.add(p2);
         enemies.add(s1);
-        //enemies.add(s2);
+        enemies.add(s2);
         enemies.add(c1);
         //enemies.add(c2);
 
         Battle b = new Battle(players, enemies);
 
         if (b.runBattle(1)) {
-            System.out.println(purple + "Players won!!");
+            System.out.println("Players won!!");
         } else {
-            System.out.println(red + "Players lost.");
+            System.out.println("Players lost.");
         }
 
-        System.out.println(reset + "\nTiny demo finished. Thanks for playing.");
+        System.out.println("\nTiny demo finished. Thanks for playing.");
 
         if ((args.length > 2) && args[0].equals("useBot")) {
+            assert connect != null;
             connect.end();
         }
     }

@@ -109,7 +109,7 @@ public abstract class SpellAttack extends AttackAction {
             String bar = "";
 
             // TODO: Entity.getUseColor() is a bodge. Replace this.
-            if (Entity.getUseColor()) {
+            if (Tools.isBotClient()) {
                 Attribute[] colors = new Attribute[]{TEXT_COLOR(0, 100, 255), TEXT_COLOR(150, 50, 255)};
                 bar = Tools.createColoredBar(mana, curMag, 20, colors);
 

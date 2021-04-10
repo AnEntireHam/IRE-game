@@ -1,5 +1,8 @@
 package com.ire.audio;
 
+import com.ire.entities.Entity;
+import com.ire.tools.Tools;
+
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -55,6 +58,11 @@ public class AudioClip implements Runnable, LineListener{
     private void playClip() {
 
         try {
+            if (Tools.isBotClient()) {
+                System.out.println("SFX" + path);
+                this.play = false;
+                return;
+            }
             ClassLoader loader = this.getClass().getClassLoader();
             InputStream inputStream = new BufferedInputStream(Objects.requireNonNull(
                     loader.getResourceAsStream(path)));

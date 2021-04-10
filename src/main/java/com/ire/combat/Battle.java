@@ -4,7 +4,7 @@ import com.ire.audio.AudioStream;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.stateffects.Surprise;
 import com.ire.entities.Entity;
-import com.ire.entities.Player;
+import com.ire.entities.players.Player;
 import com.ire.tools.Tools;
 
 import java.util.ArrayList;

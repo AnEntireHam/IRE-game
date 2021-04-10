@@ -22,7 +22,6 @@ import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
 public abstract class Entity {
 
-
     // Fields
     // TODO: This class is big. There are probably some fields and methods that can be extracted out.
 
@@ -40,9 +39,6 @@ public abstract class Entity {
     protected int rewardXp;
     protected boolean debug;
     protected boolean alive;
-
-    // Temporary implementation to bypass discord not handling colors.
-    protected static boolean useColor = true;
 
     // TODO: Consider having separate classes for these lists, offload add/remove methods.
     // TODO: Maybe attacks/defenses shouldn't be composed of string objects.
@@ -68,7 +64,7 @@ public abstract class Entity {
 
 
     protected AudioClip deathSound;
-    protected static AudioClip healSound = new AudioClip("leech");
+    protected static final AudioClip HEAL_SOUND = new AudioClip("leech");
 
     // protected String[] passSkill = {"", "", ""};
 
@@ -165,7 +161,7 @@ public abstract class Entity {
          * Consider adding a "shields/armor" color rather than just "yellow".
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
-        if (useColor) {
+        if (!Tools.isBotClient()) {
             Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
             output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors))
                     .append("  ");
@@ -243,7 +239,7 @@ public abstract class Entity {
             if (surplus) {
                 if (message) {
                     System.out.println(name + " healed beyond the limit for " + regenStrength + " health.");
-                    healSound.play();  // Beyond-limit sfx
+                    HEAL_SOUND.play();  // Beyond-limit sfx
                 }
 
                 this.hlh += regenStrength;
@@ -251,7 +247,7 @@ public abstract class Entity {
             } else if (this.hlh < this.getCurHlh()) {
                 if (message) {
                     System.out.println(name + " healed for " + (this.getCurHlh() - this.hlh) + " health.");
-                    healSound.play();
+                    HEAL_SOUND.play();
                 }
                 this.hlh = this.getCurHlh();
 
@@ -266,7 +262,7 @@ public abstract class Entity {
 
             if (message) {
                 System.out.println(name + " healed " + regenStrength + " health.");
-                healSound.play();
+                HEAL_SOUND.play();
             }
             this.hlh += regenStrength;
 
@@ -419,6 +415,7 @@ public abstract class Entity {
         System.out.println();
     }
 
+    // TODO: Remove defensive bonuses when dead or "useless" defense.
     public void die(boolean message) {
 
         this.alive = false;
@@ -718,7 +715,6 @@ public abstract class Entity {
     }
 
 
-
     // Other Accessors and Mutators
 
     // TODO: Add "getPossessiveName" method, add where appropriate.
@@ -748,14 +744,6 @@ public abstract class Entity {
 
     public void setDebug(boolean bool) {
         this.debug = bool;
-    }
-
-    public static void setUseColor(boolean color) {
-        useColor = color;
-    }
-
-    public static boolean getUseColor() {
-        return useColor;
     }
 
     /*@Override

@@ -1,6 +1,5 @@
 package com.ire.entities.enemies;
 
-import com.ire.entities.Enemy;
 import com.ire.world.Item;
 
 public class TrainingDummy extends Enemy {

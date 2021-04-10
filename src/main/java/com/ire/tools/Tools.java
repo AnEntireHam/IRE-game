@@ -11,13 +11,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import static com.diogonunes.jcolor.Ansi.colorize;
-import static com.diogonunes.jcolor.Attribute.WHITE_TEXT;
 
 public class Tools {
 
     private static final AudioClip MENU_BOOP = new AudioClip("menuBoop");
     private static final AudioClip MENU_ERROR = new AudioClip("menuError");
 
+    private static boolean botClient = false;
 
     // Display Methods
 
@@ -34,30 +34,32 @@ public class Tools {
     }
 
     public static void sleep(int time) {
-
         sleep(time, 1);
     }
 
     // TODO: Ask non-windows users if "\033" works.
     public static void clear() {
         try {
-            if (Entity.getUseColor() && System.getProperty("os.name").contains("Windows")) {
+            if (!botClient && System.getProperty("os.name").contains("Windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                return;
             }
-            else if (!Entity.getUseColor()) {
+            if (!botClient) {
                 for (int i = 0; i < 75; i++) {
                     System.out.println();
                 }
                 //System.out.print("\\033[H\\033[2J");
                 Runtime.getRuntime().exec("clear");
             }
-        } catch (IOException | InterruptedException ignored) {}
+        } catch (IOException | InterruptedException e) {
+            System.out.println("Error clearing the screen");
+            e.printStackTrace();
+        }
     }
 
     public static void emptyPrompt() {
         Scanner s = new Scanner(System.in);
         s.nextLine();
-        return;
     }
 
 
@@ -73,7 +75,7 @@ public class Tools {
             valid = true;
 
             try {
-                if (Entity.getUseColor()) {
+                if (!Tools.isBotClient()) {
                     System.out.print("> ");
                 }
                 input = s.nextInt();
@@ -86,6 +88,10 @@ public class Tools {
             if (valid && (input < min || input > max || excluded.contains(input))) {
                 MENU_ERROR.play();
                 valid = false;
+            }
+
+            if (!botClient && !valid) {
+                System.out.println("Enter a valid integer between " + min + " and " + max);
             }
 
         } while (!valid);
@@ -101,7 +107,6 @@ public class Tools {
     }
 
     public static int menu(ArrayList<String> options, int startIndex) {
-
         for (int i = startIndex; i < options.size() + startIndex; i++) {
             System.out.println("[" + (i) + "] " + options.get(i - startIndex));
         }
@@ -110,13 +115,11 @@ public class Tools {
     }
 
     public static int menu(ArrayList<String> options) {
-
         return menu(options, 1);
     }
 
-    public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded) {
-
-        for (int i = 1; i < options.size() + 1; i++) {
+    public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded, int startIndex) {
+        for (int i = startIndex; i < options.size() + startIndex; i++) {
 
             if (!excluded.contains(i)) {
                 System.out.print("[" + (i) + "] ");
@@ -127,16 +130,18 @@ public class Tools {
             if (options.size() + 1 > 9 && i < 10) {
                 System.out.print(" ");
             }
-            System.out.println(options.get(i - 1));
+            System.out.println(options.get(i - startIndex));
         }
-
         System.out.println("\n[0] Cancel\n");
-        return Tools.getUserInt(0, options.size(), excluded);
+        return Tools.getUserInt(startIndex - 1, options.size() + startIndex - 1, excluded);
+    }
+
+    public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded) {
+        return cancelableMenu(options, excluded, 1);
     }
 
     public static int cancelableMenu(ArrayList<String> options) {
-
-        return cancelableMenu(options, new ArrayList<>());
+        return cancelableMenu(options, new ArrayList<>(), 1);
     }
 
 
@@ -295,6 +300,14 @@ public class Tools {
         output.append(" -").append(stacks);
 
         return output.toString();
+    }
+
+    public static boolean isBotClient() {
+        return Tools.botClient;
+    }
+
+    public static void setBotClient(boolean botClient) {
+        Tools.botClient = botClient;
     }
 
     /*public static String createBar(float numerator, float denominator, int length) {

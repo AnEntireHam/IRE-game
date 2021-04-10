@@ -1,14 +1,10 @@
 package com.ire.bot;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ClientConnection implements Runnable {
-
-    private AtomicBoolean running;
-    private final Thread thread;
-
     private final String ip;
     private final int port;
     private Socket clientSocket;
@@ -18,65 +14,60 @@ public class ClientConnection implements Runnable {
     public ClientConnection(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.running = new AtomicBoolean(true);
-        this.thread = new Thread(this);
+        Thread thread = new Thread(this);
         thread.start();
     }
 
     public void end() {
+        System.out.println("TERMINATE_CLIENT");
         try {
             in.close();
             clientSocket.close();
             out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        } catch (NullPointerException | IOException e) {
+            System.exit(-1);
         }
-        running.set(false);
-        System.err.println("Exiting...");
-        System.out.println("Ended connection.");
         System.exit(0);
-        thread.interrupt();
     }
 
-    /*public String sendMessage(String msg) {
-
-        out.println(msg);
-        *//*try {
-            return in.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*//*
-        return "Error.";
-    }*/
 
     @Override
     public void run() {
+        try {
+            BufferedReader reader = connect();
+            readInputs(reader);
 
-        while (running.get()) {
+        } catch (ConnectException e) {
+            System.err.println("Lost connection. Terminating.");
 
-            try {
-                clientSocket = new Socket(ip, port);
-                out = new PrintStream(clientSocket.getOutputStream(), true);
-                in = new BufferedInputStream(clientSocket.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-                System.setOut(out);
-                System.setIn(in);
-
-                String inputLine;
-                while ((inputLine = reader.readLine()) != null) {
-                    if (inputLine.equals("TERMINATE_CLIENT")) {
-                        System.out.println("Ended connection.");
-                        end();
-                        break;
-                    }
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         end();
+    }
+
+    private BufferedReader connect() throws IOException {
+        clientSocket = new Socket(ip, port);
+        out = new PrintStream(clientSocket.getOutputStream(), true, "UTF-8");
+        in = new BufferedInputStream(clientSocket.getInputStream());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+        System.setOut(out);
+        System.setErr(out);
+        System.setIn(in);
+        return reader;
+    }
+
+    private void readInputs(BufferedReader reader) throws IOException {
+        String inputLine;
+        while ((inputLine = reader.readLine()) != null) {
+            if (inputLine.equals("TERMINATE_CLIENT")) {
+                System.out.println("Successfully ended game.");
+                end();
+                break;
+            }
+            out.println("REPEAT" + inputLine);
+        }
     }
 }
