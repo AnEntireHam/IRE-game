@@ -53,8 +53,9 @@ public class ClientConnection implements Runnable {
         in = new BufferedInputStream(clientSocket.getInputStream());
         BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
+        System.out.println("Successfully connected.");
         System.setOut(out);
-        System.setErr(out);
+        //System.setErr(out);
         System.setIn(in);
         return reader;
     }

@@ -167,6 +167,7 @@ public class Tools {
 
     // colors must contain at least one color.
     // TODO: These methods are WET.
+    // TODO: Redirect coloredBar calls if botClient
     public static String createColoredBar(float numerator, float denominator, int length,
                                           Attribute[] colors) {
 
