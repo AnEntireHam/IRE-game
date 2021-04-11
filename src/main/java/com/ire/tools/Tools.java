@@ -28,7 +28,9 @@ public class Tools {
 
         try {
             Thread.sleep((long) (time * multiplier));
+
         } catch(InterruptedException ex) {
+            System.out.println("Main thread disrupted!");
             Thread.currentThread().interrupt();
         }
     }
@@ -106,16 +108,25 @@ public class Tools {
         return getUserInt(min, max, new ArrayList<>());
     }
 
-    public static int menu(ArrayList<String> options, int startIndex) {
-        for (int i = startIndex; i < options.size() + startIndex; i++) {
-            System.out.println("[" + (i) + "] " + options.get(i - startIndex));
+    // TODO: Integrate excluded feature with normal menus
+    public static int menu(String[] options, int startIndex) {
+        for (int i = startIndex; i < options.length + startIndex; i++) {
+            System.out.println("[" + (i) + "] " + options[(i - startIndex)]);
         }
         System.out.println();
-        return getUserInt(startIndex, options.size() + startIndex - 1);
+        return getUserInt(startIndex, options.length + startIndex - 1);
+    }
+
+    public static int menu(String[] options) {
+        return menu(options, 1);
+    }
+
+    public static int menu(ArrayList<String> options, int startIndex) {
+        return menu((String[]) options.toArray(), startIndex);
     }
 
     public static int menu(ArrayList<String> options) {
-        return menu(options, 1);
+        return menu(options.toArray(new String[0]), 1);
     }
 
     public static int cancelableMenu(ArrayList<String> options, ArrayList<Integer> excluded, int startIndex) {

@@ -230,6 +230,13 @@ public abstract class Entity {
 
         regenerateHealth(this.getCurHlh(), false, false);
         regenerateMana(this.getCurMag(), false, false);
+
+        this.hlh = this.getCurHlh();
+        this.man = this.getCurMag();
+
+        if (!this.isAlive()) {
+            this.revive(true);
+        }
     }
 
     public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
@@ -243,6 +250,9 @@ public abstract class Entity {
                 }
 
                 this.hlh += regenStrength;
+                if (!this.isAlive()) {
+                    this.revive(true);
+                }
 
             } else if (this.hlh < this.getCurHlh()) {
                 if (message) {
@@ -250,6 +260,9 @@ public abstract class Entity {
                     HEAL_SOUND.play();
                 }
                 this.hlh = this.getCurHlh();
+                if (!this.isAlive()) {
+                    this.revive(true);
+                }
 
             } else {
                 if (message) {
@@ -265,6 +278,9 @@ public abstract class Entity {
                 HEAL_SOUND.play();
             }
             this.hlh += regenStrength;
+            if (!this.isAlive()) {
+                this.revive(true);
+            }
 
         } else {
 
@@ -429,6 +445,19 @@ public abstract class Entity {
 
         this.checkRemoveStatusEffects(RemoveCondition.DEATH);
         // add coffin dance gif for party wipe in defiled mode?
+    }
+
+    public void revive(boolean message) {
+
+        this.alive = true;
+
+        if (message) {
+            // TODO: Add great heal or revive sfx
+            HEAL_SOUND.play();
+            System.out.println(name + " was resurrected.");
+            Tools.sleep(1500);
+            System.out.println();
+        }
     }
 
 

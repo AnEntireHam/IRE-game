@@ -65,11 +65,13 @@ public class Main {
         Arena a = new Arena();
         a.startArenaLoop();
 
+        System.exit(0);
+
         Player p1 = new Mage();
-        p1.addXp(27);
+        //p1.addXp(27);
 
         Player p2 = new Warrior();
-        p2.addXp(27);
+        //p2.addXp(27);
 
         Skeleton s1 = new Skeleton(1);
         Skeleton s2 = new Skeleton(2);
