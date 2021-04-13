@@ -127,12 +127,12 @@ public abstract class StatEffect extends StatusEffect {
 
             default:
             case EXPIRATION:
-                System.out.println(target.getName() + "'s status effect \"" + name + "\" expired.");
+                System.out.println(target.getPossessiveName() + " status effect \"" + name + "\" expired.");
                 Tools.sleep(1250);
                 break;
 
             case DEATH:
-                System.out.println(target.getName() + "'s " + name + " faded.");
+                System.out.println(target.getPossessiveName() + " " + name + " faded.");
                 Tools.sleep(1250);
                 break;
 

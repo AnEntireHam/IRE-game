@@ -73,7 +73,7 @@ public abstract class GenerativeEffect extends StatusEffect {
                 break;
 
             case DEATH:
-                System.out.println(target.getName() + "'s " + name + " faded.");
+                System.out.println(target.getPossessiveName() + " " + name + " faded.");
                 Tools.sleep(1250);
                 break;
 

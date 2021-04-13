@@ -857,9 +857,15 @@ public abstract class Entity {
 
     // Other Accessors and Mutators
 
-    // TODO: Add "getPossessiveName" method, add where appropriate.
     public String getName() {
         return this.name;
+    }
+
+    public String getPossessiveName() {
+        if (this.name.endsWith("s")) {
+            return this.name + "'";
+        }
+        return this.name + "'s";
     }
 
     public boolean isAlive() {

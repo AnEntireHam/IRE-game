@@ -129,10 +129,8 @@ public class Arena {
 
         Warrior warrior = new Warrior();
         Mage mage = new Mage();
-        Caster c2 = new Caster(2);
         team1.add(warrior);
         team1.add(mage);
-        team1.add(c2);
 
         warrior.addWard(new Screen());
         warrior.addWard(new Mirror());
