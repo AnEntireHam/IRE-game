@@ -67,6 +67,7 @@ public abstract class Entity {
 
     protected AudioClip deathSound;
     protected static final AudioClip HEAL_SOUND = new AudioClip("leech");
+    protected static final AudioClip REVIVE_SOUND = new AudioClip("revive");
 
     // protected String[] passSkill = {"", "", ""};
 
@@ -211,9 +212,6 @@ public abstract class Entity {
 
     public void fullHeal(RemoveCondition condition) {
 
-        if (condition != RemoveCondition.LEVEL_UP) {
-            System.out.println(name + " fully healed!");
-        }
         this.checkRemoveStatusEffects(condition);
         recalculateCurStats();
         resetPointStats();
@@ -454,8 +452,7 @@ public abstract class Entity {
         this.alive = true;
 
         if (message) {
-            // TODO: Add great heal or revive sfx
-            HEAL_SOUND.play();
+            REVIVE_SOUND.play();
             System.out.println(name + " was resurrected.");
             Tools.sleep(1500);
             System.out.println();
