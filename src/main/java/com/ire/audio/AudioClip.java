@@ -1,6 +1,5 @@
 package com.ire.audio;
 
-import com.ire.entities.Entity;
 import com.ire.tools.Tools;
 
 import javax.sound.sampled.*;
