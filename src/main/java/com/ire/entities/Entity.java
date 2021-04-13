@@ -17,6 +17,7 @@ import com.ire.tools.Tools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
@@ -39,6 +40,7 @@ public abstract class Entity {
     protected int rewardXp;
     protected boolean debug;
     protected boolean alive;
+    protected boolean controllable;
 
     // TODO: Consider having separate classes for these lists, offload add/remove methods.
     // TODO: Maybe attacks/defenses shouldn't be composed of string objects.
@@ -72,7 +74,7 @@ public abstract class Entity {
     // Constructor
 
     public Entity(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
-                  String name, String deathSound) {
+                  String name, String deathSound, boolean controllable) {
 
         this.level = 1;
         this.baseHlh = baseHlh;
@@ -82,6 +84,7 @@ public abstract class Entity {
         this.baseSpd = baseSpd;
         this.name = name;
         this.alive = true;
+        this.controllable = controllable;
 
         this.curHlh = baseHlh;
         this.curAtk = baseAtk;
@@ -89,12 +92,11 @@ public abstract class Entity {
         this.curMag = baseMag;
         this.curSpd = baseSpd;
 
+        this.hlh = this.getCurHlh();
+        this.man = this.getCurMag();
         //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
 
         this.deathSound = new AudioClip(deathSound);
-
-        this.hlh = this.curHlh;
-        this.man = this.curMag;
 
         this.totalXp = calculateNextXp(this.level);
         this.nextXp = calculateNextXp(this.level + 1);
@@ -463,9 +465,118 @@ public abstract class Entity {
 
     // Attack and Defense Methods
 
-    public abstract void promptAttack(ArrayList<Entity> enemies);
-    public abstract void promptDefend();
-    protected abstract boolean promptTargetIndex(ArrayList<Entity> enemies);
+    public void promptAttack(ArrayList<Entity> targets) {
+
+        int choice;
+        boolean confirmed = false;
+
+        while (!confirmed) {
+
+            choice = generateActionChoice(attacks, "attacking");
+
+            switch (attacks.get(choice - 1)) {
+                case "Stab":
+                    if (promptTargetIndex(targets)) {
+                        this.setCurAction(this.stab);
+                        confirmed = true;
+                    }
+                    break;
+                case "Lunge":
+                    if (promptTargetIndex(targets)) {
+                        this.setCurAction(this.lunge);
+                        confirmed = true;
+                    }
+                    break;
+                case "Cast":
+                    while (true) {
+                        choice = SpellAttack.menu(spells, man, this.getCurMag(), this.controllable);
+
+                        if (choice == 0) {
+                            break;
+
+                        } else if (promptTargetIndex(targets)) {
+                            this.setCurAction(spells.get(choice - 1));
+                            confirmed = true;
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
+            }
+        }
+    }
+
+    public void promptDefend() {
+
+        int choice;
+        boolean confirmed = false;
+
+        while (!confirmed) {
+
+            choice = generateActionChoice(defenses, "defending");
+
+            switch (defenses.get(choice - 1)) {
+                case "Shield":
+                    this.setCurAction(this.shield);
+                    confirmed = true;
+                    break;
+                case "Counter":
+                    this.setCurAction(this.counter);
+                    confirmed = true;
+                    break;
+                case "Ward":
+                    choice = SpellDefense.menu(this.wards, this.controllable);
+                    if (choice != 0) {
+                        this.setCurAction(wards.get(choice - 1));
+                        confirmed = true;
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + defenses.get(choice));
+            }
+        }
+    }
+
+    private int generateActionChoice(ArrayList<String> options, String verb) {
+        if (this.controllable) {
+            Tools.clear();
+            System.out.println("Enemies are " + verb + ". Select an action.");
+            System.out.println("\n" + this.generateBattleStatus(true) + "\n");
+            return Tools.menu(options);
+        }
+        Random rand = new Random();
+        return rand.nextInt(options.size()) + 1;
+    }
+
+    protected boolean promptTargetIndex(ArrayList<Entity> targets) {
+
+        ArrayList<String> options = new ArrayList<>();
+        int choice;
+
+        Tools.sortEntityList(targets);
+
+        for (Entity t : targets) {
+            if (t.isAlive()) {
+                options.add(t.generateBattleStatus(true));
+            }
+        }
+
+        if (this.controllable) {
+            System.out.println("Select a target.");
+            choice = Tools.cancelableMenu(options) - 1;
+            if (choice != -1) {
+                this.targetIndex = choice;
+                return true;
+            }
+            return false;
+        }
+
+        Random rand = new Random();
+        choice = rand.nextInt(options.size());
+        this.targetIndex = choice;
+        return true;
+    }
 
     public void addAttack(String attack) {
         attacks.add(attack);
@@ -759,10 +870,6 @@ public abstract class Entity {
         this.name = name;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
-    }
-
     public int getLevel() {
         return this.level;
     }
@@ -771,8 +878,12 @@ public abstract class Entity {
         return this.debug;
     }
 
-    public void setDebug(boolean bool) {
-        this.debug = bool;
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    public void setControllable(boolean controllable) {
+        this.controllable = controllable;
     }
 
     /*@Override

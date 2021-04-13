@@ -1,20 +1,13 @@
 package com.ire.entities.enemies;
 
-import com.ire.combat.actions.attackactions.spellattacks.SpellAttack;
-import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
 import com.ire.world.Item;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public abstract class Enemy extends Entity {
 
 
     // Fields
-
     protected int tenHlh, tenAtk, tenDef, tenMag, tenSpd;
     /*protected Item rewardItem;
     protected int rewardChance;*/
@@ -28,7 +21,7 @@ public abstract class Enemy extends Entity {
                  String name, String deathSound, int rewardXp, Item rewardItem, int rewardChance,
                  boolean fleeable) {
 
-        super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound);
+        super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound, false);
 
         this.tenHlh = tenHlh;
         this.tenAtk = tenAtk;
@@ -46,6 +39,7 @@ public abstract class Enemy extends Entity {
 
     // May want to revise into a switch-case statement.
     // TODO: This should be revised like player's levelUp()
+    // TODO: Consider adding relevant level-up messages (imagine an NPC which
     @Override
     protected void levelUp(int targetLevel) {
 
@@ -74,118 +68,4 @@ public abstract class Enemy extends Entity {
         }
         this.fullHeal(RemoveCondition.LEVEL_UP);
     }
-
-
-    // Prompt Methods
-
-    @Override
-    public void promptAttack(ArrayList<Entity> targets) {
-
-        Random rand = new Random();
-        int choice;
-        boolean confirmed = false;
-
-        do {
-            choice = rand.nextInt(attacks.size()) + 1;
-
-            switch (attacks.get(choice - 1)) {
-                case "Stab":
-                    if (promptTargetIndex(targets)) {
-                        this.setCurAction(this.stab);
-                        confirmed = true;
-                    }
-                    break;
-                case "Lunge":
-                    if (promptTargetIndex(targets)) {
-                        this.setCurAction(this.lunge);
-                        confirmed = true;
-                    }
-                    break;
-                case "Cast":
-                    while (true) {
-                        choice = SpellAttack.menu(spells, man, this.getCurMag(), false);
-
-                        if (choice == 0) {
-                            break;
-
-                        } else if (promptTargetIndex(targets)) {
-                            this.setCurAction(spells.get(choice - 1));
-                            confirmed = true;
-                            break;
-                        }
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
-            }
-        } while (!confirmed);
-    }
-
-    @Override
-    public void promptDefend() {
-
-        Random rand = new Random();
-        int choice;
-        boolean confirmed = false;
-
-        do {
-            choice = rand.nextInt(defenses.size()) + 1;
-
-            switch (defenses.get(choice - 1)) {
-                case "Shield":
-                    this.setCurAction(this.shield);
-                    confirmed = true;
-                    break;
-                case "Counter":
-                    this.setCurAction(this.counter);
-                    confirmed = true;
-                    break;
-                case "Ward":
-                    choice = SpellDefense.menu(this.wards, false);
-                    if (choice != 0) {
-                        this.setCurAction(wards.get(choice - 1));
-                        confirmed = true;
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + attacks.get(choice));
-            }
-        } while (!confirmed);
-    }
-
-    @Override
-    protected boolean promptTargetIndex(ArrayList<Entity> targets) {
-
-        ArrayList<String> options = new ArrayList<>();
-        Random rand = new Random();
-        int choice;
-
-        Tools.sortEntityList(targets);
-
-        for (Entity e: targets) {
-            if (e.isAlive()) {
-                options.add(e.getName());
-            }
-        }
-
-        choice = rand.nextInt(options.size());
-
-        // Hopefully this doesn't cause an error.
-
-        this.targetIndex = choice;
-        return true;
-    }
-
-
-    // Accessor Methods
-
-    //  Revise these methods later, when inventories in general are better understood.
-    /*public boolean calculateReward() {
-        return Math.random() * 100 < this.rewardChance;
-    }
-
-    public Item getReward() {
-        return this.rewardItem;
-    }*/
-
 }

@@ -13,8 +13,8 @@ import com.ire.combat.statuseffects.generativeeffect.Bleed;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.combat.statuseffects.stateffects.*;
 import com.ire.entities.Entity;
-import com.ire.entities.players.Player;
 import com.ire.entities.enemies.Skeleton;
+import com.ire.entities.players.Mage;
 
 import java.util.ArrayList;
 
@@ -22,9 +22,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        Player p2 = new Player(1, 70, 3, 3, 10, 6,
-                "Mage", "humanDeath",
-                1, 0, 0, 2, 1);
+        Mage p1 = new Mage();
 
         Skeleton e1 = new Skeleton(1);
         e1.setName("MISTER JANGELY BONE");
@@ -60,8 +58,8 @@ public class Test {
         // HP 10, ATK 7, DEF 1, MAG 2, SPD 1
         //p2.setDebug(true);
 
-        bleed1.apply(p2, e1);
-        bleed2.apply(p2, e1);
+        bleed1.apply(p1, e1);
+        bleed2.apply(p1, e1);
         regen1.apply(e1, e1);
         regen2.apply(e1, e1);
 
@@ -69,7 +67,7 @@ public class Test {
         ArrayList<Entity> team1 = new ArrayList<>();
         ArrayList<Entity> team2 = new ArrayList<>();
 
-        team1.add(p2);
+        team1.add(p1);
         team2.add(e1);
 
         Battle battle = new Battle(team1, team2);

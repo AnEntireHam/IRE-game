@@ -132,8 +132,8 @@ public class Battle {
         if (surprise == 2) {
             for (Entity e : team2) {
                 this.surprise.apply(e, e);
-                System.out.println("You got surprised!");
             }
+            System.out.println("You got surprised!");
             Tools.sleep(1000);
         }
     }
