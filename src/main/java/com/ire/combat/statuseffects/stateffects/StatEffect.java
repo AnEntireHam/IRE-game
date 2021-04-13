@@ -113,7 +113,11 @@ public abstract class StatEffect extends StatusEffect {
     public String generateDisplay() {
 
         //  temporary format. probably include a condensed version, settable by global options.
-        return (name + ": " + (Math.round(statMultiplier * 100f)) + "%, " + duration + " t, " + stacks + " s.  ");
+        int multiplierDisplay = Math.round(statMultiplier * 100f);
+        if (statMultiplier > 0) {
+            multiplierDisplay += 100;
+        }
+        return (name + ": " + multiplierDisplay + "%, " + duration + " t, " + stacks + " s.  ");
     }
 
     @Override
