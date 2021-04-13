@@ -11,11 +11,12 @@ import java.util.ArrayList;
 
 public class Battle {
 
-    private final static Surprise SURPRISE = new Surprise();
     private final static AudioStream WIN = new AudioStream("win");
 
-    public ArrayList<Entity> team1 = new ArrayList<>();
-    public ArrayList<Entity> team2 = new ArrayList<>();
+    private final Surprise surprise = new Surprise();
+    private final ArrayList<Entity> team1 = new ArrayList<>();
+    private final ArrayList<Entity> team2 = new ArrayList<>();
+    private boolean giveRewards = true;
 
 
     // Constructor
@@ -24,6 +25,13 @@ public class Battle {
 
         this.team1.addAll(team1);
         this.team2.addAll(team2);
+    }
+
+    public Battle(ArrayList<Entity> team1, ArrayList<Entity> team2, boolean giveRewards) {
+
+        this.team1.addAll(team1);
+        this.team2.addAll(team2);
+        this.giveRewards = giveRewards;
     }
 
     // Pre-battle Methods
@@ -114,7 +122,7 @@ public class Battle {
 
         if (surprise == 1) {
             for (Entity p: team1) {
-                SURPRISE.apply(p, p);
+                this.surprise.apply(p, p);
             }
             System.out.println("You got the surprise on the enemy!");
             Tools.sleep(1000);
@@ -123,7 +131,7 @@ public class Battle {
 
         if (surprise == 2) {
             for (Entity e : team2) {
-                SURPRISE.apply(e, e);
+                this.surprise.apply(e, e);
                 System.out.println("You got surprised!");
             }
             Tools.sleep(1000);
@@ -200,6 +208,10 @@ public class Battle {
         // 1. Tally and calculate rewards from losers. All entities should have a "getRewardXp" method.
         // 2. Count number of entities eligible to gain xp, then distribute evenly.
         // TODO: 3. Calculate items from losers. Open prompt to distribute items within party and discard.
+        // This is an arguably janky way to implement giveRewards. Rethink it later.
+        if (!giveRewards) {
+            return;
+        }
 
         double xpGained = 0;
         boolean playersWon = false;

@@ -23,7 +23,8 @@ public class Arena {
     private ArrayList<Entity> team1;
     private ArrayList<Entity> team2;
     private int surprise = 0;
-    private boolean heal = false;
+    private int battleEndBehavior = 1;
+    private boolean giveRewards = false;
 
 
     // Constructors
@@ -77,21 +78,24 @@ public class Arena {
         if (team1 == null || team2 == null || team1.isEmpty() || team2.isEmpty()) {
             System.out.println("Teams haven't been initialized yet.");
             Tools.sleep(1000);
+            Tools.clear();
             return;
         }
 
         // This is a shallow copy. Fix with serialization later.
-        /*ArrayList<Entity> copy1 = new ArrayList<>(team1.size() + 1);
-        ArrayList<Entity> copy2 = new ArrayList<>(team2.size() + 1);*/
+        /*if (battleEndBehavior == 1) {
+            ArrayList<Entity> copy1 = new ArrayList<>(team1.size() + 1);
+            ArrayList<Entity> copy2 = new ArrayList<>(team2.size() + 1);
+         }*/
 
 
-        Battle b = new Battle(team1, team2);
+        // Somehow, even with surprise favoring team1, team2 went first. Not sure how, but watch out for this.
+        Battle b = new Battle(team1, team2, giveRewards);
         b.runBattle(surprise);
-        if (heal) {
+        if (battleEndBehavior == 2) {
             team1.forEach((e) -> e.fullHeal(RemoveCondition.LEVEL_UP));
             team2.forEach((e) -> e.fullHeal(RemoveCondition.LEVEL_UP));
         }
-        System.out.println("Ending Battle...");
     }
 
     private void chooseEditTeam() {
@@ -225,8 +229,9 @@ public class Arena {
         while (true) {
             System.out.println("Battle Settings");
             ArrayList<String> options = new ArrayList<>();
-            options.add("Surprise: " + surprise);
-            options.add("Heal: " + heal);
+            options.add("Surprise: " + getSurpriseString());
+            options.add("Post-Battle: " + getBattleEndBehaviorString());
+            options.add("Give Rewards: " + giveRewards);
 
             int choice = Tools.cancelableMenu(options);
             switch (choice) {
@@ -236,7 +241,10 @@ public class Arena {
                     editSurprise();
                     break;
                 case 2:
-                    heal = !heal;
+                    editBattleEndBehavior();
+                    break;
+                case 3:
+                    giveRewards = !giveRewards;
                     break;
             }
         }
@@ -254,6 +262,48 @@ public class Arena {
             return;
         }
         surprise = choice - 1;
+    }
+
+    private String getSurpriseString() {
+
+        switch (surprise) {
+            case 0:
+                return "Neither";
+            case 1:
+                return "Team 1";
+            case 2:
+                return "Team 2";
+            default:
+                throw new IllegalStateException("surprise set to illegal value.");
+        }
+    }
+
+    private void editBattleEndBehavior() {
+        System.out.println("Post-Battle Settings");
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Do nothing");
+        options.add("Reset teams");
+        options.add("Heal teams");
+
+        int choice = Tools.cancelableMenu(options);
+        if (choice == 0) {
+            return;
+        }
+        battleEndBehavior = choice - 1;
+    }
+
+    private String getBattleEndBehaviorString() {
+
+        switch (battleEndBehavior) {
+            case 0:
+                return "Nothing";
+            case 1:
+                return "Reset";
+            case 2:
+                return "Heal";
+            default:
+                throw new IllegalStateException("battleEndBehavior set to illegal value.");
+        }
     }
 
 
