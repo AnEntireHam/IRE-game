@@ -4,15 +4,17 @@ import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class AudioStream implements Runnable {
+public class AudioStream implements Runnable, Serializable {
 
     private static final int BUFFER_SIZE = 256;
 
     private final String path;
     private boolean play;
     private boolean end;
+    private transient Thread thread;
 
     public AudioStream(String path) {
 
@@ -20,12 +22,16 @@ public class AudioStream implements Runnable {
         this.play = false;
         this.end = false;
 
-        Thread thread = new Thread(this);
+        this.thread = new Thread(this);
         thread.start();
     }
 
     public void play() {
         this.play = true;
+        if (thread == null) {
+            this.thread = new Thread(this);
+            this.thread.start();
+        }
     }
 
     public void end() {

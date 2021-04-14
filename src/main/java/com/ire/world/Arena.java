@@ -16,6 +16,7 @@ import com.ire.entities.players.Mage;
 import com.ire.entities.players.Warrior;
 import com.ire.tools.Tools;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class Arena {
@@ -25,7 +26,7 @@ public class Arena {
     private int surprise = 0;
     private int battleEndBehavior = 1;
     private boolean giveRewards = false;
-
+    private final static String SAVE_DIRECTORY = "team/";
 
     // Constructors
 
@@ -83,10 +84,10 @@ public class Arena {
         }
 
         // This is a shallow copy. Fix with serialization later.
-        /*if (battleEndBehavior == 1) {
-            ArrayList<Entity> copy1 = new ArrayList<>(team1.size() + 1);
-            ArrayList<Entity> copy2 = new ArrayList<>(team2.size() + 1);
-         }*/
+        if (battleEndBehavior == 1) {
+            ArrayList<Entity> copy1 = new ArrayList<>(team1);
+            ArrayList<Entity> copy2 = new ArrayList<>(team2);
+         }
 
 
         // Somehow, even with surprise favoring team1, team2 went first. Not sure how, but watch out for this.
@@ -117,20 +118,23 @@ public class Arena {
                     editTeam(team2);
                     break;
                 case 3:
-                    loadDefaults();
+                    loadDefaultTeams();
                     break;
             }
         }
     }
 
-    private void loadDefaults() {
+    private void loadDefaultTeams() {
         team1 = new ArrayList<>();
         team2 = new ArrayList<>();
 
         Warrior warrior = new Warrior();
         Mage mage = new Mage();
+        Caster friend = new Caster(2);
+        friend.setControllable(true);
         team1.add(warrior);
         team1.add(mage);
+        //team1.add(friend);
 
         warrior.addWard(new Screen());
         warrior.addWard(new Mirror());
@@ -157,13 +161,57 @@ public class Arena {
 
     }
 
+    private void saveTeam(ArrayList<Entity> team) {
+
+        System.out.println("Saving team to \"team/save1.ser\"...");
+        Tools.sleep(500);
+        File f = new File(SAVE_DIRECTORY + "save1.ser");
+
+        try {
+            if (f.createNewFile()) {
+                System.out.println("Creating file...");
+            }
+        } catch (IOException e) {
+            System.out.println("Error creating file.");
+            e.printStackTrace();
+        }
+
+        try (FileOutputStream fileStream = new FileOutputStream(f);
+             ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
+            objectStream.writeObject(team);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadTeam(ArrayList<Entity> team) {
+
+        System.out.println("Loading team from \"team/save1.ser\"...");
+        Tools.sleep(500);
+        File f = new File(SAVE_DIRECTORY + "save1.ser");
+
+        try (FileInputStream fileStream = new FileInputStream(f);
+             ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
+            //noinspection unchecked
+            ArrayList<Entity> temp = (ArrayList<Entity>) objectStream.readObject();
+            team1.clear();
+            team.addAll(temp);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void editTeam(ArrayList<Entity> team) {
         while (true) {
-            System.out.println("Choose an entity to edit.");
+            System.out.println("Choose an option, or an entity to edit.");
             ArrayList<String> options = new ArrayList<>();
             options.add("Add Entity");
             options.add("Remove Entity");
             options.add("Copy Entity");
+            options.add("Load Team");
+            options.add("Save Team");
             for (Entity e : team) {
                 options.add(e.getName() + "  Lv. " + e.getLevel());
             }
@@ -182,14 +230,23 @@ public class Arena {
                 case 3:
                     copyEntity(team);
                     break;
+                case 4:
+                    loadTeam(team);
+                    break;
+                case 5:
+                    saveTeam(team);
+                    break;
                 default:
-                    editEntity(team.get(options.size() - 4));
+                    editEntity(team.get(options.size() - 6));
                     break;
             }
         }
     }
 
     private void addEntity(ArrayList<Entity> team) {
+
+        Mage mage = new Mage();
+        team.add(mage);
 
         System.out.println("WIP.");
         Tools.sleep(1000);

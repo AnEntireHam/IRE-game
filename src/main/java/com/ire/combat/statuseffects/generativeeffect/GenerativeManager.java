@@ -1,8 +1,9 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class GenerativeManager {
+public abstract class GenerativeManager implements Serializable {
 
     ArrayList<GenerativeEffect> generativeEffects;
     ArrayList<GenerativeEffect> regenEffects;

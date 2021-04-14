@@ -5,6 +5,7 @@ ire-game.iws
 /.idea/
 /out/
 /target/
+/team/
 output.txt
 SaveFile.txt
 IdeaProjects.iml

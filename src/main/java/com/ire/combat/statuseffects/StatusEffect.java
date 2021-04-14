@@ -2,9 +2,10 @@ package com.ire.combat.statuseffects;
 
 import com.ire.entities.Entity;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public abstract class StatusEffect implements RemoveMethod {
+public abstract class StatusEffect implements RemoveMethod, Serializable {
 
 
     // Fields

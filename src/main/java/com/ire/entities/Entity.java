@@ -15,13 +15,14 @@ import com.ire.combat.statuseffects.generativeeffect.*;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
 import com.ire.tools.Tools;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable {
 
     // Fields
     // TODO: This class is big. There are probably some fields and methods that can be extracted out.
@@ -469,7 +470,7 @@ public abstract class Entity {
 
         while (!confirmed) {
 
-            choice = generateActionChoice(attacks, "attacking");
+            choice = generateActionChoice(attacks, "defending");
 
             switch (attacks.get(choice - 1)) {
                 case "Stab":
@@ -511,7 +512,7 @@ public abstract class Entity {
 
         while (!confirmed) {
 
-            choice = generateActionChoice(defenses, "defending");
+            choice = generateActionChoice(defenses, "attacking");
 
             switch (defenses.get(choice - 1)) {
                 case "Shield":
@@ -864,6 +865,8 @@ public abstract class Entity {
         }
         return this.name + "'s";
     }
+
+    // TODO: Consider adding a getPossessivePronoun/Pronoun method.
 
     public boolean isAlive() {
         return this.alive;

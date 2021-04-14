@@ -1,10 +1,11 @@
 package com.ire.world;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Inventory {
+public class Inventory implements Serializable {
 
     private Map<String, Item> inventory = new HashMap<>();
 

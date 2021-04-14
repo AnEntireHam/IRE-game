@@ -6,14 +6,16 @@ import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Objects;
 
-public class AudioClip implements Runnable, LineListener{
+public class AudioClip implements Runnable, LineListener, Serializable {
 
     private final String path;
     private boolean play;
     private boolean playCompleted;
     private boolean end;
+    private transient Thread thread;
 
     public AudioClip(String path) {
 
@@ -22,13 +24,17 @@ public class AudioClip implements Runnable, LineListener{
         this.playCompleted = false;
         this.end = false;
 
-        Thread thread = new Thread(this);
+        this.thread = new Thread(this);
         thread.start();
     }
 
     public void play() {
         this.play = true;
         this.playCompleted = false;
+        if (thread == null) {
+            this.thread = new Thread(this);
+            this.thread.start();
+        }
     }
 
     public void end() {
