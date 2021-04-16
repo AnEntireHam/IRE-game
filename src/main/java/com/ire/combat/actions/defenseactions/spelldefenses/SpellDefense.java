@@ -1,7 +1,7 @@
 package com.ire.combat.actions.defenseactions.spelldefenses;
 
 import com.ire.combat.actions.defenseactions.DefenseAction;
-import com.ire.tools.Tools;
+import com.ire.tools.UserInput;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,7 +25,7 @@ public abstract class SpellDefense extends DefenseAction {
 
         if (input) {
             System.out.println("Select a ward");
-            choice = Tools.cancelableMenu(options);
+            choice = UserInput.cancelableMenu(options);
         } else {
             // TODO: Consider replacing with Math.random. Figure out if Math.random is generally better.
             Random rand = new Random();

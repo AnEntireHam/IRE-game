@@ -1,6 +1,6 @@
 package com.ire.audio;
 
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 import javax.sound.sampled.*;
 import java.io.BufferedInputStream;
@@ -63,7 +63,7 @@ public class AudioClip implements Runnable, LineListener, Serializable {
     private void playClip() {
 
         try {
-            if (Tools.isBotClient()) {
+            if (PrintControl.isBotClient()) {
                 System.out.println("SFX" + path);
                 this.play = false;
                 return;

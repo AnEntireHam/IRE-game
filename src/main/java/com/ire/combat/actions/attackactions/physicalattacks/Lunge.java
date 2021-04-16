@@ -2,7 +2,7 @@ package com.ire.combat.actions.attackactions.physicalattacks;
 
 import com.ire.audio.AudioClip;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public class Lunge extends PhysicalAttack {
 
@@ -17,7 +17,7 @@ public class Lunge extends PhysicalAttack {
     public void execute(Entity attacker, Entity defender) {
 
         System.out.println(attacker.getName() + " lunged at " + defender.getName());
-        Tools.sleep(1250);
+        PrintControl.sleep(1250);
 
         calculateDamage(attacker, defender);
 
@@ -42,10 +42,10 @@ public class Lunge extends PhysicalAttack {
     protected void narrateEvents(Entity attacker, Entity defender) {
 
         if (defender.isAlive()) {
-            Tools.sleep(250);
+            PrintControl.sleep(250);
             System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
             this.SOUND.play();
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
 
         } else {
             this.SOUND.play();

@@ -5,7 +5,9 @@ import com.ire.audio.AudioClip;
 import com.ire.combat.actions.attackactions.AttackAction;
 import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.Bar;
+import com.ire.tools.PrintControl;
+import com.ire.tools.UserInput;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -67,21 +69,20 @@ public abstract class SpellAttack extends AttackAction {
         Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
 
-        Tools.sleep(DELAY);
+        PrintControl.sleep(DELAY);
         this.SOUND.play();
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
-            Tools.sleep(DURATION - DELAY);
+            PrintControl.sleep(DURATION - DELAY);
         }
     }
 
-    // TODO: Split into separate methods. Perhaps it should use Tools' menu().
+    // TODO: Split into separate methods. Perhaps it should use UserInput's menu().
     public static int menu(ArrayList<SpellAttack> spells, int mana, int curMag, boolean input) {
 
         ArrayList<String> options = new ArrayList<>();
         ArrayList<Integer> exclusions = new ArrayList<>();
-        int choice;
 
         for (int i = 0; i < spells.size(); i++) {
 
@@ -106,23 +107,16 @@ public abstract class SpellAttack extends AttackAction {
 
         if (input) {
             System.out.println("Select a spell");
-            String bar = "";
+            Attribute[] colors = new Attribute[]{TEXT_COLOR(0, 100, 255), TEXT_COLOR(150, 50, 255)};
+            String bar = Bar.createBar(mana, curMag, 20, colors);
 
-            // TODO: Entity.getUseColor() is a bodge. Replace this.
-            if (Tools.isBotClient()) {
-                Attribute[] colors = new Attribute[]{TEXT_COLOR(0, 100, 255), TEXT_COLOR(150, 50, 255)};
-                bar = Tools.createColoredBar(mana, curMag, 20, colors);
-
-            } else {
-                bar = Tools.createBar(mana, curMag, 20);
-            }
 
             System.out.println("Mana  " + bar + " " + mana + "/" + curMag);
-            return Tools.cancelableMenu(options, exclusions);
+            return UserInput.cancelableMenu(options, exclusions);
         }
 
         Random rand = new Random();
-        return choice = rand.nextInt(options.size() + 1);
+        return rand.nextInt(options.size() + 1);
     }
 
     protected void updateName() {

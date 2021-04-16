@@ -5,7 +5,7 @@ import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.stateffects.Surprise;
 import com.ire.entities.Entity;
 import com.ire.entities.players.Player;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 import java.util.ArrayList;
 
@@ -108,11 +108,11 @@ public class Battle {
         }
 
         if (checkDead() == 1) {
-            Tools.clear();
+            PrintControl.clear();
             giveRewards(team1, team2);
             return true;
         } else {
-            Tools.clear();
+            PrintControl.clear();
             giveRewards(team2, team1);
             return false;
         }
@@ -125,7 +125,7 @@ public class Battle {
                 this.surprise.apply(p, p);
             }
             System.out.println("You got the surprise on the enemy!");
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
             return;
         }
 
@@ -134,7 +134,7 @@ public class Battle {
                 this.surprise.apply(e, e);
             }
             System.out.println("You got surprised!");
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
         }
     }
 
@@ -234,7 +234,7 @@ public class Battle {
             WIN.play();
             System.out.println("Everyone got " + (int) xpGained + " xp.");
             // Method to show XP bars
-            Tools.emptyPrompt();
+            PrintControl.emptyPrompt();
         }
 
         for (Entity p : winners) {

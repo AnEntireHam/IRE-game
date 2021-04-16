@@ -2,7 +2,7 @@ package com.ire.combat.actions.attackactions.physicalattacks;
 
 import com.ire.audio.AudioClip;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public class Stab extends PhysicalAttack {
 
@@ -31,12 +31,12 @@ public class Stab extends PhysicalAttack {
     protected void narrateEvents(Entity attacker, Entity defender) {
 
         System.out.println(attacker.getName() + " stabbed " + defender.getName());
-        Tools.sleep(DELAY);
+        PrintControl.sleep(DELAY);
         this.SOUND.play();
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
-            Tools.sleep(DURATION - DELAY);
+            PrintControl.sleep(DURATION - DELAY);
         }
     }
 

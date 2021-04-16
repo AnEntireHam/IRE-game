@@ -2,7 +2,7 @@ package com.ire.combat.actions.attackactions.spellattacks;
 
 import com.ire.audio.AudioClip;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 import java.util.Formatter;
 
@@ -27,14 +27,14 @@ public class Lunar extends SpellAttack {
 
         System.out.println(parser.format(flavorText, attacker.getName(), healthCost));
 
-        Tools.sleep(DELAY);
+        PrintControl.sleep(DELAY);
         this.SOUND.play();
 
         attacker.takeDamage(healthCost, false);
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
-            Tools.sleep(DURATION - DELAY);
+            PrintControl.sleep(DURATION - DELAY);
         }
     }
 

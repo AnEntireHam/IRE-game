@@ -3,7 +3,7 @@ package com.ire.combat.statuseffects.stateffects;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public abstract class StatEffect extends StatusEffect {
 
@@ -106,7 +106,7 @@ public abstract class StatEffect extends StatusEffect {
                 System.out.println(defender + " didn't have their " + statName + " increased.");
             }
         }
-        Tools.sleep(1000);  //  Eventually factor in global text speed
+        PrintControl.sleep(1000);  //  Eventually factor in global text speed
     }
 
     @Override
@@ -128,17 +128,17 @@ public abstract class StatEffect extends StatusEffect {
             default:
             case EXPIRATION:
                 System.out.println(target.getPossessiveName() + " status effect \"" + name + "\" expired.");
-                Tools.sleep(1250);
+                PrintControl.sleep(1250);
                 break;
 
             case DEATH:
                 System.out.println(target.getPossessiveName() + " " + name + " faded.");
-                Tools.sleep(1250);
+                PrintControl.sleep(1250);
                 break;
 
             case END_BATTLE:
                 System.out.println(target.getName() + " removed \"" + name + "\" from themselves.");
-                Tools.sleep(1250);
+                PrintControl.sleep(1250);
                 break;
 
             case LEVEL_UP:

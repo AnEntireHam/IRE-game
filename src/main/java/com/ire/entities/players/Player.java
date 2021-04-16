@@ -3,7 +3,8 @@ package com.ire.entities.players;
 import com.ire.audio.AudioStream;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
+import com.ire.tools.UserInput;
 import com.ire.world.Inventory;
 
 public abstract class Player extends Entity {
@@ -45,7 +46,7 @@ public abstract class Player extends Entity {
             return;
         }
 
-        Tools.clear();
+        PrintControl.clear();
 
         int[] previousBaseStats = {this.baseHlh, this.baseAtk, this.baseDef, this.baseMag, this.baseSpd};
 
@@ -60,7 +61,7 @@ public abstract class Player extends Entity {
         this.fullHeal(RemoveCondition.LEVEL_UP);
     }
 
-    // Weird version of Tools' menu. May be able to consolidate later.
+    // Weird version of PrintControl' menu. May be able to consolidate later.
     private void allocateBonusPoints(int targetLevel, int[] previousBaseStats, String[] statPrefixes, String message) {
 
         int bonusPoints = calculateBonusPoints(targetLevel);
@@ -82,8 +83,8 @@ public abstract class Player extends Entity {
 
         printStatChanges(previousBaseStats, statPrefixes, targetLevel, message);
 
-        Tools.emptyPrompt();
-        Tools.clear();
+        PrintControl.emptyPrompt();
+        PrintControl.clear();
     }
 
     private void addAllocations(int targetLevel) {
@@ -136,7 +137,7 @@ public abstract class Player extends Entity {
 
     private String handleAllocationChoice() {
         String message;
-        int choice = Tools.getUserInt(1, 5);
+        int choice = UserInput.getUserInt(1, 5);
         String statName = "";
 
         switch (choice) {

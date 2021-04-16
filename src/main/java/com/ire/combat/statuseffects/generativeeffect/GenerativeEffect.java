@@ -3,7 +3,7 @@ package com.ire.combat.statuseffects.generativeeffect;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -69,18 +69,18 @@ public abstract class GenerativeEffect extends StatusEffect {
             case EXPIRATION:
                 Formatter parser = new Formatter();
                 System.out.println(parser.format(expirationMessage, target.getName()));
-                Tools.sleep(1250);
+                PrintControl.sleep(1250);
                 break;
 
             case DEATH:
                 System.out.println(target.getPossessiveName() + " " + name + " faded.");
-                Tools.sleep(1250);
+                PrintControl.sleep(1250);
                 break;
 
             case END_BATTLE:
                 if (target.isAlive()) {
                     System.out.println(target.getName() + " removed \"" + name + "\" from themself.");
-                    Tools.sleep(1250);
+                    PrintControl.sleep(1250);
                 }
                 break;
 

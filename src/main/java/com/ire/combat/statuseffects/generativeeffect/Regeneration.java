@@ -1,6 +1,6 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public class Regeneration extends HealthGenerative{
 
@@ -27,6 +27,6 @@ public class Regeneration extends HealthGenerative{
                 System.out.println(defenderName + "'s regeneration didn't increase.");
             }
         }
-        Tools.sleep(1000);
+        PrintControl.sleep(1000);
     }
 }

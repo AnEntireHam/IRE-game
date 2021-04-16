@@ -2,7 +2,7 @@ package com.ire.combat.statuseffects.generativeeffect;
 
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public abstract class HealthGenerative extends GenerativeEffect {
 
@@ -31,7 +31,7 @@ public abstract class HealthGenerative extends GenerativeEffect {
 
             if (target.isAlive()) {
                 System.out.println(target.getName() + " bled for " + -total + " damage.");
-                Tools.sleep(1000);
+                PrintControl.sleep(1000);
             }
             target.takeDamage(-total, false);
             return;
@@ -45,6 +45,6 @@ public abstract class HealthGenerative extends GenerativeEffect {
         }
 
         System.out.println(target.getName() + " regenerated as much health as they bled for.");
-        Tools.sleep(1000);
+        PrintControl.sleep(1000);
     }
 }

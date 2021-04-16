@@ -35,7 +35,7 @@ public class Mirror extends SpellDefense {
         SpellAttack attack = (SpellAttack) attacker.getCurAction();
 
         defender.takeDamage(Math.round(attack.getDamage() * 0.3333f), true);
-        //  Tools.sleep(1000);
+        //  PrintControl.sleep(1000);
         System.out.println("... and reflected " + attacker.getPossessiveName() + " spell!");
         reflect.play();
 

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class Test {
 
     public static void main(String[] args) {
-
+        
         Mage p1 = new Mage();
 
         Skeleton e1 = new Skeleton(1);

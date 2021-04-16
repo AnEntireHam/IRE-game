@@ -2,7 +2,7 @@ package com.ire.combat.statuseffects.generativeeffect;
 
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public abstract class ManaGenerative extends GenerativeEffect {
 
@@ -30,7 +30,7 @@ public abstract class ManaGenerative extends GenerativeEffect {
 
             if (target.isAlive()) {
                 System.out.println(target.getName() + " lost " + -total + " mana.");
-                Tools.sleep(1000);
+                PrintControl.sleep(1000);
             }
             target.bleedMana(-total, false, false);
             return;
@@ -43,6 +43,6 @@ public abstract class ManaGenerative extends GenerativeEffect {
         }
 
         System.out.println(target.getName() + " regenerated a normal amount of mana.");
-        Tools.sleep(1000);
+        PrintControl.sleep(1000);
     }
 }

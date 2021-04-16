@@ -13,7 +13,9 @@ import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.generativeeffect.*;
 import com.ire.combat.statuseffects.stateffects.StatEffect;
-import com.ire.tools.Tools;
+import com.ire.tools.Bar;
+import com.ire.tools.PrintControl;
+import com.ire.tools.UserInput;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -165,13 +167,10 @@ public abstract class Entity implements Serializable {
          * Consider adding a "shields/armor" color rather than just "yellow".
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
-        if (!Tools.isBotClient()) {
-            Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
-            output.append(Tools.createColoredBar(this.getHlh(), this.getCurHlh(), 20, colors))
-                    .append("  ");
-        } else {
-            output.append(Tools.createBar(this.getHlh(), this.getCurHlh(), 20)).append("  ");
-        }
+        //Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
+        Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55)};
+        output.append(Bar.createBar(this.getHlh(), this.getCurHlh(), 20, colors))
+                .append("  ");
 
         for (StatusEffect se: statusEffects) {
             output.append(se.generateDisplay());
@@ -292,7 +291,7 @@ public abstract class Entity implements Serializable {
         }
 
         if (message) {
-            Tools.sleep(2000);
+            PrintControl.sleep(2000);
             System.out.println();
         }
     }
@@ -326,7 +325,7 @@ public abstract class Entity implements Serializable {
     private void printDamageMessage(String message) {
 
         System.out.println(message);
-        Tools.sleep(2000);
+        PrintControl.sleep(2000);
         System.out.println();
     }
 
@@ -371,7 +370,7 @@ public abstract class Entity implements Serializable {
         }
 
         if (message) {
-            Tools.sleep(2000);
+            PrintControl.sleep(2000);
             System.out.println();
         }
     }
@@ -428,7 +427,7 @@ public abstract class Entity implements Serializable {
     private void printRegenMessage(String message) {
 
         System.out.println(message);
-        Tools.sleep(2000);
+        PrintControl.sleep(2000);
         System.out.println();
     }
 
@@ -440,7 +439,7 @@ public abstract class Entity implements Serializable {
         if (message) {
             this.deathSound.play();
             System.out.println(name + " has died.");
-            Tools.sleep(1500);
+            PrintControl.sleep(1500);
             System.out.println();
         }
 
@@ -455,7 +454,7 @@ public abstract class Entity implements Serializable {
         if (message) {
             REVIVE_SOUND.play();
             System.out.println(name + " was resurrected.");
-            Tools.sleep(1500);
+            PrintControl.sleep(1500);
             System.out.println();
         }
     }
@@ -538,10 +537,10 @@ public abstract class Entity implements Serializable {
 
     private int generateActionChoice(ArrayList<String> options, String verb) {
         if (this.controllable) {
-            Tools.clear();
+            PrintControl.clear();
             System.out.println("Enemies are " + verb + ". Select an action.");
             System.out.println("\n" + this.generateBattleStatus(true) + "\n");
-            return Tools.menu(options);
+            return UserInput.menu(options);
         }
         Random rand = new Random();
         return rand.nextInt(options.size()) + 1;
@@ -552,7 +551,7 @@ public abstract class Entity implements Serializable {
         ArrayList<String> options = new ArrayList<>();
         int choice;
 
-        Tools.sortEntityList(targets);
+        PrintControl.sortEntityList(targets);
 
         for (Entity t : targets) {
             if (t.isAlive()) {
@@ -562,7 +561,7 @@ public abstract class Entity implements Serializable {
 
         if (this.controllable) {
             System.out.println("Select a target.");
-            choice = Tools.cancelableMenu(options) - 1;
+            choice = UserInput.cancelableMenu(options) - 1;
             if (choice != -1) {
                 this.targetIndex = choice;
                 return true;
@@ -774,7 +773,7 @@ public abstract class Entity implements Serializable {
             int damage = this.hlh - this.curHlh;
             this.takeDamage(damage, false);
             System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
-            Tools.sleep(2000);
+            PrintControl.sleep(2000);
         }
 
         return this.curHlh;

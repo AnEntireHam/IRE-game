@@ -5,7 +5,7 @@ import com.ire.combat.actions.attackactions.spellattacks.debuffspells.DebuffSpel
 import com.ire.combat.statuseffects.generativeeffect.GenerativeEffect;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 import java.util.Formatter;
 
@@ -27,13 +27,13 @@ public class Heal extends DebuffSpell {
         Formatter parser = new Formatter();
         System.out.println(parser.format(flavorText, attacker.getName(), defender.getName()));
 
-        Tools.sleep(DELAY);
+        PrintControl.sleep(DELAY);
         this.SOUND.play();
 
 
         if (defender.isAlive()) {
             System.out.println(defender.getName() + " used " + defender.getCurAction().getName());
-            Tools.sleep(DURATION - DELAY);
+            PrintControl.sleep(DURATION - DELAY);
         }
 
         attacker.incrementMan(-baseManaCost);

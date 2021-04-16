@@ -1,6 +1,6 @@
 package com.ire.combat.statuseffects.generativeeffect;
 
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public class ManaBleed extends ManaGenerative {
 
@@ -27,6 +27,6 @@ public class ManaBleed extends ManaGenerative {
                 System.out.println(defender + " didn't start losing more mana.");
             }
         }
-        Tools.sleep(1000);
+        PrintControl.sleep(1000);
     }
 }

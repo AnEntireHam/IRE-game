@@ -3,7 +3,7 @@ package com.ire.combat.actions.defenseactions.physicaldefenses;
 import com.ire.combat.actions.Action;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
 import com.ire.entities.Entity;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
 
 public class Counter extends PhysicalDefense {
 
@@ -28,7 +28,7 @@ public class Counter extends PhysicalDefense {
 
             System.out.println("... but was countered!");
             ((Lunge) attack).getSOUND().play();
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
             attacker.takeDamage(counterDamage, true);
 
         } else {

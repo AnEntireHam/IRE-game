@@ -14,10 +14,12 @@ import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.players.Mage;
 import com.ire.entities.players.Warrior;
-import com.ire.tools.Tools;
+import com.ire.tools.PrintControl;
+import com.ire.tools.UserInput;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Arena {
 
@@ -50,15 +52,9 @@ public class Arena {
     public void startArenaLoop() {
         while (true) {
             System.out.println("Welcome to the arena.");
-            ArrayList<String> options = new ArrayList<>();
-            options.add("Start Battle");
-            options.add("Edit Teams");
-            options.add("Edit Battle Settings");
-            options.add("Exit");
+            String[] options = {"Start Battle", "Edit Teams", "Edit Battle Settings", "Exit"};
 
-            int choice = Tools.menu(options);
-
-            switch (choice) {
+            switch (UserInput.menu(options)) {
                 case 1:
                     startBattle();
                     break;
@@ -78,8 +74,8 @@ public class Arena {
         System.out.println("Starting Battle...");
         if (team1 == null || team2 == null || team1.isEmpty() || team2.isEmpty()) {
             System.out.println("Teams haven't been initialized yet.");
-            Tools.sleep(1000);
-            Tools.clear();
+            PrintControl.sleep(1000);
+            PrintControl.clear();
             return;
         }
 
@@ -102,13 +98,9 @@ public class Arena {
     private void chooseEditTeam() {
         while (true) {
             System.out.println("Choose a team to edit");
-            ArrayList<String> options = new ArrayList<>();
-            options.add("Team 1");
-            options.add("Team 2");
-            options.add("Load Defaults");
+            String[] options = {"Team 1", "Team 2", "Load Defaults"};
 
-            int choice = Tools.cancelableMenu(options);
-            switch (choice) {
+            switch (UserInput.cancelableMenu(options)) {
                 case 0:
                     return;
                 case 1:
@@ -161,10 +153,80 @@ public class Arena {
 
     }
 
+    private void editTeam(ArrayList<Entity> team) {
+        while (true) {
+            System.out.println("Choose an option or an entity to edit.");
+            ArrayList<String> options = new ArrayList<>(
+                    Arrays.asList("Add Entity", "Remove Entity", "Copy Entity", "Load Team", "Save Team"));
+            for (Entity e : team) {
+                options.add(e.getName() + "  Lv. " + e.getLevel());
+            }
+
+            int choice = UserInput.cancelableMenu(options);
+            switch (choice) {
+                case 0:
+                    return;
+                case 1:
+                    addEntity(team);
+                    break;
+                case 2:
+                    removeEntity(team);
+                    break;
+                case 3:
+                    copyEntity(team);
+                    break;
+                case 4:
+                    loadTeam(team);
+                    break;
+                case 5:
+                    saveTeam(team);
+                    break;
+                default:
+                    editEntity(team.get(choice - 6));
+                    break;
+            }
+        }
+    }
+
+    private void addEntity(ArrayList<Entity> team) {
+
+        Skeleton s = new Skeleton(1);
+        s.setName("MR JANGELY BONES");
+        team.add(s);
+
+        System.out.println("WIP.");
+        PrintControl.sleep(1000);
+
+        /*System.out.println("Choose entity type");
+        ArrayList<String> options = new ArrayList<>();
+        options.add("Player");
+        options.add("Enemy");
+
+        int choice = PrintControl.cancelableMenu(options);
+
+        switch (choice) {
+            case 0:
+                return;
+            case 1:
+
+        }*/
+
+    }
+
+    private void removeEntity(ArrayList<Entity> team) {
+        System.out.println("WIP.");
+        PrintControl.sleep(1000);
+    }
+
+    private void copyEntity(ArrayList<Entity> team) {
+        System.out.println("WIP.");
+        PrintControl.sleep(1000);
+    }
+
     private void saveTeam(ArrayList<Entity> team) {
 
         System.out.println("Saving team to \"team/save1.ser\"...");
-        Tools.sleep(500);
+        PrintControl.sleep(500);
         File f = new File(SAVE_DIRECTORY + "save1.ser");
 
         try {
@@ -188,7 +250,7 @@ public class Arena {
     private void loadTeam(ArrayList<Entity> team) {
 
         System.out.println("Loading team from \"team/save1.ser\"...");
-        Tools.sleep(500);
+        PrintControl.sleep(500);
         File f = new File(SAVE_DIRECTORY + "save1.ser");
 
         try (FileInputStream fileStream = new FileInputStream(f);
@@ -203,95 +265,19 @@ public class Arena {
         }
     }
 
-    private void editTeam(ArrayList<Entity> team) {
-        while (true) {
-            System.out.println("Choose an option, or an entity to edit.");
-            ArrayList<String> options = new ArrayList<>();
-            options.add("Add Entity");
-            options.add("Remove Entity");
-            options.add("Copy Entity");
-            options.add("Load Team");
-            options.add("Save Team");
-            for (Entity e : team) {
-                options.add(e.getName() + "  Lv. " + e.getLevel());
-            }
-
-            int choice = Tools.cancelableMenu(options);
-
-            switch (choice) {
-                case 0:
-                    return;
-                case 1:
-                    addEntity(team);
-                    break;
-                case 2:
-                    removeEntity(team);
-                    break;
-                case 3:
-                    copyEntity(team);
-                    break;
-                case 4:
-                    loadTeam(team);
-                    break;
-                case 5:
-                    saveTeam(team);
-                    break;
-                default:
-                    editEntity(team.get(options.size() - 6));
-                    break;
-            }
-        }
-    }
-
-    private void addEntity(ArrayList<Entity> team) {
-
-        Mage mage = new Mage();
-        team.add(mage);
-
-        System.out.println("WIP.");
-        Tools.sleep(1000);
-
-        /*System.out.println("Choose entity type");
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Player");
-        options.add("Enemy");
-
-        int choice = Tools.cancelableMenu(options);
-
-        switch (choice) {
-            case 0:
-                return;
-            case 1:
-
-        }*/
-
-    }
-
-    private void removeEntity(ArrayList<Entity> team) {
-        System.out.println("WIP.");
-        Tools.sleep(1000);
-    }
-
-    private void copyEntity(ArrayList<Entity> team) {
-        System.out.println("WIP.");
-        Tools.sleep(1000);
-    }
-
     private void editEntity(Entity entity) {
         System.out.println("WIP.");
-        Tools.sleep(1000);
+        PrintControl.sleep(1000);
     }
 
     private void editSettings() {
         while (true) {
             System.out.println("Battle Settings");
-            ArrayList<String> options = new ArrayList<>();
-            options.add("Surprise: " + getSurpriseString());
-            options.add("Post-Battle: " + getBattleEndBehaviorString());
-            options.add("Give Rewards: " + giveRewards);
+            String[] options = {"Surprise: " + getSurpriseString(),
+                    "Post-Battle: " + getBattleEndBehaviorString(),
+                    "Give Rewards: " + giveRewards};
 
-            int choice = Tools.cancelableMenu(options);
-            switch (choice) {
+            switch (UserInput.cancelableMenu(options)) {
                 case 0:
                     return;
                 case 1:
@@ -309,12 +295,9 @@ public class Arena {
 
     private void editSurprise() {
         System.out.println("Surprise Settings");
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Neither has surprise");
-        options.add("Team 1 has surprise");
-        options.add("Team 2 has surprise");
+        String[] options = {"Neither has surprise", "Team 1 has surprise", "Team 2 has surprise"};
 
-        int choice = Tools.cancelableMenu(options);
+        int choice = UserInput.cancelableMenu(options);
         if (choice == 0) {
             return;
         }
@@ -342,7 +325,7 @@ public class Arena {
         options.add("Reset teams");
         options.add("Heal teams");
 
-        int choice = Tools.cancelableMenu(options);
+        int choice = UserInput.cancelableMenu(options);
         if (choice == 0) {
             return;
         }

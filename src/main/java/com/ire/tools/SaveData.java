@@ -29,7 +29,7 @@ public class SaveData {
 
             System.out.println("An error occurred. Could not read file.");
             e.printStackTrace();
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
         }
     }
 
@@ -41,7 +41,7 @@ public class SaveData {
 
             if (f.createNewFile()) {
                 System.out.println("File created: " + f.getName());
-                Tools.sleep(1000);
+                PrintControl.sleep(1000);
                 return;
             }
             System.out.println("File already exists.");
@@ -49,7 +49,7 @@ public class SaveData {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("An error occurred. Could not create file.");
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
         }
     }
 
@@ -61,12 +61,12 @@ public class SaveData {
             myWriter.write(d);
             myWriter.close();
             System.out.println("Successfully wrote to the file.");
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
 
         } catch (IOException e) {
             System.out.println("An error occurred. Could not write to file.");
             e.printStackTrace();
-            Tools.sleep(1000);
+            PrintControl.sleep(1000);
         }
     }
 }
