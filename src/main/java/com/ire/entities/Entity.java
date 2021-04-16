@@ -167,10 +167,8 @@ public abstract class Entity implements Serializable {
          * Consider adding a "shields/armor" color rather than just "yellow".
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
-        //Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
-        Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55)};
-        output.append(Bar.createBar(this.getHlh(), this.getCurHlh(), 20, colors))
-                .append("  ");
+        Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
+        output.append(Bar.createBar(this.getHlh(), this.getCurHlh(), 20, colors)).append("  ");
 
         for (StatusEffect se: statusEffects) {
             output.append(se.generateDisplay());

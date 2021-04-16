@@ -9,6 +9,10 @@ import com.ire.combat.actions.attackactions.spellattacks.debuffspells.statspells
 import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.combat.actions.defenseactions.spelldefenses.Screen;
 import com.ire.combat.statuseffects.RemoveCondition;
+import com.ire.combat.statuseffects.generativeeffect.Bleed;
+import com.ire.combat.statuseffects.generativeeffect.Regeneration;
+import com.ire.combat.statuseffects.stateffects.AttackUp;
+import com.ire.combat.statuseffects.stateffects.MagicUp;
 import com.ire.entities.Entity;
 import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
@@ -79,17 +83,19 @@ public class Arena {
             return;
         }
 
-        // This is a shallow copy. Fix with serialization later.
-        if (battleEndBehavior == 1) {
-            ArrayList<Entity> copy1 = new ArrayList<>(team1);
-            ArrayList<Entity> copy2 = new ArrayList<>(team2);
+        if (battleEndBehavior == 2) {
+            saveTeam(team1, "temp1",false);
+            saveTeam(team2, "temp2", false);
          }
-
-
         // Somehow, even with surprise favoring team1, team2 went first. Not sure how, but watch out for this.
         Battle b = new Battle(team1, team2, giveRewards);
         b.runBattle(surprise);
+
         if (battleEndBehavior == 2) {
+            loadTeam(team1, "temp1", false);
+            loadTeam(team2, "temp2", false);
+
+        } else if (battleEndBehavior == 3) {
             team1.forEach((e) -> e.fullHeal(RemoveCondition.LEVEL_UP));
             team2.forEach((e) -> e.fullHeal(RemoveCondition.LEVEL_UP));
         }
@@ -176,10 +182,10 @@ public class Arena {
                     copyEntity(team);
                     break;
                 case 4:
-                    loadTeam(team);
+                    loadTeam(team, "save1",true);
                     break;
                 case 5:
-                    saveTeam(team);
+                    saveTeam(team, "save1", true);
                     break;
                 default:
                     editEntity(team.get(choice - 6));
@@ -223,14 +229,16 @@ public class Arena {
         PrintControl.sleep(1000);
     }
 
-    private void saveTeam(ArrayList<Entity> team) {
+    private void saveTeam(ArrayList<Entity> team, String path, boolean message) {
 
-        System.out.println("Saving team to \"team/save1.ser\"...");
-        PrintControl.sleep(500);
-        File f = new File(SAVE_DIRECTORY + "save1.ser");
+        if (message) {
+            System.out.println("Saving team to \"team/" + path + ".ser\"...");
+            PrintControl.sleep(500);
+        }
+        File f = new File(SAVE_DIRECTORY + path + ".ser");
 
         try {
-            if (f.createNewFile()) {
+            if (f.createNewFile() && message) {
                 System.out.println("Creating file...");
             }
         } catch (IOException e) {
@@ -247,17 +255,19 @@ public class Arena {
         }
     }
 
-    private void loadTeam(ArrayList<Entity> team) {
+    private void loadTeam(ArrayList<Entity> team, String path, boolean message) {
 
-        System.out.println("Loading team from \"team/save1.ser\"...");
-        PrintControl.sleep(500);
-        File f = new File(SAVE_DIRECTORY + "save1.ser");
+        if (message) {
+            System.out.println("Loading team from \"team/" + path + ".ser\"...");
+            PrintControl.sleep(500);
+        }
+        File f = new File(SAVE_DIRECTORY + path + ".ser");
 
         try (FileInputStream fileStream = new FileInputStream(f);
              ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
             //noinspection unchecked
             ArrayList<Entity> temp = (ArrayList<Entity>) objectStream.readObject();
-            team1.clear();
+            team.clear();
             team.addAll(temp);
 
         } catch (IOException | ClassNotFoundException e) {
@@ -267,7 +277,43 @@ public class Arena {
 
     private void editEntity(Entity entity) {
         System.out.println("WIP.");
-        PrintControl.sleep(1000);
+        // PrintControl.sleep(1000);
+        System.out.println("Select an effect to apply to this entity");
+        String[] options = {"Damage", "Heal", "Man Heal", "Atk Up", "Mag Up", "Apply Bleed", "Apply Regen"};
+        AttackUp au = new AttackUp(1);
+        MagicUp mu = new MagicUp(1);
+        Bleed bleed = new Bleed(1);
+        bleed.setStrength(2);
+        Regeneration regen = new Regeneration(1);
+        regen.setStrength(2);
+
+        switch (UserInput.cancelableMenu(options)) {
+            case 0:
+                return;
+            case 1:
+                entity.takeDamage(3, true);
+                break;
+            case 2:
+                entity.regenerateHealth(3, false, true);
+                break;
+            case 3:
+                entity.regenerateMana(3, false, true);
+                break;
+            case 4:
+                au.apply(entity, entity);
+                break;
+            case 5:
+                mu.apply(entity, entity);
+                break;
+            case 6:
+                bleed.apply(entity, entity);
+                break;
+            case 7:
+                regen.apply(entity, entity);
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected value in editEntity");
+        }
     }
 
     private void editSettings() {
