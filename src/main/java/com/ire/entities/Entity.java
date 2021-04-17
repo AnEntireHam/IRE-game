@@ -31,11 +31,6 @@ public abstract class Entity implements Serializable {
     protected String name;
     protected int level;
     protected StatHelper stats;
-    protected int baseHlh, curHlh, hlh;
-    protected int baseAtk, curAtk;
-    protected int baseDef, curDef;
-    protected int baseMag, curMag, man;
-    protected int baseSpd, curSpd;
     // TODO: Xp fields might be weird to have in Entity. This is a bodge for now.
     // TODO: Add a bar for Xp, which displays post-battle or in party menu.
     protected int totalXp;
@@ -82,27 +77,12 @@ public abstract class Entity implements Serializable {
 
         this.level = 1;
         this.stats = new StatHelper(baseHlh, baseAtk, baseDef, baseMag, baseSpd);
-        this.baseHlh = baseHlh;
-        this.baseAtk = baseAtk;
-        this.baseDef = baseDef;
-        this.baseMag = baseMag;
-        this.baseSpd = baseSpd;
         this.name = name;
         this.alive = true;
         this.controllable = controllable;
-
-        this.curHlh = baseHlh;
-        this.curAtk = baseAtk;
-        this.curDef = baseDef;
-        this.curMag = baseMag;
-        this.curSpd = baseSpd;
-
-        this.hlh = this.getCurStat("hlh");
-        this.man = this.getCurStat("mag");
-        //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
-
         this.deathSound = new AudioClip(deathSound);
 
+        //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
         this.totalXp = calculateNextXp(this.level);
         this.nextXp = calculateNextXp(this.level + 1);
         // This scale is temporary.
@@ -230,8 +210,8 @@ public abstract class Entity implements Serializable {
         regenerateHealth(this.getCurStat("hlh"), false, false);
         regenerateMana(this.getCurStat("mag"), false, false);
 
-        this.hlh = this.getCurStat("hlh");
-        this.man = this.getCurStat("mag");
+        this.stats.setHlh(this.getCurStat("hlh"));
+        this.stats.setMan(this.getCurStat("mag"));
 
         if (!this.isAlive()) {
             this.revive(true);
@@ -240,7 +220,7 @@ public abstract class Entity implements Serializable {
 
     public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
 
-        if ((this.hlh + regenStrength) > this.getCurStat("hlh")) {
+        if ((this.stats.getHlh() + regenStrength) > this.getCurStat("hlh")) {
 
             if (surplus) {
                 if (message) {
@@ -248,17 +228,17 @@ public abstract class Entity implements Serializable {
                     HEAL_SOUND.play();  // Beyond-limit sfx
                 }
 
-                this.hlh += regenStrength;
+                this.stats.incrementHlh(regenStrength);
                 if (!this.isAlive()) {
                     this.revive(true);
                 }
 
-            } else if (this.hlh < this.getCurStat("hlh")) {
+            } else if (this.stats.getHlh() < this.getCurStat("hlh")) {
                 if (message) {
-                    System.out.println(name + " healed for " + (this.getCurStat("hlh") - this.hlh) + " health.");
+                    System.out.println(name + " healed for " + (this.getCurStat("hlh") - this.stats.getHlh()) + " health.");
                     HEAL_SOUND.play();
                 }
-                this.hlh = this.getCurStat("hlh");
+                this.stats.setHlh(this.getCurStat("hlh"));
                 if (!this.isAlive()) {
                     this.revive(true);
                 }
@@ -276,7 +256,7 @@ public abstract class Entity implements Serializable {
                 System.out.println(name + " healed " + regenStrength + " health.");
                 HEAL_SOUND.play();
             }
-            this.hlh += regenStrength;
+            this.stats.incrementHlh(regenStrength);
             if (!this.isAlive()) {
                 this.revive(true);
             }
@@ -303,18 +283,18 @@ public abstract class Entity implements Serializable {
         }
 
         if (alive) {
-            this.hlh -= damage;
+            this.stats.incrementHlh(-damage);
             printDamageMessage(name + " took " + damage + " damage.", showMessage);
         }
         if (!alive) {
-            this.hlh -= damage;
+            this.stats.incrementHlh(-damage);
             printDamageMessage(name + " is incapacitated, but took " + damage + " more damage.", showMessage);
         }
-        if (hlh <= -this.getCurStat("hlh")) {
+        if (this.stats.getHlh() <= -this.getCurStat("hlh")) {
             this.die(true);
             return;
         }
-        if (hlh < 1 && alive) {
+        if (this.stats.getHlh() < 1 && alive) {
             this.knockOut(true);
         }
     }
@@ -330,21 +310,21 @@ public abstract class Entity implements Serializable {
 
     public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
 
-        if ((man - bleedStrength) < 0) {
+        if ((this.stats.getMan() - bleedStrength) < 0) {
 
             if (surplus) {
                 if (message) {
                     System.out.println(name + " is being drained of " + bleedStrength);
                     // mana loss sound
                 }
-                this.man -= bleedStrength;
+                this.stats.incrementMan(-bleedStrength);
 
-            } else if (man < bleedStrength) {
+            } else if (this.stats.getMan() < bleedStrength) {
                 if (message) {
-                    System.out.println(name + " lost " + man + " mana.");
+                    System.out.println(name + " lost " + this.stats.getMan() + " mana.");
                     // mana loss sound?
                 }
-                this.man = 0;
+                this.stats.setMan(0);
 
             } else {
                 if (message) {
@@ -359,7 +339,7 @@ public abstract class Entity implements Serializable {
                 System.out.println(name + " lost " + bleedStrength + " mana.");
                 // mana loss sound
             }
-            this.man -= bleedStrength;
+            this.stats.incrementMan(-bleedStrength);
 
         } else {
 
@@ -376,7 +356,7 @@ public abstract class Entity implements Serializable {
 
     public void regenerateMana(int regenStrength, boolean showMessage, boolean excess) {
 
-        if ((man + regenStrength) > getCurStat("mag")) {
+        if ((this.stats.getMan() + regenStrength) > getCurStat("mag")) {
             handleOverRegen(regenStrength, showMessage, excess);
             return;
         }
@@ -397,15 +377,15 @@ public abstract class Entity implements Serializable {
             if (showMessage) {
                 printRegenMessage(name + " over-regenerated, gaining " + regenStrength + " mana.");
             }
-            this.man += regenStrength;
+            this.stats.incrementMan(regenStrength);
             return;
         }
 
-        if (man < getCurStat("mag")) {
+        if (this.stats.getMan() < getCurStat("mag")) {
             if (showMessage) {
-                printRegenMessage(name + " regenerated " + (getCurStat("mag") - man) + " mana");
+                printRegenMessage(name + " regenerated " + (getCurStat("mag") - this.stats.getMan()) + " mana");
             }
-            man = getCurStat("mag");
+            this.stats.setMan(getCurStat("mag"));
             return;
         }
 
@@ -419,7 +399,7 @@ public abstract class Entity implements Serializable {
         if (showMessage) {
             printRegenMessage(name + " regenerated " + regenStrength + " mana.");
         }
-        this.man += regenStrength;
+        this.stats.incrementMan(regenStrength);
     }
 
     // TODO: Add sound as a parameter
@@ -500,7 +480,8 @@ public abstract class Entity implements Serializable {
                     break;
                 case "Cast":
                     while (true) {
-                        choice = SpellAttack.menu(spells, man, this.getCurStat("mag"), this.controllable);
+                        choice = SpellAttack.menu(
+                                spells, this.stats.getMan(), this.getCurStat("mag"), this.controllable);
 
                         if (choice == 0) {
                             break;
@@ -648,7 +629,7 @@ public abstract class Entity implements Serializable {
 
         ArrayList<GenerativeEffect> generativeEffects = new ArrayList<>();
 
-        int manaRegen = (int) Math.round((this.curMag / 4.0));
+        int manaRegen = (int) Math.round((this.getCurStat("mag") / 4.0));
         this.regenerateMana(manaRegen, false, false);
 
         for (int i = 0; i < statusEffects.size(); i++) {
@@ -757,14 +738,13 @@ public abstract class Entity implements Serializable {
         return this.name;
     }
 
+    // One day, a getPossessivePronoun() and similar will be needed
     public String getPossessiveName() {
         if (this.name.endsWith("s")) {
             return this.name + "'";
         }
         return this.name + "'s";
     }
-
-    // TODO: Consider adding a getPossessivePronoun/Pronoun method.
 
     public boolean isAlive() {
         return this.alive;
@@ -790,18 +770,12 @@ public abstract class Entity implements Serializable {
         this.controllable = controllable;
     }
 
-    /*@Override
-    public String toString() {
-        return ("Entity: " + "Name: " + name + "  Level: " + level + "  Health: " + hlh + "/" + curHlh +
-                "  Attack: " + curAtk + "  Defense: " + curDef + "  Magic: " + curMag + "  Speed: " + curSpd);
-    }*/
-
     @Override
     public String toString() {
         return "Entity{" +
                 "name='" + name + '\'' +
                 ", level=" + level +
-                ", hlh=" + hlh +
+                ", hlh=" + this.stats.getHlh() +
                 ", debug=" + debug +
                 ", currentAction=" + curAction +
                 ", statusEffects=" + statusEffects +

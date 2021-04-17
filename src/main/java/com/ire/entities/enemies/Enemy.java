@@ -42,15 +42,15 @@ public abstract class Enemy extends Entity {
             for (int j = 6; j > 0; j--) {
                 double r = Math.random() * tenTotal;
                 if (r < tenHlh) {
-                    this.baseHlh++;
+                    this.stats.incrementBaseStat("hlh");
                 } else if (r < tenHlh + tenAtk) {
-                    this.baseAtk++;
+                    this.stats.incrementBaseStat("atk");
                 } else if (r < tenHlh + tenAtk + tenDef) {
-                    this.baseDef++;
+                    this.stats.incrementBaseStat("def");
                 } else if (r < tenHlh + tenAtk + tenDef + tenMag) {
-                    this.baseMag++;
+                    this.stats.incrementBaseStat("mag");
                 } else {
-                    this.baseSpd++;
+                    this.stats.incrementBaseStat("spd");
                 }
             }
             this.level++;

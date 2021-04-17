@@ -45,7 +45,8 @@ public abstract class Player extends Entity {
 
         PrintControl.clear();
 
-        int[] previousBaseStats = {this.baseHlh, this.baseAtk, this.baseDef, this.baseMag, this.baseSpd};
+        int[] previousBaseStats = {this.getBaseStat("hlh"), this.getBaseStat("atk"),
+                this.getBaseStat("def"), this.getBaseStat("mag"), this.getBaseStat("spd")};
 
         addAllocations(targetLevel);
 
@@ -88,11 +89,12 @@ public abstract class Player extends Entity {
 
         int differenceLevels = targetLevel - this.level;
 
-        this.baseHlh += hlhAllocation * differenceLevels;
-        this.baseAtk += atkAllocation * differenceLevels;
-        this.baseDef += defAllocation * differenceLevels;
-        this.baseMag += magAllocation * differenceLevels;
-        this.baseSpd += spdAllocation * differenceLevels;
+        this.stats.incrementBaseStat("hlh", hlhAllocation * differenceLevels);
+        this.stats.incrementBaseStat("atk", atkAllocation * differenceLevels);
+        this.stats.incrementBaseStat("def", defAllocation * differenceLevels);
+        this.stats.incrementBaseStat("mag", magAllocation * differenceLevels);
+        this.stats.incrementBaseStat("spd", spdAllocation * differenceLevels);
+
     }
 
     private int calculateBonusPoints(int targetLevel) {
@@ -139,23 +141,23 @@ public abstract class Player extends Entity {
 
         switch (choice) {
             case 1:
-                this.baseHlh++;
+                this.stats.incrementBaseStat("hlh");
                 statName = "health";
                 break;
             case 2:
-                this.baseAtk++;
+                this.stats.incrementBaseStat("atk");
                 statName = "attack";
                 break;
             case 3:
-                this.baseDef++;
+                this.stats.incrementBaseStat("def");
                 statName = "defense";
                 break;
             case 4:
-                this.baseMag++;
+                this.stats.incrementBaseStat("mag");
                 statName = "magic";
                 break;
             case 5:
-                this.baseSpd++;
+                this.stats.incrementBaseStat("spd");
                 statName = "speed";
                 break;
         }

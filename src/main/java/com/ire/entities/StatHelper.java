@@ -10,10 +10,9 @@ import java.util.ArrayList;
 public class StatHelper implements Serializable {
 
     private int baseHlh, baseAtk, baseDef, baseMag, baseSpd;
+    @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal", "unused"})
     private int curHlh,  curAtk,  curDef,  curMag,  curSpd;
     private int hlh, man;
-    private boolean alive;
-    private String name;
 
     public StatHelper(int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd) {
         this.baseHlh = baseHlh;
@@ -73,6 +72,30 @@ public class StatHelper implements Serializable {
         return getBaseStat(prefix);
     }
 
+    public void incrementBaseStat(String prefix, int increment) {
+        switch (prefix.toLowerCase()) {
+            case "hlh":
+                this.baseHlh += increment;
+                break;
+            case "atk":
+                this.baseAtk += increment;
+                break;
+            case "def":
+                this.baseDef += increment;
+                break;
+            case "mag":
+                this.baseMag += increment;
+                break;
+            case "spd":
+                this.baseSpd += increment;
+                break;
+        }
+    }
+
+    public void incrementBaseStat(String prefix) {
+        incrementBaseStat(prefix, 1);
+    }
+
     public void setBaseStat(String prefix, int stat) {
         switch (prefix.toLowerCase()) {
             case "hlh":
@@ -125,7 +148,7 @@ public class StatHelper implements Serializable {
             System.out.println(this.hlh + " " + this.curHlh);
             int damage = this.hlh - this.curHlh;
             e.takeDamage(damage, false);
-            System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
+            System.out.println(e.getName() + " took " + damage + " damage from lowered maximum health.");
             PrintControl.sleep(2000);
         }
         return this.curHlh;
