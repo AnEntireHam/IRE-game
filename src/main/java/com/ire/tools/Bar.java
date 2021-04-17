@@ -9,6 +9,7 @@ public class Bar {
 
     // Bar methods
 
+    // Determines which type of bar should be used
     public static String createBar(float numerator, float denominator, int length,
                                    Attribute[] colors) {
         if (denominator < 1 || length < 1 || colors.length < 1) {
@@ -30,6 +31,8 @@ public class Bar {
         return createBar(numerator, denominator, length, new Attribute[]{CLEAR()});
     }
 
+    // createBar methods from hereon are responsible for determining shading and colors
+    // At this point, colors.length > 1
     private static String createPositiveBar(float numerator, float denominator, int length, Attribute[] colors) {
         String primaryShading = "█";
         String secondaryShading = "░";
@@ -84,12 +87,13 @@ public class Bar {
             stacks++;
             primaryShading = " ";
         }
-        String sign = " +" + stacks;
+        String sign = " -" + stacks;
 
         return generateBar(numerator, denominator, length, primaryShading, secondaryShading,
                 sign, colors[0], colors[0]);
     }
 
+    // Method responsible for actually generating the bar
     private static String generateBar(float numerator, float denominator, int length,
                                       String primaryShading, String secondaryShading, String sign,
                                       Attribute primaryColor, Attribute secondaryColor) {
@@ -110,6 +114,7 @@ public class Bar {
         return output.toString();
     }
 
+    // Chiefly for instances where colors are entirely unsupported
     private static String generateBar(float numerator, float denominator, int length,
                                       String primaryShading, String secondaryShading, String sign) {
         int quotient = Math.round((numerator / denominator) * length);

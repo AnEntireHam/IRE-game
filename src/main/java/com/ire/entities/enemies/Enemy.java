@@ -2,36 +2,25 @@ package com.ire.entities.enemies;
 
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
-import com.ire.world.Item;
 
 public abstract class Enemy extends Entity {
 
 
     // Fields
     protected int tenHlh, tenAtk, tenDef, tenMag, tenSpd;
-    /*protected Item rewardItem;
-    protected int rewardChance;*/
-    protected boolean fleeable;
-
 
     // Constructor
 
     public Enemy(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
-                 int tenHlh, int tenAtk, int tenDef, int tenMag, int tenSpd,
-                 String name, String deathSound, int rewardXp, Item rewardItem, int rewardChance,
-                 boolean fleeable) {
-
+                 int hlhTendency, int atkTendency, int defTendency, int magTendency, int spdTendency,
+                 String name, String deathSound) {
         super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound, false);
 
-        this.tenHlh = tenHlh;
-        this.tenAtk = tenAtk;
-        this.tenDef = tenDef;
-        this.tenMag = tenMag;
-        this.tenSpd = tenSpd;
-        this.rewardXp = rewardXp;
-        //  this.rewardItem = rewardItem;
-        //  this.rewardChance = rewardChance;
-        this.fleeable = fleeable;
+        this.tenHlh = hlhTendency;
+        this.tenAtk = atkTendency;
+        this.tenDef = defTendency;
+        this.tenMag = magTendency;
+        this.tenSpd = spdTendency;
     }
 
 

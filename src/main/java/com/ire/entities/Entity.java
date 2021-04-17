@@ -104,7 +104,8 @@ public abstract class Entity implements Serializable {
 
         this.totalXp = calculateNextXp(this.level);
         this.nextXp = calculateNextXp(this.level + 1);
-        this.rewardXp = 0;
+        // This scale is temporary.
+        this.rewardXp = (int) ((nextXp - totalXp) / 4.0f) + 1;
 
         this.levelUp(level);
 
@@ -296,32 +297,32 @@ public abstract class Entity implements Serializable {
 
     public void takeDamage(int damage, boolean showMessage) {
 
-        if (damage <= 0 && showMessage) {
-
-            printDamageMessage(name + " was struck, but took no damage.");
+        if (damage <= 0) {
+            printDamageMessage(name + " was struck, but took no damage.", showMessage);
             return;
         }
 
         if (alive) {
-
             this.hlh -= damage;
-            if (showMessage) {
-                printDamageMessage(name + " took " + damage + " damage.");
-            }
-            if (hlh < 1 && alive) {
-                this.die(true);
-            }
+            printDamageMessage(name + " took " + damage + " damage.", showMessage);
+        }
+        if (!alive) {
+            this.hlh -= damage;
+            printDamageMessage(name + " is incapacitated, but took " + damage + " more damage.", showMessage);
+        }
+        if (hlh <= -this.getCurHlh()) {
+            this.die(true);
             return;
         }
-
-        this.hlh -= damage;
-        if (showMessage) {
-            printDamageMessage(name + " is dead, but took " + damage + " more damage.");
+        if (hlh < 1 && alive) {
+            this.knockOut(true);
         }
     }
 
-    private void printDamageMessage(String message) {
-
+    private void printDamageMessage(String message, boolean showMessage) {
+        if (!showMessage) {
+            return;
+        }
         System.out.println(message);
         PrintControl.sleep(2000);
         System.out.println();
@@ -430,19 +431,34 @@ public abstract class Entity implements Serializable {
     }
 
     // TODO: Remove defensive bonuses when dead or "useless" defense.
-    public void die(boolean message) {
-
-        this.alive = false;
-
+    public void knockOut(boolean message) {
         if (message) {
             this.deathSound.play();
-            System.out.println(name + " has died.");
+            System.out.println(name + " was incapacitated.");
             PrintControl.sleep(1500);
             System.out.println();
         }
-
-        this.checkRemoveStatusEffects(RemoveCondition.DEATH);
+        if (alive) {
+            this.alive = false;
+            this.checkRemoveStatusEffects(RemoveCondition.DEATH);
+        }
         // add coffin dance gif for party wipe in defiled mode?
+    }
+
+    // TODO: Consider making an Enum for "status" (alive/incapacitated/death).
+    public void die(boolean message) {
+        if (message) {
+            if (alive) {
+                this.deathSound.play();
+            }
+            System.out.println(name + " has died!");
+            PrintControl.sleep(1500);
+            System.out.println();
+        }
+        if (alive) {
+            this.alive = false;
+            this.checkRemoveStatusEffects(RemoveCondition.DEATH);
+        }
     }
 
     public void revive(boolean message) {
@@ -761,6 +777,31 @@ public abstract class Entity implements Serializable {
         return baseSpd;
     }
 
+    public void setBaseHlh(int baseHlh) {
+        this.baseHlh = baseHlh;
+        getCurHlh();
+    }
+
+    public void setBaseAtk(int baseAtk) {
+        this.baseAtk = baseAtk;
+        getCurAtk();
+    }
+
+    public void setBaseDef(int baseDef) {
+        this.baseDef = baseDef;
+        getCurDef();
+    }
+
+    public void setBaseMag(int baseMag) {
+        this.baseMag = baseMag;
+        getCurMag();
+    }
+
+    public void setBaseSpd(int baseSpd) {
+        this.baseSpd = baseSpd;
+        getCurSpd();
+    }
+
     public int getCurHlh() {
 
         int prevMax = this.curHlh;
@@ -831,14 +872,6 @@ public abstract class Entity implements Serializable {
 
     public ArrayList<StatusEffect> getStatusEffects() {
         return this.statusEffects;
-    }
-
-    public AudioClip getDeathSound() {
-        return deathSound;
-    }
-
-    public StatusEffect getStatusEffect(int index) {
-        return this.statusEffects.get(index);
     }
 
     public void setCurAction(Action curAction) {

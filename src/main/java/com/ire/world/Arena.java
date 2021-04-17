@@ -83,7 +83,7 @@ public class Arena {
             return;
         }
 
-        if (battleEndBehavior == 2) {
+        if (battleEndBehavior == 1) {
             saveTeam(team1, "temp1",false);
             saveTeam(team2, "temp2", false);
          }
@@ -91,11 +91,12 @@ public class Arena {
         Battle b = new Battle(team1, team2, giveRewards);
         b.runBattle(surprise);
 
-        if (battleEndBehavior == 2) {
+        if (battleEndBehavior == 1) {
             loadTeam(team1, "temp1", false);
             loadTeam(team2, "temp2", false);
-
-        } else if (battleEndBehavior == 3) {
+            return;
+        }
+        if (battleEndBehavior == 2) {
             team1.forEach((e) -> e.fullHeal(RemoveCondition.LEVEL_UP));
             team2.forEach((e) -> e.fullHeal(RemoveCondition.LEVEL_UP));
         }
@@ -340,18 +341,14 @@ public class Arena {
     }
 
     private void editSurprise() {
-        System.out.println("Surprise Settings");
-        String[] options = {"Neither has surprise", "Team 1 has surprise", "Team 2 has surprise"};
-
-        int choice = UserInput.cancelableMenu(options);
-        if (choice == 0) {
+        if (surprise == 2) {
+            surprise = 0;
             return;
         }
-        surprise = choice - 1;
+        surprise++;
     }
 
     private String getSurpriseString() {
-
         switch (surprise) {
             case 0:
                 return "Neither";
@@ -365,17 +362,11 @@ public class Arena {
     }
 
     private void editBattleEndBehavior() {
-        System.out.println("Post-Battle Settings");
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Do nothing");
-        options.add("Reset teams");
-        options.add("Heal teams");
-
-        int choice = UserInput.cancelableMenu(options);
-        if (choice == 0) {
+        if (battleEndBehavior == 2) {
+            battleEndBehavior = 0;
             return;
         }
-        battleEndBehavior = choice - 1;
+        battleEndBehavior++;
     }
 
     private String getBattleEndBehaviorString() {

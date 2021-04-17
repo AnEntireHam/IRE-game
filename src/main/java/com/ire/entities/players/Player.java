@@ -5,7 +5,6 @@ import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.entities.Entity;
 import com.ire.tools.PrintControl;
 import com.ire.tools.UserInput;
-import com.ire.world.Inventory;
 
 public abstract class Player extends Entity {
 
@@ -13,8 +12,7 @@ public abstract class Player extends Entity {
     // Fields
 
     protected int hlhAllocation, atkAllocation, defAllocation, magAllocation, spdAllocation;
-    protected Inventory playerInventory;
-    protected static AudioStream letsGo = new AudioStream("letsGo");
+    protected final static AudioStream LETS_GO = new AudioStream("letsGo");
 
 
     // Constructor
@@ -31,7 +29,6 @@ public abstract class Player extends Entity {
         this.defAllocation = defAllocation;
         this.magAllocation = magAllocation;
         this.spdAllocation = spdAllocation;
-        this.playerInventory = new Inventory();
 
     }
 
@@ -54,7 +51,7 @@ public abstract class Player extends Entity {
 
         String[] statPrefixes = {"[1] Hlh ", "[2] Atk ", "[3] Def ", "[4] Mag ", "[5] Spd "};
         String message = (this.name + "'s stats have increased!");
-        letsGo.play();
+        LETS_GO.play();
 
         allocateBonusPoints(targetLevel, previousBaseStats, statPrefixes, message);
 
