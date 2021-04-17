@@ -31,8 +31,8 @@ public abstract class DefenseAction extends Action {
     public void execute(Entity attacker, Entity defender) {
 
         Action action = attacker.getCurAction();
-        int curDef = defender.getCurDef();
-        int curMag = defender.getCurMag();
+        int curDef = defender.getCurStat("def");
+        int curMag = defender.getCurStat("mag");
 
         if (action instanceof PhysicalAttack) {
 

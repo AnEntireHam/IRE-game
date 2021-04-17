@@ -12,7 +12,6 @@ import com.ire.combat.actions.defenseactions.spelldefenses.SpellDefense;
 import com.ire.combat.statuseffects.RemoveCondition;
 import com.ire.combat.statuseffects.StatusEffect;
 import com.ire.combat.statuseffects.generativeeffect.*;
-import com.ire.combat.statuseffects.stateffects.StatEffect;
 import com.ire.tools.Bar;
 import com.ire.tools.PrintControl;
 import com.ire.tools.UserInput;
@@ -31,6 +30,7 @@ public abstract class Entity implements Serializable {
 
     protected String name;
     protected int level;
+    protected StatHelper stats;
     protected int baseHlh, curHlh, hlh;
     protected int baseAtk, curAtk;
     protected int baseDef, curDef;
@@ -81,6 +81,7 @@ public abstract class Entity implements Serializable {
                   String name, String deathSound, boolean controllable) {
 
         this.level = 1;
+        this.stats = new StatHelper(baseHlh, baseAtk, baseDef, baseMag, baseSpd);
         this.baseHlh = baseHlh;
         this.baseAtk = baseAtk;
         this.baseDef = baseDef;
@@ -96,8 +97,8 @@ public abstract class Entity implements Serializable {
         this.curMag = baseMag;
         this.curSpd = baseSpd;
 
-        this.hlh = this.getCurHlh();
-        this.man = this.getCurMag();
+        this.hlh = this.getCurStat("hlh");
+        this.man = this.getCurStat("mag");
         //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
 
         this.deathSound = new AudioClip(deathSound);
@@ -169,7 +170,7 @@ public abstract class Entity implements Serializable {
          * Length should probably be longer depending on the enemy/character... which ones, and when?
          */
         Attribute[] colors = new Attribute[]{TEXT_COLOR(100, 165, 55), TEXT_COLOR(230, 175, 20)};
-        output.append(Bar.createBar(this.getHlh(), this.getCurHlh(), 20, colors)).append("  ");
+        output.append(Bar.createBar(this.getHlh(), this.getCurStat("hlh"), 20, colors)).append("  ");
 
         for (StatusEffect se: statusEffects) {
             output.append(se.generateDisplay());
@@ -190,17 +191,16 @@ public abstract class Entity implements Serializable {
 
         StringBuilder output = new StringBuilder();
 
-        output.append("Hlh: ").append(getHlh()).append("/").append(getCurHlh())
-                .append("  Atk: ").append(getCurAtk())
-                .append("  Def: ").append(getCurDef());
+        output.append("Hlh: ").append(getHlh()).append("/").append(getCurStat("hlh"))
+                .append("  Atk: ").append(getCurStat("atk"))
+                .append("  Def: ").append(getCurStat("def"))
+                .append(" Mag: ");
 
         if (!spells.isEmpty()) {
-            output.append("  Mag: ").append(getMan()).append("/").append(getCurMag());
-        } else {
-            output.append(" Mag: ").append(getCurMag());
+            output.append(getMan()).append("/");
         }
-
-        output.append("  Spd: ").append(getCurSpd());
+        output.append(getCurStat("mag"));
+        output.append("  Spd: ").append(getCurStat("spd"));
 
         return output.toString();
     }
@@ -217,21 +217,21 @@ public abstract class Entity implements Serializable {
     }
 
     public void recalculateCurStats() {
-
-        getCurHlh();
-        getCurAtk();
-        getCurDef();
-        getCurMag();
-        getCurSpd();
+        this.getCurStat("hlh");
+        this.getCurStat("atk");
+        this.getCurStat("def");
+        this.getCurStat("mag");
+        this.getCurStat("spd");
     }
 
     public void resetPointStats() {
 
-        regenerateHealth(this.getCurHlh(), false, false);
-        regenerateMana(this.getCurMag(), false, false);
+        // TODO: This is a bad way to implement this.
+        regenerateHealth(this.getCurStat("hlh"), false, false);
+        regenerateMana(this.getCurStat("mag"), false, false);
 
-        this.hlh = this.getCurHlh();
-        this.man = this.getCurMag();
+        this.hlh = this.getCurStat("hlh");
+        this.man = this.getCurStat("mag");
 
         if (!this.isAlive()) {
             this.revive(true);
@@ -240,7 +240,7 @@ public abstract class Entity implements Serializable {
 
     public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
 
-        if ((this.hlh + regenStrength) > this.getCurHlh()) {
+        if ((this.hlh + regenStrength) > this.getCurStat("hlh")) {
 
             if (surplus) {
                 if (message) {
@@ -253,12 +253,12 @@ public abstract class Entity implements Serializable {
                     this.revive(true);
                 }
 
-            } else if (this.hlh < this.getCurHlh()) {
+            } else if (this.hlh < this.getCurStat("hlh")) {
                 if (message) {
-                    System.out.println(name + " healed for " + (this.getCurHlh() - this.hlh) + " health.");
+                    System.out.println(name + " healed for " + (this.getCurStat("hlh") - this.hlh) + " health.");
                     HEAL_SOUND.play();
                 }
-                this.hlh = this.getCurHlh();
+                this.hlh = this.getCurStat("hlh");
                 if (!this.isAlive()) {
                     this.revive(true);
                 }
@@ -310,7 +310,7 @@ public abstract class Entity implements Serializable {
             this.hlh -= damage;
             printDamageMessage(name + " is incapacitated, but took " + damage + " more damage.", showMessage);
         }
-        if (hlh <= -this.getCurHlh()) {
+        if (hlh <= -this.getCurStat("hlh")) {
             this.die(true);
             return;
         }
@@ -376,7 +376,7 @@ public abstract class Entity implements Serializable {
 
     public void regenerateMana(int regenStrength, boolean showMessage, boolean excess) {
 
-        if ((man + regenStrength) > getCurMag()) {
+        if ((man + regenStrength) > getCurStat("mag")) {
             handleOverRegen(regenStrength, showMessage, excess);
             return;
         }
@@ -401,11 +401,11 @@ public abstract class Entity implements Serializable {
             return;
         }
 
-        if (man < getCurMag()) {
+        if (man < getCurStat("mag")) {
             if (showMessage) {
-                printRegenMessage(name + " regenerated " + (getCurMag() - man) + " mana");
+                printRegenMessage(name + " regenerated " + (getCurStat("mag") - man) + " mana");
             }
-            man = getCurMag();
+            man = getCurStat("mag");
             return;
         }
 
@@ -431,7 +431,7 @@ public abstract class Entity implements Serializable {
     }
 
     // TODO: Remove defensive bonuses when dead or "useless" defense.
-    public void knockOut(boolean message) {
+    private void knockOut(boolean message) {
         if (message) {
             this.deathSound.play();
             System.out.println(name + " was incapacitated.");
@@ -446,7 +446,7 @@ public abstract class Entity implements Serializable {
     }
 
     // TODO: Consider making an Enum for "status" (alive/incapacitated/death).
-    public void die(boolean message) {
+    private void die(boolean message) {
         if (message) {
             if (alive) {
                 this.deathSound.play();
@@ -500,7 +500,7 @@ public abstract class Entity implements Serializable {
                     break;
                 case "Cast":
                     while (true) {
-                        choice = SpellAttack.menu(spells, man, this.getCurMag(), this.controllable);
+                        choice = SpellAttack.menu(spells, man, this.getCurStat("mag"), this.controllable);
 
                         if (choice == 0) {
                             break;
@@ -670,20 +670,6 @@ public abstract class Entity implements Serializable {
         statusEffects.removeIf(se -> se.checkRemove(condition, this));
     }
 
-    protected float calculateMultiplier(String prefix) {
-
-        float multiplier = 1.0f;
-
-        for (StatusEffect se: this.statusEffects) {
-            //  Consider StatEffects which affect multiple stats
-            if (se instanceof StatEffect && se.getAbbreviation().equals(prefix)) {
-                multiplier += (Math.round(((StatEffect) se).getStatMultiplier() * 100f) / 100f);
-            }
-        }
-
-        return multiplier;
-    }
-
     public void addStatusEffect(StatusEffect effect) {
         this.statusEffects.add(effect);
     }
@@ -707,158 +693,40 @@ public abstract class Entity implements Serializable {
 
     // Stat Accessors and Mutators
 
-    protected int getStat(int index) {
-
-        switch (index) {
-            case 0:
-                return getBaseHlh();
-            case 1:
-                return getBaseAtk();
-            case 2:
-                return getBaseDef();
-            case 3:
-                return getBaseMag();
-            case 4:
-                return getBaseSpd();
-            case 5:
-                return getCurHlh();
-            case 6:
-                return getCurAtk();
-            case 7:
-                return getCurDef();
-            case 8:
-                return getCurMag();
-            case 9:
-                return getCurSpd();
-            case 10:
-                return getHlh();
-            case 11:
-                return getMan();
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + index);
-        }
-    }
-
     public int getBaseStat(String prefix) {
+        return this.stats.getBaseStat(prefix);
+    }
 
-        switch (prefix.toLowerCase()) {
-            case "hlh":
-                return getBaseHlh();
-            case "atk":
-                return getBaseAtk();
-            case "def":
-                return getBaseDef();
-            case "mag":
-                return getBaseMag();
-            case "spd":
-                return getBaseSpd();
-            default:
-                throw new IllegalArgumentException("Unexpected value: " + prefix.toLowerCase());
+    public int getCurStat(String prefix) {
+        if (prefix.equalsIgnoreCase("hlh")) {
+            return stats.getCurHlh(this);
         }
-    }
-
-    public int getBaseHlh() {
-        return this.baseHlh;
-    }
-
-    public int getBaseAtk() {
-        return this.baseAtk;
-    }
-
-    public int getBaseDef() {
-        return this.baseDef;
-    }
-
-    public int getBaseMag() {
-        return baseMag;
-    }
-
-    public int getBaseSpd() {
-        return baseSpd;
-    }
-
-    public void setBaseHlh(int baseHlh) {
-        this.baseHlh = baseHlh;
-        getCurHlh();
-    }
-
-    public void setBaseAtk(int baseAtk) {
-        this.baseAtk = baseAtk;
-        getCurAtk();
-    }
-
-    public void setBaseDef(int baseDef) {
-        this.baseDef = baseDef;
-        getCurDef();
-    }
-
-    public void setBaseMag(int baseMag) {
-        this.baseMag = baseMag;
-        getCurMag();
-    }
-
-    public void setBaseSpd(int baseSpd) {
-        this.baseSpd = baseSpd;
-        getCurSpd();
-    }
-
-    public int getCurHlh() {
-
-        int prevMax = this.curHlh;
-        this.curHlh = Math.round(this.baseHlh * calculateMultiplier("HLH"));
-
-        if (prevMax != this.curHlh && this.hlh > this.curHlh) {
-            System.out.println(this.hlh + " " + this.curHlh);
-            int damage = this.hlh - this.curHlh;
-            this.takeDamage(damage, false);
-            System.out.println(this.name + " took " + damage + " damage from lowered maximum health.");
-            PrintControl.sleep(2000);
-        }
-
-        return this.curHlh;
-    }
-
-    public int getCurAtk() {
-        this.curAtk = Math.round(this.baseAtk * calculateMultiplier("ATK"));
-        return this.curAtk;
-    }
-
-    public int getCurDef() {
-        this.curDef = Math.round(this.baseDef * calculateMultiplier("DEF"));
-        return this.curDef;
-    }
-
-    public int getCurMag() {
-        this.curMag = Math.round(this.baseMag * calculateMultiplier("MAG"));
-        return this.curMag;
-    }
-
-    public int getCurSpd() {
-        this.curSpd = Math.round(this.baseSpd * calculateMultiplier("SPD"));
-        return this.curSpd;
+        return stats.getCurStat(prefix, this.statusEffects);
     }
 
     public int getHlh() {
-        return this.hlh;
+        return this.stats.getHlh();
     }
 
     public int getMan() {
-        return this.man;
+        return this.stats.getMan();
     }
 
-
     public void setHlh(int hlh) {
-        this.hlh = hlh;
+        this.stats.setHlh(hlh);
     }
 
     public void setMan(int man) {
-        this.man = man;
+        this.stats.setMan(man);
+    }
+
+    public void incrementHlh(int hlh) {
+        this.stats.incrementHlh(hlh);
     }
 
     public void incrementMan(int man) {
-        this.man += man;
+        this.stats.incrementMan(man);
     }
-
 
     // Battle Accessors and Mutators
 

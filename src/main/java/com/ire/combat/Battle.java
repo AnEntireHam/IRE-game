@@ -52,7 +52,7 @@ public class Battle {
         int i = 0;
 
         for (Entity e: team1) {
-            s += e.getCurSpd();
+            s += e.getCurStat("spd");
             i++;
         }
         team1Spd = Math.round(s / i);
@@ -60,7 +60,7 @@ public class Battle {
         s = 0;
         i = 0;
         for (Entity e: team2) {
-            s += e.getCurSpd();
+            s += e.getCurStat("spd");
             i++;
         }
         team2Spd = Math.round(s / i);

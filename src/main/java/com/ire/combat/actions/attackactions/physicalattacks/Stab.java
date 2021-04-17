@@ -23,7 +23,7 @@ public class Stab extends PhysicalAttack {
     @Override
     protected void calculateDamage(Entity attacker, Entity defender) {
 
-        this.damage = (int) (attacker.getCurAtk() * coefficient);
+        this.damage = (int) (attacker.getCurStat("atk") * coefficient);
         defender.getCurAction().execute(attacker, defender);
     }
 

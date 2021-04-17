@@ -21,10 +21,10 @@ public class Counter extends PhysicalDefense {
 
         if (attack instanceof Lunge) {
 
-            int counterDamage = Math.round((defender.getCurAtk() * COUNTER_COEFFICIENT) +
-                    (defender.getCurSpd() - attacker.getCurSpd()));
+            int counterDamage = Math.round((defender.getCurStat("atk") * COUNTER_COEFFICIENT) +
+                    (defender.getCurStat("spd") - attacker.getCurStat("spd")));
 
-            ((Lunge) attack).setCounterDamage(Math.max(Math.round(defender.getCurDef() * physBoost), 0));
+            ((Lunge) attack).setCounterDamage(Math.max(Math.round(defender.getCurStat("def") * physBoost), 0));
 
             System.out.println("... but was countered!");
             ((Lunge) attack).getSOUND().play();

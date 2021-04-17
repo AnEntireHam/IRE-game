@@ -115,10 +115,10 @@ public abstract class Player extends Entity {
             statDisplay[i] = statPrefixes[i];
             statDisplay[i] += previousBaseStats[i];
 
-            if (this.getStat(i) != previousBaseStats[i]) {
+            if (this.stats.getBaseStat(i) != previousBaseStats[i]) {
 
-                previousBaseStats[i] = this.getStat(i);
-                statDisplay[i] += (" -> " + this.getStat(i));
+                previousBaseStats[i] = this.stats.getBaseStat(i);
+                statDisplay[i] += (" -> " + this.stats.getBaseStat(i));
             }
         }
 

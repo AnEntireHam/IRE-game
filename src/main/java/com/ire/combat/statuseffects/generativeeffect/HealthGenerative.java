@@ -17,7 +17,7 @@ public abstract class HealthGenerative extends GenerativeEffect {
     @Override
     public void apply(Entity attacker, Entity defender) {
 
-        statProbability = (strengthCoefficient * ((float) Math.abs(strength) / (float) defender.getCurHlh()));
+        statProbability = (strengthCoefficient * ((float) Math.abs(strength) / (float) defender.getCurStat("hlh")));
         if (statProbability < 0.05f) {
             statProbability = 0;
         }

@@ -83,7 +83,7 @@ public abstract class StatEffect extends StatusEffect {
         float statProbability = 0.0f;
 
         if (baseMultiplier < 0) {
-            statProbability = (STAT_COEFFICIENT * (attacker.getBaseMag() - defender.getBaseStat(abbreviation)));
+            statProbability = (STAT_COEFFICIENT * (attacker.getBaseStat("mag") - defender.getBaseStat(abbreviation)));
         }
 
         return rand <= (effectProbability + statProbability);

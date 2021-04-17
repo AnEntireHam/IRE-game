@@ -19,7 +19,7 @@ public abstract class ManaGenerative extends GenerativeEffect {
     @Override
     public void apply(Entity attacker, Entity defender) {
 
-        statProbability = (statCoefficient * (attacker.getCurMag() - defender.getCurMag()));
+        statProbability = (statCoefficient * (attacker.getCurStat("mag") - defender.getCurStat("mag")));
         super.apply(attacker, defender);
     }
 

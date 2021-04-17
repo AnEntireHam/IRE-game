@@ -23,7 +23,7 @@ public class Lunar extends SpellAttack {
     protected void narrateEvents(Entity attacker, Entity defender) {
 
         Formatter parser = new Formatter();
-        int healthCost = Math.round((baseHealthCost * attacker.getCurMag()));
+        int healthCost = Math.round((baseHealthCost * attacker.getCurStat("mag")));
 
         System.out.println(parser.format(flavorText, attacker.getName(), healthCost));
 
