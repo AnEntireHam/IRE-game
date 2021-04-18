@@ -1,7 +1,6 @@
 package com.ire.entities;
 
 import com.diogonunes.jcolor.Attribute;
-import com.ire.audio.AudioClip;
 import com.ire.combat.actions.Action;
 import com.ire.combat.actions.attackactions.physicalattacks.Lunge;
 import com.ire.combat.actions.attackactions.physicalattacks.Stab;
@@ -31,13 +30,14 @@ public abstract class Entity implements Serializable {
     protected String name;
     protected int level;
     protected StatHelper stats;
+    protected ConditionHelper condition;
     // TODO: Xp fields might be weird to have in Entity. This is a bodge for now.
     // TODO: Add a bar for Xp, which displays post-battle or in party menu.
     protected int totalXp;
     protected int nextXp;
     protected int rewardXp;
     protected boolean debug;
-    protected boolean alive;
+    //protected boolean alive;
     protected boolean controllable;
 
     // TODO: Consider having separate classes for these lists, offload add/remove methods.
@@ -62,11 +62,6 @@ public abstract class Entity implements Serializable {
     protected int targetIndex;
     protected Action curAction;
 
-
-    protected AudioClip deathSound;
-    protected static final AudioClip HEAL_SOUND = new AudioClip("leech");
-    protected static final AudioClip REVIVE_SOUND = new AudioClip("revive");
-
     // protected String[] passSkill = {"", "", ""};
 
 
@@ -75,12 +70,11 @@ public abstract class Entity implements Serializable {
     public Entity(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                   String name, String deathSound, boolean controllable) {
 
+        this.name = name;
         this.level = 1;
         this.stats = new StatHelper(baseHlh, baseAtk, baseDef, baseMag, baseSpd);
-        this.name = name;
-        this.alive = true;
+        this.condition = new ConditionHelper(deathSound);
         this.controllable = controllable;
-        this.deathSound = new AudioClip(deathSound);
 
         //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
         this.totalXp = calculateNextXp(this.level);
@@ -188,271 +182,25 @@ public abstract class Entity implements Serializable {
 
     // Healing and Damage Methods
 
-
-    public void fullHeal(RemoveCondition condition) {
-
-        this.checkRemoveStatusEffects(condition);
-        recalculateCurStats();
-        resetPointStats();
-    }
-
-    public void recalculateCurStats() {
-        this.getCurStat("hlh");
-        this.getCurStat("atk");
-        this.getCurStat("def");
-        this.getCurStat("mag");
-        this.getCurStat("spd");
-    }
-
-    public void resetPointStats() {
-
-        // TODO: This is a bad way to implement this.
-        regenerateHealth(this.getCurStat("hlh"), false, false);
-        regenerateMana(this.getCurStat("mag"), false, false);
-
-        this.stats.setHlh(this.getCurStat("hlh"));
-        this.stats.setMan(this.getCurStat("mag"));
-
-        if (!this.isAlive()) {
-            this.revive(true);
-        }
+    public void takeDamage(int damage, boolean showMessage) {
+        this.condition.takeDamage(this, damage, showMessage);
     }
 
     public void regenerateHealth(int regenStrength, boolean message, boolean surplus) {
-
-        if ((this.stats.getHlh() + regenStrength) > this.getCurStat("hlh")) {
-
-            if (surplus) {
-                if (message) {
-                    System.out.println(name + " healed beyond the limit for " + regenStrength + " health.");
-                    HEAL_SOUND.play();  // Beyond-limit sfx
-                }
-
-                this.stats.incrementHlh(regenStrength);
-                if (!this.isAlive()) {
-                    this.revive(true);
-                }
-
-            } else if (this.stats.getHlh() < this.getCurStat("hlh")) {
-                if (message) {
-                    System.out.println(name + " healed for " + (this.getCurStat("hlh") - this.stats.getHlh()) + " health.");
-                    HEAL_SOUND.play();
-                }
-                this.stats.setHlh(this.getCurStat("hlh"));
-                if (!this.isAlive()) {
-                    this.revive(true);
-                }
-
-            } else {
-                if (message) {
-                    System.out.println(name + " was healed, but was already beyond full health.");
-                    // heal error
-                }
-            }
-
-        } else if (regenStrength > 0) {
-
-            if (message) {
-                System.out.println(name + " healed " + regenStrength + " health.");
-                HEAL_SOUND.play();
-            }
-            this.stats.incrementHlh(regenStrength);
-            if (!this.isAlive()) {
-                this.revive(true);
-            }
-
-        } else {
-
-            if (message) {
-                System.out.println(name + " received a useless heal.");
-                // Heal error
-            }
-        }
-
-        if (message) {
-            PrintControl.sleep(2000);
-            System.out.println();
-        }
-    }
-
-    public void takeDamage(int damage, boolean showMessage) {
-
-        if (damage <= 0) {
-            printDamageMessage(name + " was struck, but took no damage.", showMessage);
-            return;
-        }
-
-        if (alive) {
-            this.stats.incrementHlh(-damage);
-            printDamageMessage(name + " took " + damage + " damage.", showMessage);
-        }
-        if (!alive) {
-            this.stats.incrementHlh(-damage);
-            printDamageMessage(name + " is incapacitated, but took " + damage + " more damage.", showMessage);
-        }
-        if (this.stats.getHlh() <= -this.getCurStat("hlh")) {
-            this.die(true);
-            return;
-        }
-        if (this.stats.getHlh() < 1 && alive) {
-            this.knockOut(true);
-        }
-    }
-
-    private void printDamageMessage(String message, boolean showMessage) {
-        if (!showMessage) {
-            return;
-        }
-        System.out.println(message);
-        PrintControl.sleep(2000);
-        System.out.println();
+        this.condition.regenerateHealth(this, regenStrength, message, surplus);
     }
 
     public void bleedMana(int bleedStrength, boolean message, boolean surplus) {
-
-        if ((this.stats.getMan() - bleedStrength) < 0) {
-
-            if (surplus) {
-                if (message) {
-                    System.out.println(name + " is being drained of " + bleedStrength);
-                    // mana loss sound
-                }
-                this.stats.incrementMan(-bleedStrength);
-
-            } else if (this.stats.getMan() < bleedStrength) {
-                if (message) {
-                    System.out.println(name + " lost " + this.stats.getMan() + " mana.");
-                    // mana loss sound?
-                }
-                this.stats.setMan(0);
-
-            } else {
-                if (message) {
-                    System.out.println(name + " is being drained of mana, but has none left to lose.");
-                    // mana loss error?
-                }
-            }
-
-        } else if (bleedStrength > 0) {
-
-            if (message) {
-                System.out.println(name + " lost " + bleedStrength + " mana.");
-                // mana loss sound
-            }
-            this.stats.incrementMan(-bleedStrength);
-
-        } else {
-
-            if (message) {
-                System.out.println(name + " resisted losing mana.");
-            }
-        }
-
-        if (message) {
-            PrintControl.sleep(2000);
-            System.out.println();
-        }
+        this.condition.regenerateMana(this, bleedStrength, message, surplus);
     }
 
     public void regenerateMana(int regenStrength, boolean showMessage, boolean excess) {
-
-        if ((this.stats.getMan() + regenStrength) > getCurStat("mag")) {
-            handleOverRegen(regenStrength, showMessage, excess);
-            return;
-        }
-
-        if (regenStrength > 0) {
-            handleNormalRegen(regenStrength, showMessage);
-            return;
-        }
-
-        if (showMessage) {
-            printRegenMessage(name + " tried to regenerate mana, but failed.");
-        }
+        this.condition.regenerateMana(this, regenStrength, showMessage, excess);
     }
 
-    private void handleOverRegen(int regenStrength, boolean showMessage, boolean excess) {
-
-        if (excess) {
-            if (showMessage) {
-                printRegenMessage(name + " over-regenerated, gaining " + regenStrength + " mana.");
-            }
-            this.stats.incrementMan(regenStrength);
-            return;
-        }
-
-        if (this.stats.getMan() < getCurStat("mag")) {
-            if (showMessage) {
-                printRegenMessage(name + " regenerated " + (getCurStat("mag") - this.stats.getMan()) + " mana");
-            }
-            this.stats.setMan(getCurStat("mag"));
-            return;
-        }
-
-        if (showMessage) {
-            printRegenMessage(name + " regenerated mana, but already had maximum mana.");
-        }
+    public void fullHeal(RemoveCondition condition) {
+        this.condition.fullHeal(this, condition);
     }
-
-    private void handleNormalRegen(int regenStrength, boolean showMessage) {
-
-        if (showMessage) {
-            printRegenMessage(name + " regenerated " + regenStrength + " mana.");
-        }
-        this.stats.incrementMan(regenStrength);
-    }
-
-    // TODO: Add sound as a parameter
-    private void printRegenMessage(String message) {
-
-        System.out.println(message);
-        PrintControl.sleep(2000);
-        System.out.println();
-    }
-
-    // TODO: Remove defensive bonuses when dead or "useless" defense.
-    private void knockOut(boolean message) {
-        if (message) {
-            this.deathSound.play();
-            System.out.println(name + " was incapacitated.");
-            PrintControl.sleep(1500);
-            System.out.println();
-        }
-        if (alive) {
-            this.alive = false;
-            this.checkRemoveStatusEffects(RemoveCondition.DEATH);
-        }
-        // add coffin dance gif for party wipe in defiled mode?
-    }
-
-    // TODO: Consider making an Enum for "status" (alive/incapacitated/death).
-    private void die(boolean message) {
-        if (message) {
-            if (alive) {
-                this.deathSound.play();
-            }
-            System.out.println(name + " has died!");
-            PrintControl.sleep(1500);
-            System.out.println();
-        }
-        if (alive) {
-            this.alive = false;
-            this.checkRemoveStatusEffects(RemoveCondition.DEATH);
-        }
-    }
-
-    public void revive(boolean message) {
-
-        this.alive = true;
-
-        if (message) {
-            REVIVE_SOUND.play();
-            System.out.println(name + " was resurrected.");
-            PrintControl.sleep(1500);
-            System.out.println();
-        }
-    }
-
 
     // Attack and Defense Methods
 
@@ -656,7 +404,6 @@ public abstract class Entity implements Serializable {
     }
 
     public void addGenerative(GenerativeEffect effect) {
-
         if (effect instanceof HealthGenerative) {
             generatives.get(0).add(effect);
         } else if (effect instanceof ManaGenerative) {
@@ -666,10 +413,6 @@ public abstract class Entity implements Serializable {
 
     public void removeStatusEffect(StatusEffect effect) {
         this.statusEffects.remove(effect);
-    }
-
-    public void removeGenerative(GenerativeEffect effect) {
-
     }
 
     // Stat Accessors and Mutators
@@ -693,18 +436,6 @@ public abstract class Entity implements Serializable {
         return this.stats.getMan();
     }
 
-    public void setHlh(int hlh) {
-        this.stats.setHlh(hlh);
-    }
-
-    public void setMan(int man) {
-        this.stats.setMan(man);
-    }
-
-    public void incrementHlh(int hlh) {
-        this.stats.incrementHlh(hlh);
-    }
-
     public void incrementMan(int man) {
         this.stats.incrementMan(man);
     }
@@ -716,7 +447,7 @@ public abstract class Entity implements Serializable {
     }
 
     public Action getCurAction() {
-        return curAction;
+        return this.curAction;
     }
 
     public ArrayList<StatusEffect> getStatusEffects() {
@@ -747,7 +478,7 @@ public abstract class Entity implements Serializable {
     }
 
     public boolean isAlive() {
-        return this.alive;
+        return this.condition.isAlive();
     }
 
     public void setName(String name) {

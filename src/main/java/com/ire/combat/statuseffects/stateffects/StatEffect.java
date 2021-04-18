@@ -50,7 +50,7 @@ public abstract class StatEffect extends StatusEffect {
                 this.statMultiplier = statMultiplier;
                 defender.addStatusEffect(this);
             }
-            defender.recalculateCurStats();
+            defender.getCurStat(abbreviation);
         }
 
         displayResult(defender.getName(), statName, baseMultiplier < 0.0, success);
