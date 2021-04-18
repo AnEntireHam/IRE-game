@@ -104,4 +104,8 @@ public class UserInput {
     public static int cancelableMenu(String[] options) {
         return cancelableMenu(new ArrayList<>(Arrays.asList(options)), new ArrayList<>(), 1);
     }
+
+    public static int cancelableMenu(String[] options, int startIndex) {
+        return cancelableMenu(new ArrayList<>(Arrays.asList(options)), new ArrayList<>(), startIndex);
+    }
 }

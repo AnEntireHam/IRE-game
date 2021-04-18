@@ -9,21 +9,16 @@ import com.ire.combat.actions.attackactions.spellattacks.debuffspells.statspells
 import com.ire.combat.actions.defenseactions.spelldefenses.Mirror;
 import com.ire.combat.actions.defenseactions.spelldefenses.Screen;
 import com.ire.combat.statuseffects.RemoveCondition;
-import com.ire.combat.statuseffects.generativeeffect.Bleed;
-import com.ire.combat.statuseffects.generativeeffect.Regeneration;
-import com.ire.combat.statuseffects.stateffects.AttackUp;
-import com.ire.combat.statuseffects.stateffects.MagicUp;
 import com.ire.entities.Entity;
 import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.players.Mage;
 import com.ire.entities.players.Warrior;
+import com.ire.tools.EntityEditor;
 import com.ire.tools.PrintControl;
 import com.ire.tools.UserInput;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Arena {
 
@@ -32,7 +27,7 @@ public class Arena {
     private int surprise = 0;
     private int battleEndBehavior = 1;
     private boolean giveRewards = false;
-    private final static String SAVE_DIRECTORY = "team/";
+
 
     // Constructors
 
@@ -63,7 +58,7 @@ public class Arena {
                     startBattle();
                     break;
                 case 2:
-                    chooseEditTeam();
+                    chooseTeamToEdit();
                     break;
                 case 3:
                     editSettings();
@@ -84,16 +79,16 @@ public class Arena {
         }
 
         if (battleEndBehavior == 1) {
-            saveTeam(team1, "temp1",false);
-            saveTeam(team2, "temp2", false);
+            EntityEditor.saveTeam(team1, "temp1",false);
+            EntityEditor.saveTeam(team2, "temp2", false);
          }
         // Somehow, even with surprise favoring team1, team2 went first. Not sure how, but watch out for this.
         Battle b = new Battle(team1, team2, giveRewards);
         b.runBattle(surprise);
 
         if (battleEndBehavior == 1) {
-            loadTeam(team1, "temp1", false);
-            loadTeam(team2, "temp2", false);
+            EntityEditor.loadTeam(team1, "temp1", false);
+            EntityEditor.loadTeam(team2, "temp2", false);
             return;
         }
         if (battleEndBehavior == 2) {
@@ -102,7 +97,7 @@ public class Arena {
         }
     }
 
-    private void chooseEditTeam() {
+    private void chooseTeamToEdit() {
         while (true) {
             System.out.println("Choose a team to edit");
             String[] options = {"Team 1", "Team 2", "Load Defaults"};
@@ -111,10 +106,10 @@ public class Arena {
                 case 0:
                     return;
                 case 1:
-                    editTeam(team1);
+                    EntityEditor.editTeam(team1);
                     break;
                 case 2:
-                    editTeam(team2);
+                    EntityEditor.editTeam(team2);
                     break;
                 case 3:
                     loadDefaultTeams();
@@ -157,164 +152,6 @@ public class Arena {
         c1.addSpell(new Lunar(1));
         c1.addSpell(new Ice(1));
         c1.addWard(new Mirror());
-
-    }
-
-    private void editTeam(ArrayList<Entity> team) {
-        while (true) {
-            System.out.println("Choose an option or an entity to edit.");
-            ArrayList<String> options = new ArrayList<>(
-                    Arrays.asList("Add Entity", "Remove Entity", "Copy Entity", "Load Team", "Save Team"));
-            for (Entity e : team) {
-                options.add(e.getName() + "  Lv. " + e.getLevel());
-            }
-
-            int choice = UserInput.cancelableMenu(options);
-            switch (choice) {
-                case 0:
-                    return;
-                case 1:
-                    addEntity(team);
-                    break;
-                case 2:
-                    removeEntity(team);
-                    break;
-                case 3:
-                    copyEntity(team);
-                    break;
-                case 4:
-                    loadTeam(team, "save1",true);
-                    break;
-                case 5:
-                    saveTeam(team, "save1", true);
-                    break;
-                default:
-                    editEntity(team.get(choice - 6));
-                    break;
-            }
-        }
-    }
-
-    private void addEntity(ArrayList<Entity> team) {
-
-        Skeleton s = new Skeleton(1);
-        s.setName("MR JANGELY BONES");
-        team.add(s);
-
-        System.out.println("WIP.");
-        PrintControl.sleep(1000);
-
-        /*System.out.println("Choose entity type");
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Player");
-        options.add("Enemy");
-
-        int choice = PrintControl.cancelableMenu(options);
-
-        switch (choice) {
-            case 0:
-                return;
-            case 1:
-
-        }*/
-
-    }
-
-    private void removeEntity(ArrayList<Entity> team) {
-        System.out.println("WIP.");
-        PrintControl.sleep(1000);
-    }
-
-    private void copyEntity(ArrayList<Entity> team) {
-        System.out.println("WIP.");
-        PrintControl.sleep(1000);
-    }
-
-    private void saveTeam(ArrayList<Entity> team, String path, boolean message) {
-
-        if (message) {
-            System.out.println("Saving team to \"team/" + path + ".ser\"...");
-            PrintControl.sleep(500);
-        }
-        File f = new File(SAVE_DIRECTORY + path + ".ser");
-
-        try {
-            if (f.createNewFile() && message) {
-                System.out.println("Creating file...");
-            }
-        } catch (IOException e) {
-            System.out.println("Error creating file.");
-            e.printStackTrace();
-        }
-
-        try (FileOutputStream fileStream = new FileOutputStream(f);
-             ObjectOutputStream objectStream = new ObjectOutputStream(fileStream)) {
-            objectStream.writeObject(team);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadTeam(ArrayList<Entity> team, String path, boolean message) {
-
-        if (message) {
-            System.out.println("Loading team from \"team/" + path + ".ser\"...");
-            PrintControl.sleep(500);
-        }
-        File f = new File(SAVE_DIRECTORY + path + ".ser");
-
-        try (FileInputStream fileStream = new FileInputStream(f);
-             ObjectInputStream objectStream = new ObjectInputStream(fileStream)) {
-            //noinspection unchecked
-            ArrayList<Entity> temp = (ArrayList<Entity>) objectStream.readObject();
-            team.clear();
-            team.addAll(temp);
-
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void editEntity(Entity entity) {
-        System.out.println("WIP.");
-        // PrintControl.sleep(1000);
-        System.out.println("Select an effect to apply to this entity");
-        String[] options = {"Damage", "Heal", "Man Heal", "Atk Up", "Mag Up", "Apply Bleed", "Apply Regen"};
-        AttackUp au = new AttackUp(1);
-        MagicUp mu = new MagicUp(1);
-        Bleed bleed = new Bleed(1);
-        bleed.setStrength(2);
-        Regeneration regen = new Regeneration(1);
-        regen.setStrength(2);
-
-        switch (UserInput.cancelableMenu(options)) {
-            case 0:
-                return;
-            case 1:
-                entity.takeDamage(3, true);
-                break;
-            case 2:
-                entity.regenerateHealth(3, false, true);
-                break;
-            case 3:
-                entity.regenerateMana(3, false, true);
-                break;
-            case 4:
-                au.apply(entity, entity);
-                break;
-            case 5:
-                mu.apply(entity, entity);
-                break;
-            case 6:
-                bleed.apply(entity, entity);
-                break;
-            case 7:
-                regen.apply(entity, entity);
-                break;
-            default:
-                throw new IllegalArgumentException("Unexpected value in editEntity");
-        }
     }
 
     private void editSettings() {
@@ -382,6 +219,5 @@ public class Arena {
                 throw new IllegalStateException("battleEndBehavior set to illegal value.");
         }
     }
-
 
 }

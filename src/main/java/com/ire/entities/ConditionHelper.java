@@ -118,8 +118,8 @@ public class ConditionHelper implements Serializable {
     private boolean effectiveOverRegenHealth(Entity e, int regenStrength, boolean message, boolean excess) {
         if (excess) {
             if (message) {
-                printGenerativeMessage(e.getName() + " healed beyond the limit for " + regenStrength + " health.");
                 HEAL_SOUND.play();  // Beyond-limit sfx
+                printGenerativeMessage(e.getName() + " healed beyond the limit for " + regenStrength + " health.");
             }
             e.stats.incrementHlh(regenStrength);
             if (!this.isAlive()) {
@@ -129,9 +129,9 @@ public class ConditionHelper implements Serializable {
         }
         if (e.getHlh() < e.getCurStat("hlh")) {
             if (message) {
+                HEAL_SOUND.play();
                 printGenerativeMessage(e.getName() + " healed for " +
                         (e.getCurStat("hlh") - e.stats.getHlh()) + " health.");
-                HEAL_SOUND.play();
             }
             e.stats.setHlh(e.getCurStat("hlh"));
             if (!this.isAlive()) {
@@ -144,8 +144,8 @@ public class ConditionHelper implements Serializable {
 
     private void normalRegenHealth(Entity e, int regenStrength, boolean message) {
         if (message) {
-            System.out.println(e.getName() + " healed " + regenStrength + " health.");
             HEAL_SOUND.play();
+            System.out.println(e.getName() + " healed " + regenStrength + " health.");
         }
         e.stats.incrementHlh(regenStrength);
         if (!this.isAlive()) {
