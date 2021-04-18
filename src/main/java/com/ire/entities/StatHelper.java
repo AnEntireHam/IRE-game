@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class StatHelper implements Serializable {
 
+    private static final long serialVersionUID = 4182021L;
     private int baseHlh, baseAtk, baseDef, baseMag, baseSpd;
     @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal", "unused"})
     private int curHlh,  curAtk,  curDef,  curMag,  curSpd;

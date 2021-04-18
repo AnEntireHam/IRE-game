@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class AudioClip implements Runnable, LineListener, Serializable {
 
+    private static final long serialVersionUID = 4182021L;
     private final String path;
     private boolean play;
     private boolean playCompleted;

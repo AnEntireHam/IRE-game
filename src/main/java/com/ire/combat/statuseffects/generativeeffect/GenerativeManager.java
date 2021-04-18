@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public abstract class GenerativeManager implements Serializable {
 
+    private static final long serialVersionUID = 4182021L;
     ArrayList<GenerativeEffect> generativeEffects;
     ArrayList<GenerativeEffect> regenEffects;
     ArrayList<GenerativeEffect> bleedEffects;

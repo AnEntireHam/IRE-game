@@ -9,8 +9,9 @@ import java.util.Objects;
 
 public class AudioStream implements Runnable, Serializable {
 
-    private static final int BUFFER_SIZE = 256;
+    private static final long serialVersionUID = 4182021L;
 
+    private static final int BUFFER_SIZE = 256;
     private final String path;
     private boolean play;
     private boolean end;

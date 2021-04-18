@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public abstract class Action implements Serializable {
 
+    private static final long serialVersionUID = 4182021L;
     protected String name;
     protected String description;
 

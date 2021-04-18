@@ -24,9 +24,10 @@ import static com.diogonunes.jcolor.Attribute.TEXT_COLOR;
 
 public abstract class Entity implements Serializable {
 
+    private static final long serialVersionUID = 4182021L;
+
     // Fields
     // TODO: This class is big. There are probably some fields and methods that can be extracted out.
-
     protected String name;
     protected int level;
     protected StatHelper stats;

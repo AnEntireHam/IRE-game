@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class ConditionHelper implements Serializable {
 
+    private static final long serialVersionUID = 4182021L;
     protected static final AudioClip HEAL_SOUND = new AudioClip("leech");
     protected static final AudioClip REVIVE_SOUND = new AudioClip("revive");
     protected AudioClip deathSound;

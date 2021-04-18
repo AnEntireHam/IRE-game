@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class Inventory implements Serializable {
 
+    private static final long serialVersionUID = 4182021L;
     private Map<String, Item> inventory = new HashMap<>();
 
     public Collection<Item> getInventory() {

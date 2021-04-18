@@ -7,9 +7,9 @@ import java.util.Arrays;
 
 public abstract class StatusEffect implements RemoveMethod, Serializable {
 
+    private static final long serialVersionUID = 4182021L;
 
     // Fields
-    //
     protected String name;
     protected String abbreviation;
     protected String description;
