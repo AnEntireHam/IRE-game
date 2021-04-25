@@ -68,11 +68,10 @@ public abstract class Entity implements Serializable {
 
     // Constructor
 
-    public Entity(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
+    public Entity(int baseLevel, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                   String name, String deathSound, boolean controllable) {
-
         this.name = name;
-        this.level = 1;
+        this.level = baseLevel;
         this.stats = new StatHelper(baseHlh, baseAtk, baseDef, baseMag, baseSpd);
         this.condition = new ConditionHelper(deathSound);
         this.controllable = controllable;
@@ -80,10 +79,6 @@ public abstract class Entity implements Serializable {
         //  USE THE WORD "SUNDER", "BAP" somewhere PLEASE
         this.totalXp = calculateNextXp(this.level);
         this.nextXp = calculateNextXp(this.level + 1);
-        // This scale is temporary.
-        this.rewardXp = (int) ((nextXp - totalXp) / 4.0f) + 1;
-
-        this.levelUp(level);
 
         HealthGenerativeManager healthManager = new HealthGenerativeManager();
         ManaGenerativeManager manaManager = new ManaGenerativeManager();
@@ -460,6 +455,8 @@ public abstract class Entity implements Serializable {
     }
 
     public int getRewardXp() {
+        // This scale is temporary. It may also help to semi-manually define this value.
+        this.rewardXp = (int) ((nextXp - totalXp) / 4.0f) + 1;
         return this.rewardXp;
     }
 

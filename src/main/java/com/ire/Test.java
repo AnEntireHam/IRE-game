@@ -22,7 +22,7 @@ public class Test {
 
     public static void main(String[] args) {
         
-        Mage p1 = new Mage();
+        Mage p1 = new Mage(1);
 
         Skeleton e1 = new Skeleton(1);
         e1.setName("MISTER JANGELY BONE");

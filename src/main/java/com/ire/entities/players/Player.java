@@ -20,16 +20,15 @@ public abstract class Player extends Entity {
     public Player(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                   String name, String deathSound,
                   int hlhAllocation, int atkAllocation, int defAllocation, int magAllocation, int spdAllocation) {
-        super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd,
+        super(1, baseHlh, baseAtk, baseDef, baseMag, baseSpd,
                 name,deathSound, true);
 
-        this.level = level;
         this.hlhAllocation = hlhAllocation;
         this.atkAllocation = atkAllocation;
         this.defAllocation = defAllocation;
         this.magAllocation = magAllocation;
         this.spdAllocation = spdAllocation;
-
+        this.levelUp(level);
     }
 
 
@@ -38,7 +37,6 @@ public abstract class Player extends Entity {
     // This makes the presumption that weapons/armor won't change baseStats, or that seeing modified values is okay.
     @Override
     protected void levelUp(int targetLevel) {
-
         if (this.level == targetLevel) {
             return;
         }
@@ -61,7 +59,6 @@ public abstract class Player extends Entity {
 
     // Weird version of PrintControl' menu. May be able to consolidate later.
     private void allocateBonusPoints(int targetLevel, int[] previousBaseStats, String[] statPrefixes, String message) {
-
         int bonusPoints = calculateBonusPoints(targetLevel);
         while (bonusPoints > 0) {
 
@@ -86,7 +83,6 @@ public abstract class Player extends Entity {
     }
 
     private void addAllocations(int targetLevel) {
-
         int differenceLevels = targetLevel - this.level;
 
         this.stats.incrementBaseStat("hlh", hlhAllocation * differenceLevels);
@@ -109,7 +105,6 @@ public abstract class Player extends Entity {
     }
 
     private void printStatChanges(int[] previousBaseStats, String[] statPrefixes, int targetLevel, String message) {
-
         String[] statDisplay = new String[5];
 
         for (int i = 0; i < 5; i++) {

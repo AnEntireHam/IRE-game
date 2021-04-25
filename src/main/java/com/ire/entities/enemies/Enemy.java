@@ -14,13 +14,14 @@ public abstract class Enemy extends Entity {
     public Enemy(int level, int baseHlh, int baseAtk, int baseDef, int baseMag, int baseSpd,
                  int hlhTendency, int atkTendency, int defTendency, int magTendency, int spdTendency,
                  String name, String deathSound) {
-        super(level, baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound, false);
+        super(1, baseHlh, baseAtk, baseDef, baseMag, baseSpd, name, deathSound, false);
 
         this.tenHlh = hlhTendency;
         this.tenAtk = atkTendency;
         this.tenDef = defTendency;
         this.tenMag = magTendency;
         this.tenSpd = spdTendency;
+        this.levelUp(level);
     }
 
 
@@ -31,7 +32,6 @@ public abstract class Enemy extends Entity {
     // TODO: Consider adding relevant level-up messages (imagine an NPC which
     @Override
     protected void levelUp(int targetLevel) {
-
         if (this.level == targetLevel) {
             return;
         }

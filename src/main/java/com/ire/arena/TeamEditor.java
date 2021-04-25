@@ -1,4 +1,4 @@
-package com.ire.tools;
+package com.ire.arena;
 
 import com.ire.combat.statuseffects.generativeeffect.Bleed;
 import com.ire.combat.statuseffects.generativeeffect.Regeneration;
@@ -6,13 +6,15 @@ import com.ire.combat.statuseffects.stateffects.AttackUp;
 import com.ire.combat.statuseffects.stateffects.MagicUp;
 import com.ire.entities.Entity;
 import com.ire.entities.enemies.Skeleton;
+import com.ire.tools.PrintControl;
+import com.ire.tools.UserInput;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class EntityEditor {
+public class TeamEditor {
 
     private final static String SAVE_DIRECTORY = "team/";
 

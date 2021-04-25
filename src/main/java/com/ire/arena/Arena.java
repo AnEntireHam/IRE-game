@@ -1,4 +1,4 @@
-package com.ire.world;
+package com.ire.arena;
 
 import com.ire.combat.Battle;
 import com.ire.combat.actions.attackactions.spellattacks.Celestial;
@@ -14,7 +14,6 @@ import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
 import com.ire.entities.players.Mage;
 import com.ire.entities.players.Warrior;
-import com.ire.tools.EntityEditor;
 import com.ire.tools.PrintControl;
 import com.ire.tools.UserInput;
 
@@ -79,16 +78,16 @@ public class Arena {
         }
 
         if (battleEndBehavior == 1) {
-            EntityEditor.saveTeam(team1, "temp1",false);
-            EntityEditor.saveTeam(team2, "temp2", false);
+            TeamEditor.saveTeam(team1, "temp1",false);
+            TeamEditor.saveTeam(team2, "temp2", false);
          }
         // Somehow, even with surprise favoring team1, team2 went first. Not sure how, but watch out for this.
         Battle b = new Battle(team1, team2, giveRewards);
         b.runBattle(surprise);
 
         if (battleEndBehavior == 1) {
-            EntityEditor.loadTeam(team1, "temp1", false);
-            EntityEditor.loadTeam(team2, "temp2", false);
+            TeamEditor.loadTeam(team1, "temp1", false);
+            TeamEditor.loadTeam(team2, "temp2", false);
             return;
         }
         if (battleEndBehavior == 2) {
@@ -106,10 +105,10 @@ public class Arena {
                 case 0:
                     return;
                 case 1:
-                    EntityEditor.editTeam(team1);
+                    TeamEditor.editTeam(team1);
                     break;
                 case 2:
-                    EntityEditor.editTeam(team2);
+                    TeamEditor.editTeam(team2);
                     break;
                 case 3:
                     loadDefaultTeams();
@@ -122,8 +121,8 @@ public class Arena {
         team1 = new ArrayList<>();
         team2 = new ArrayList<>();
 
-        Warrior warrior = new Warrior();
-        Mage mage = new Mage();
+        Warrior warrior = new Warrior(2);
+        Mage mage = new Mage(3);
         Caster friend = new Caster(2);
         friend.setControllable(true);
         team1.add(warrior);

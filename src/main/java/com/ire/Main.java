@@ -1,10 +1,10 @@
 package com.ire;
 
+import com.ire.arena.Arena;
 import com.ire.audio.AudioClip;
 import com.ire.bot.ClientConnection;
 import com.ire.tools.PrintControl;
 import com.ire.tools.SaveData;
-import com.ire.world.Arena;
 
 public class Main {
 

@@ -7,7 +7,7 @@ public class Skeleton extends Enemy {
         // 5(10?), 6, 1, 2, 6
         // 14, 6, 1, 2, 6
         // 10, 5, 1, 2, 5
-        super(level, 14, 6, 1, 2, 6,
+        super(level, 12, 6, 3, 2, 7,
                 5, 3, 2, 1, 2,
                 "Skeleton", "skeletonDeath");
     }

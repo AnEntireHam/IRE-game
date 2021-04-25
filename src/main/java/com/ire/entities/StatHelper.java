@@ -90,6 +90,8 @@ public class StatHelper implements Serializable {
             case "spd":
                 this.baseSpd += increment;
                 break;
+            default:
+                throw new IllegalArgumentException("Illegal stat prefix: " + prefix.toLowerCase());
         }
     }
 
