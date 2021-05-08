@@ -1,11 +1,11 @@
 package com.ire.arena;
 
-import com.ire.combat.statuseffects.generativeeffect.Bleed;
-import com.ire.combat.statuseffects.generativeeffect.Regeneration;
-import com.ire.combat.statuseffects.stateffects.AttackUp;
-import com.ire.combat.statuseffects.stateffects.MagicUp;
 import com.ire.entities.Entity;
+import com.ire.entities.enemies.Caster;
 import com.ire.entities.enemies.Skeleton;
+import com.ire.entities.enemies.TrainingDummy;
+import com.ire.entities.players.Mage;
+import com.ire.entities.players.Warrior;
 import com.ire.tools.PrintControl;
 import com.ire.tools.UserInput;
 
@@ -36,7 +36,7 @@ public class TeamEditor {
                     chooseEditOption(team);
                     break;
                 default:
-                    editEntity(team.get(choice - 2));
+                    EntityEditor.editEntity(team.get(choice - 2));
                     break;
             }
         }
@@ -72,27 +72,87 @@ public class TeamEditor {
     }
 
     private static void addEntity(ArrayList<Entity> team) {
-        Skeleton s = new Skeleton(1);
-        s.setName("MR JANGELY BONES");
-        team.add(s);
+        while (true) {
+            System.out.println("Select a leveling type.");
+            String[] options = {"Player", "Enemy"};
+            switch (UserInput.cancelableMenu(options)) {
+                case 0:
+                    return;
+                case 1:
+                    addPlayer(team);
+                    return;
+                case 2:
+                    addEnemy(team);
+                    return;
+            }
+        }
+    }
 
-        System.out.println("WIP.");
-        PrintControl.sleep(300);
+    // Probably refactor these later.
+    private static void addPlayer(ArrayList<Entity> team) {
+        while (true) {
+            System.out.println("Select a class.");
+            String[] options = {"Warrior", "Mage"};
+            int choice = UserInput.cancelableMenu(options);
+            if (choice == 0) {
+                break;
+            }
+            int level = promptStartingLevel();
+            if (level == 0) {
+                continue;
+            }
 
-        /*System.out.println("Choose entity type");
-        ArrayList<String> options = new ArrayList<>();
-        options.add("Player");
-        options.add("Enemy");
+            Entity e;
+            switch (choice) {
+                case 1:
+                    e = new Warrior(level);
+                    break;
+                case 2:
+                    e = new Mage(level);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + choice);
+            }
+            team.add(e);
+            break;
+        }
+    }
 
-        int choice = PrintControl.cancelableMenu(options);
+    private static void addEnemy(ArrayList<Entity> team) {
+        while (true) {
+            System.out.println("Select a class.");
+            String[] options = {"Skeleton", "Caster", "Training Dummy"};
+            int choice = UserInput.cancelableMenu(options);
+            if (choice == 0) {
+                break;
+            }
+            int level = promptStartingLevel();
+            if (level == 0) {
+                continue;
+            }
 
-        switch (choice) {
-            case 0:
-                return;
-            case 1:
+            Entity e;
+            switch (choice) {
+                case 1:
+                    e = new Skeleton(level);
+                    break;
+                case 2:
+                    e = new Caster(level);
+                    break;
+                case 3:
+                    e = new TrainingDummy(level);
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + choice);
+            }
+            team.add(e);
+            break;
+        }
+    }
 
-        }*/
-
+    private static int promptStartingLevel() {
+        System.out.println("Choose a starting level (enter 0 to cancel).");
+        return UserInput.getUserInt(0, 99);
     }
 
     private static void removeEntity(ArrayList<Entity> team) {
@@ -160,47 +220,6 @@ public class TeamEditor {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static void editEntity(Entity entity) {
-        System.out.println("WIP.");
-        // PrintControl.sleep(1000);
-        System.out.println("Select an effect to apply to this entity");
-        String[] options = {"Damage", "Heal", "Man Heal", "Atk Up", "Mag Up", "Apply Bleed", "Apply Regen"};
-        AttackUp au = new AttackUp(1);
-        MagicUp mu = new MagicUp(1);
-        Bleed bleed = new Bleed(1);
-        bleed.setStrength(2);
-        Regeneration regen = new Regeneration(1);
-        regen.setStrength(2);
-
-        switch (UserInput.cancelableMenu(options)) {
-            case 0:
-                return;
-            case 1:
-                entity.takeDamage(3, true);
-                break;
-            case 2:
-                entity.regenerateHealth(3, false, true);
-                break;
-            case 3:
-                entity.regenerateMana(3, false, true);
-                break;
-            case 4:
-                au.apply(entity, entity);
-                break;
-            case 5:
-                mu.apply(entity, entity);
-                break;
-            case 6:
-                bleed.apply(entity, entity);
-                break;
-            case 7:
-                regen.apply(entity, entity);
-                break;
-            default:
-                throw new IllegalArgumentException("Unexpected value in editEntity");
         }
     }
 }
